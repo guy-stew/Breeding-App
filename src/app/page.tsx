@@ -102,6 +102,12 @@ export default async function HomePage() {
         >
           Buyers
         </Link>
+        <Link
+          href="/listings"
+          className="flex-1 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-center text-sm font-medium hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+        >
+          Listings
+        </Link>
       </div>
 
       <section>

@@ -91,6 +91,15 @@ export const HealthRecordType = {
 export type HealthRecordType = (typeof HealthRecordType)[keyof typeof HealthRecordType]
 
 
+export const ListingStatus = {
+  active: 'active',
+  sold: 'sold',
+  withdrawn: 'withdrawn'
+} as const
+
+export type ListingStatus = (typeof ListingStatus)[keyof typeof ListingStatus]
+
+
 export const PuppyStatus = {
   available: 'available',
   reserved: 'reserved',

@@ -201,6 +201,9 @@ model Puppy {
   buyer   Buyer?  @relation(fields: [buyerId], references: [id])
   buyerId String?
 
+  // Marketplace listing (one-to-one, optional).
+  listing Listing?
+
   // WeightLogs hang off the Dog record (dogId), not here, so a kept
   // puppy keeps one continuous weight history for life.
 
@@ -321,6 +324,12 @@ enum HealthRecordType {
   other
 }
 
+enum ListingStatus {
+  active
+  sold
+  withdrawn
+}
+
 enum PuppyStatus {
   available
   reserved
@@ -398,6 +407,25 @@ model ProgesteroneTest {
   @@index([heatCycleId])
 }
 
+// ------------------------------------------------------------
+//  11. Listing — a public marketplace entry for an available
+//      puppy. One-to-one with Puppy. Status controls visibility.
+// ------------------------------------------------------------
+model Listing {
+  id      String @id @default(uuid())
+  puppy   Puppy  @relation(fields: [puppyId], references: [id])
+  puppyId String @unique
+
+  title       String?
+  description String?
+  priceText   String?        // display price, e.g. "£2,500" or "POA"
+  status      ListingStatus @default(active)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
 // ============================================================
 //  Reserved for later builds — shape noted, not yet modelled.
 //  Uncomment and flesh out when each phase arrives.
@@ -405,6 +433,5 @@ model ProgesteroneTest {
 //
 //  model WelfareCheck { ... }   // timestamped in-person litter checks
 //  model Document     { ... }   // generated contracts / packs
-//  model Listing      { ... }   // marketplace view onto records
 //
 // ============================================================

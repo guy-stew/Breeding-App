@@ -787,3 +787,77 @@ export async function addProgesteroneTest(
   revalidatePath(`/dogs/${dogId}/heat-cycles/${cycleId}`);
   return { ok: true };
 }
+
+// ============================================================
+//  14. createListing — publish a puppy to the marketplace.
+// ============================================================
+type CreateListingInput = {
+  puppyId: string;
+  title: string;
+  description: string;
+  priceText: string;
+};
+
+export async function createListing(
+  input: CreateListingInput,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const { puppyId, title, description, priceText } = input;
+  if (!puppyId) return { ok: false, error: "Puppy is required." };
+
+  // Verify the puppy belongs to this breeder (via litter).
+  const puppy = await prisma.puppy.findFirst({
+    where: { id: puppyId, deletedAt: null },
+    include: { litter: { select: { breederId: true } }, listing: true },
+  });
+  if (!puppy || puppy.litter.breederId !== breeder.id) {
+    return { ok: false, error: "Puppy not found." };
+  }
+  if (puppy.listing) {
+    return { ok: false, error: "This puppy already has a listing." };
+  }
+
+  await prisma.listing.create({
+    data: {
+      puppyId,
+      title: title || null,
+      description: description || null,
+      priceText: priceText || null,
+    },
+  });
+
+  revalidatePath("/listings");
+  redirect("/listings");
+}
+
+// ============================================================
+//  15. updateListingStatus — change listing to sold/withdrawn/active.
+// ============================================================
+export async function updateListingStatus(
+  listingId: string,
+  status: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const listing = await prisma.listing.findFirst({
+    where: { id: listingId, deletedAt: null },
+    include: {
+      puppy: { include: { litter: { select: { breederId: true } } } },
+    },
+  });
+  if (!listing || listing.puppy.litter.breederId !== breeder.id) {
+    return { ok: false, error: "Listing not found." };
+  }
+
+  await prisma.listing.update({
+    where: { id: listingId },
+    data: { status: status as any },
+  });
+
+  revalidatePath("/listings");
+  revalidatePath("/marketplace");
+  return { ok: true };
+}
