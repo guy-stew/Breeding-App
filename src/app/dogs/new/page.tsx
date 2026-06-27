@@ -11,7 +11,7 @@ import AddDogForm from "./AddDogForm";
 
 export default function NewDogPage() {
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href="/"
@@ -28,6 +28,6 @@ export default function NewDogPage() {
       <section className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
         <AddDogForm />
       </section>
-    </main>
+    </div>
   );
 }

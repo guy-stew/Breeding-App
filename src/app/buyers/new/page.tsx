@@ -8,7 +8,7 @@ export default async function NewBuyerPage() {
   if (!breeder) redirect("/login");
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href="/buyers"
@@ -20,6 +20,6 @@ export default async function NewBuyerPage() {
       </header>
 
       <BuyerForm mode="create" />
-    </main>
+    </div>
   );
 }

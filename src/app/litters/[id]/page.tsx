@@ -76,7 +76,7 @@ export default async function LitterDetailPage({
   const day = dayOfLitter(litter.whelpDate);
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href="/"
@@ -250,6 +250,6 @@ export default async function LitterDetailPage({
           </ul>
         )}
       </section>
-    </main>
+    </div>
   );
 }

@@ -22,7 +22,7 @@ export default async function EditDogPage({
   if (!dog) notFound();
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href={`/dogs/${dog.id}`}
@@ -49,6 +49,6 @@ export default async function EditDogPage({
         microchip={dog.microchip ?? ""}
         kcRegNumber={dog.kcRegNumber ?? ""}
       />
-    </main>
+    </div>
   );
 }

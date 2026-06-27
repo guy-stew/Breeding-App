@@ -23,7 +23,7 @@ export default async function AddHealthRecordPage({
   if (!dog) notFound();
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href={`/dogs/${dog.id}`}
@@ -35,6 +35,6 @@ export default async function AddHealthRecordPage({
       </header>
 
       <AddHealthRecordForm dogId={dog.id} />
-    </main>
+    </div>
   );
 }

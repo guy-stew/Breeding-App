@@ -317,7 +317,7 @@ export default function ContractView({
 
   // Form view
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href={`/dogs/${dog.id}`}
@@ -428,7 +428,7 @@ export default function ContractView({
           </button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 

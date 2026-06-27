@@ -22,7 +22,7 @@ export default async function EditLitterPage({
   if (!litter) notFound();
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href={`/litters/${litter.id}`}
@@ -42,6 +42,6 @@ export default async function EditLitterPage({
         notes={litter.notes ?? ""}
         status={litter.status}
       />
-    </main>
+    </div>
   );
 }

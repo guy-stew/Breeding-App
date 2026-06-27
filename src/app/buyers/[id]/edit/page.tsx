@@ -22,7 +22,7 @@ export default async function EditBuyerPage({
   if (!buyer) notFound();
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href={`/buyers/${buyer.id}`}
@@ -43,6 +43,6 @@ export default async function EditBuyerPage({
         notes={buyer.notes ?? ""}
         status={buyer.status}
       />
-    </main>
+    </div>
   );
 }

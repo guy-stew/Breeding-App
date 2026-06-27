@@ -52,7 +52,7 @@ export default async function WeighInPage() {
   });
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 flex items-center justify-between px-1">
         <div>
           <Link
@@ -100,6 +100,6 @@ export default async function WeighInPage() {
           </ul>
         </section>
       )}
-    </main>
+    </div>
   );
 }

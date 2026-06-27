@@ -27,7 +27,7 @@ export default async function AddPuppyPage({
   const nextOrder = litter.puppies.length + 1;
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href={`/litters/${litter.id}`}
@@ -39,6 +39,6 @@ export default async function AddPuppyPage({
       </header>
 
       <AddPuppyForm litterId={litter.id} nextOrder={nextOrder} />
-    </main>
+    </div>
   );
 }

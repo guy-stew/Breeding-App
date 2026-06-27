@@ -24,7 +24,7 @@ export default async function NewListingPage() {
   });
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href="/listings"
@@ -48,6 +48,6 @@ export default async function NewListingPage() {
           }))}
         />
       )}
-    </main>
+    </div>
   );
 }

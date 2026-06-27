@@ -22,11 +22,11 @@ export default async function NewLitterPage() {
   const sires = dogs.filter((d) => d.sex === "dog");
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <NewLitterForm
         dams={dams.map((d) => ({ id: d.id, callName: d.callName ?? "Unnamed" }))}
         sires={sires.map((d) => ({ id: d.id, callName: d.callName ?? "Unnamed" }))}
       />
-    </main>
+    </div>
   );
 }

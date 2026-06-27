@@ -69,7 +69,7 @@ export default async function HeatCycleDetailPage({
     : daysSince(cycle.startDate);
 
   return (
-    <main className="mx-auto max-w-md p-4">
+    <div className="mx-auto max-w-md p-4">
       <header className="mb-4 px-1">
         <Link
           href={`/dogs/${dog.id}`}
@@ -213,6 +213,6 @@ export default async function HeatCycleDetailPage({
           <AddProgTestForm cycleId={cycle.id} dogId={dog.id} />
         </div>
       </section>
-    </main>
+    </div>
   );
 }
