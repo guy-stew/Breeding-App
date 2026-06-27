@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getBreeder } from "@/lib/breeder";
 import { redirect } from "next/navigation";
 import SignOutButton from "./SignOutButton";
+import DashboardLitters from "./DashboardLitters";
 
 function dayOfLitter(whelpDate: Date): number {
   const ms = Date.now() - whelpDate.getTime();
@@ -13,13 +14,12 @@ export default async function HomePage() {
   const breeder = await getBreeder();
   if (!breeder) redirect("/login");
 
-  const dogs = await prisma.dog.findMany({
+  const totalDogs = await prisma.dog.count({
     where: {
       deletedAt: null,
       breederId: breeder.id,
       puppyRecord: null,
     },
-    orderBy: { callName: "asc" },
   });
 
   const activeLitters = await prisma.litter.findMany({
@@ -29,15 +29,45 @@ export default async function HomePage() {
       status: { not: "all_homed" },
     },
     orderBy: { whelpDate: "desc" },
-    include: { puppies: { where: { deletedAt: null } } },
+    include: {
+      puppies: {
+        where: { deletedAt: null },
+        orderBy: { birthOrder: "asc" },
+        include: {
+          dog: {
+            include: {
+              weightLogs: {
+                where: { deletedAt: null },
+                orderBy: { date: "asc" },
+              },
+            },
+          },
+        },
+      },
+    },
   });
 
-  // Stats
-  const totalDogs = dogs.length;
   const totalPuppies = activeLitters.reduce(
     (sum, l) => sum + l.puppies.length,
     0,
   );
+
+  // Shape litter data for the client component.
+  const litterData = activeLitters.map((litter) => ({
+    id: litter.id,
+    name: litter.name,
+    whelpDate: litter.whelpDate.toISOString(),
+    bornAlive: litter.bornAlive,
+    day: dayOfLitter(litter.whelpDate),
+    puppies: litter.puppies.map((p) => ({
+      collarColour: p.collarColour,
+      callName: p.dog.callName,
+      weights: p.dog.weightLogs.map((w) => ({
+        date: w.date.toISOString(),
+        weightG: w.weightG,
+      })),
+    })),
+  }));
 
   return (
     <div className="mx-auto max-w-md p-4">
@@ -78,64 +108,10 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* Active litters */}
-      {activeLitters.length > 0 && (
-        <section className="mb-5">
-          <p className="mb-1 flex items-center justify-between px-1">
-            <span className="text-xs font-medium text-neutral-400">
-              Active litter{activeLitters.length !== 1 ? "s" : ""}
-            </span>
-            <Link
-              href="/litters/new"
-              className="text-xs font-medium text-blue-600 dark:text-blue-400"
-            >
-              + New litter
-            </Link>
-          </p>
-          <div className="space-y-3">
-            {activeLitters.map((litter) => (
-              <div
-                key={litter.id}
-                className="rounded-xl border border-blue-500/30 bg-white p-4 shadow-sm dark:bg-neutral-900"
-              >
-                <div className="mb-3 flex items-center justify-between">
-                  <Link
-                    href={`/litters/${litter.id}`}
-                    className="font-medium hover:text-blue-600"
-                  >
-                    {litter.name ?? "Litter"}
-                  </Link>
-                  <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-200">
-                    Day {dayOfLitter(litter.whelpDate)}
-                  </span>
-                </div>
-                <div className="flex gap-3">
-                  <div className="flex-1 rounded-lg bg-neutral-50 p-2.5 dark:bg-neutral-800">
-                    <div className="text-xs text-neutral-400">Puppies</div>
-                    <div className="text-xl font-bold">
-                      {litter.puppies.length}
-                    </div>
-                  </div>
-                  <div className="flex-1 rounded-lg bg-neutral-50 p-2.5 dark:bg-neutral-800">
-                    <div className="text-xs text-neutral-400">Born alive</div>
-                    <div className="text-xl font-bold">
-                      {litter.bornAlive ?? "—"}
-                    </div>
-                  </div>
-                </div>
-                <Link
-                  href={`/litters/${litter.id}`}
-                  className="mt-3 block rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
-                >
-                  View litter
-                </Link>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {activeLitters.length === 0 && (
+      {/* Active litters with growth chart */}
+      {litterData.length > 0 ? (
+        <DashboardLitters litters={litterData} />
+      ) : (
         <section className="mb-5">
           <Link
             href="/litters/new"
@@ -146,74 +122,13 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Quick actions */}
-      <div className="mb-5 grid grid-cols-2 gap-3">
-        <Link
-          href="/weigh-in"
-          className="rounded-xl border border-neutral-200 bg-white p-3 text-center text-sm font-medium shadow-sm transition hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900"
-        >
-          <div className="mb-1 text-lg">⚖️</div>
-          Weigh-in
-        </Link>
-        <Link
-          href="/marketplace"
-          className="rounded-xl border border-neutral-200 bg-white p-3 text-center text-sm font-medium shadow-sm transition hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900"
-        >
-          <div className="mb-1 text-lg">🏪</div>
-          Marketplace
-        </Link>
-      </div>
-
-      {/* My dogs */}
-      <section>
-        <div className="mb-2 flex items-center justify-between px-1">
-          <p className="text-xs font-medium text-neutral-400">My dogs</p>
-          <Link
-            href="/dogs/new"
-            className="text-xs font-medium text-blue-600 dark:text-blue-400"
-          >
-            + Add dog
-          </Link>
-        </div>
-        {dogs.length === 0 ? (
-          <div className="rounded-xl border border-neutral-200 bg-white p-6 text-center dark:border-neutral-800 dark:bg-neutral-900">
-            <p className="text-sm text-neutral-400">
-              No dogs yet.{" "}
-              <Link
-                href="/dogs/new"
-                className="text-blue-600 dark:text-blue-400"
-              >
-                Add your first dog
-              </Link>
-              .
-            </p>
-          </div>
-        ) : (
-          <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
-            {dogs.map((dog) => (
-              <li key={dog.id}>
-                <Link
-                  href={`/dogs/${dog.id}`}
-                  className="flex items-center gap-3 p-3 transition hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-xs font-bold text-white shadow-sm">
-                    {(dog.callName ?? "?").slice(0, 2).toUpperCase()}
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-sm font-medium">{dog.callName}</div>
-                    <div className="text-xs text-neutral-500">
-                      {dog.breed} · {dog.sex === "bitch" ? "Bitch" : "Dog"}
-                    </div>
-                  </div>
-                  <svg className="h-4 w-4 text-neutral-300 dark:text-neutral-600" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-                  </svg>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+      {/* Quick action */}
+      <Link
+        href="/weigh-in"
+        className="mb-5 block rounded-xl border border-neutral-200 bg-white p-3 text-center text-sm font-medium shadow-sm transition hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900"
+      >
+        ⚖️ Start weigh-in round
+      </Link>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import GrowthChart from "./GrowthChart";
 import AssignBuyer from "./AssignBuyer";
 import DeleteWelfareCheckButton from "./welfare/DeleteWelfareCheckButton";
+import CollarColourPicker from "./CollarColourPicker";
 
 function formatDate(date: Date | null | undefined): string {
   if (!date) return "—";
@@ -306,13 +307,25 @@ export default async function LitterDetailPage({
                       {puppy.status}
                     </span>
                   </Link>
-                  <div className="mt-1.5 flex items-center gap-2 pl-12 text-xs text-neutral-500">
-                    <span>Buyer:</span>
-                    <AssignBuyer
-                      puppyId={puppy.id}
-                      currentBuyerId={puppy.buyerId}
-                      buyers={buyers}
-                    />
+                  <div className="mt-1.5 space-y-1 pl-12">
+                    <div className="flex items-center gap-2 text-xs text-neutral-500">
+                      <span>Collar:</span>
+                      <span className="font-medium">
+                        {puppy.collarColour ?? "None"}
+                      </span>
+                      <CollarColourPicker
+                        puppyId={puppy.id}
+                        currentColour={puppy.collarColour}
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 text-xs text-neutral-500">
+                      <span>Buyer:</span>
+                      <AssignBuyer
+                        puppyId={puppy.id}
+                        currentBuyerId={puppy.buyerId}
+                        buyers={buyers}
+                      />
+                    </div>
                   </div>
                 </li>
               );

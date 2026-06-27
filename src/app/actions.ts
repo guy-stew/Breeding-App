@@ -990,3 +990,30 @@ export async function deleteWelfareCheck(
   revalidatePath(`/litters/${litterId}`);
   return { ok: true };
 }
+
+// ============================================================
+//  20. updatePuppyCollar — change a puppy's collar colour.
+// ============================================================
+export async function updatePuppyCollar(
+  puppyId: string,
+  collarColour: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const puppy = await prisma.puppy.findFirst({
+    where: { id: puppyId, deletedAt: null },
+    include: { litter: { select: { breederId: true, id: true } } },
+  });
+  if (!puppy || puppy.litter.breederId !== breeder.id) {
+    return { ok: false, error: "Puppy not found." };
+  }
+
+  await prisma.puppy.update({
+    where: { id: puppyId },
+    data: { collarColour: collarColour || null },
+  });
+
+  revalidatePath(`/litters/${puppy.litter.id}`);
+  return { ok: true };
+}
