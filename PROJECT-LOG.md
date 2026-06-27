@@ -4,11 +4,10 @@ A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 27 June 2026 — app now covers the full breeding cycle plus
-buyer management, health records, and heat cycle tracking: add dogs, record
-matings + litters, add puppies, track weights, view growth charts, generate
-contracts + info packs, manage buyers, log vaccinations/worming/tests/scores,
-and track heat cycles with progesterone testing. Login required.*
+*Last updated: 27 June 2026 — all planned milestones complete. The app covers
+the full breeding cycle, buyer management, health records, heat cycle tracking,
+and a public marketplace. Login required for breeder pages; marketplace is
+public.*
 
 ---
 
@@ -102,11 +101,19 @@ once, and re-arrange/print it differently** for each feature.
       predicted whelp date (ovulation + 63 days). Inline form to add test results.
       Dog profile shows heat cycles section for bitches only.
 
-**The app now supports a complete breeding cycle plus buyer management, health
-records, and heat cycle tracking: add dogs → record a mating and litter → add
-puppies → track daily weights → view growth charts → log health records →
-track heat cycles with progesterone → manage buyers → assign buyers to
-puppies → generate pre-filled contracts and info packs.**
+- [x] **Public marketplace** — Listing model linked to Puppy. Breeder manages
+      listings at `/listings` (create, toggle status active/sold/withdrawn).
+      Public-facing marketplace at `/marketplace` (no login required) with card
+      grid of active listings. Detail page at `/marketplace/[id]` shows puppy
+      details, parentage, health checks, and breeder contact with email/call
+      buttons. Middleware updated to allow `/marketplace` without auth.
+      "Listings" quick link on home screen.
+
+**All planned milestones complete.** The app now supports the full workflow:
+add dogs → record matings and litters → add puppies → track daily weights →
+view growth charts → log health records → track heat cycles with progesterone
+→ manage buyers → assign buyers to puppies → generate pre-filled contracts
+and info packs → publish puppies to the public marketplace.
 
 ---
 
@@ -130,7 +137,8 @@ breeding-app/
 │   │   │                       createLitter, updateLitter, addPuppy,
 │   │   │                       createBuyer, updateBuyer, assignBuyer,
 │   │   │                       addHealthRecord, deleteHealthRecord,
-│   │   │                       createHeatCycle, addProgesteroneTest)
+│   │   │                       createHeatCycle, addProgesteroneTest,
+│   │   │                       createListing, updateListingStatus)
 │   │   ├── SignOutButton.tsx ← sign-out link (client component)
 │   │   ├── login/
 │   │   │   ├── page.tsx     ← the LOGIN PAGE
@@ -168,6 +176,16 @@ breeding-app/
 │   │   │       └── info-pack/
 │   │   │           ├── page.tsx      ← INFO PACK (printable)
 │   │   │           └── PrintButton.tsx ← print trigger (client component)
+│   │   ├── listings/
+│   │   │   ├── page.tsx        ← MY LISTINGS (manage, toggle status)
+│   │   │   ├── ListingStatusButton.tsx ← status dropdown (client component)
+│   │   │   └── new/
+│   │   │       ├── page.tsx    ← NEW LISTING (pick puppy, add details)
+│   │   │       └── NewListingForm.tsx ← form (client component)
+│   │   ├── marketplace/
+│   │   │   ├── page.tsx        ← PUBLIC MARKETPLACE (no auth, card grid)
+│   │   │   └── [id]/
+│   │   │       └── page.tsx    ← LISTING DETAIL (puppy, parents, breeder)
 │   │   ├── buyers/
 │   │   │   ├── page.tsx        ← BUYERS LIST (all buyers with status badges)
 │   │   │   ├── BuyerForm.tsx   ← shared create/edit form (client component)
@@ -336,11 +354,16 @@ npx prisma studio
 
 ---
 
-## Next steps (roughly in order of value)
+## Next steps (all original milestones complete — future ideas)
 
-1. **Public marketplace** — a Pets4Homes-style listing page for available
-   puppies, built from the existing data. The "Listing" model stub is
-   reserved in the schema.
+1. **Photo uploads** — puppy photos on listings, dog profiles, and info packs.
+2. **Welfare checks** — timestamped litter welfare visits (the WelfareCheck
+   stub is reserved in the schema).
+3. **Document generation** — save contracts and info packs as stored records
+   rather than just print-on-demand.
+4. **Multi-breeder** — support co-owned dogs and shared litter access.
+5. **Notifications** — email/push reminders for upcoming vaccinations,
+   progesterone tests, and whelp dates.
 
 ---
 
@@ -361,6 +384,7 @@ data model. Worked examples exist for every pattern:
 - **CRM / ASSIGN:** `src/app/buyers/` + `AssignBuyer.tsx` — CRUD pages, dropdown assigns buyer to puppy, contract pre-fills.
 - **HEALTH:** `src/app/dogs/[id]/health/new/` — typed record form, info pack auto-fills from real data.
 - **HEAT CYCLE:** `src/app/dogs/[id]/heat-cycles/` — cycle + progesterone tests, Recharts chart, predicted whelp date.
+- **MARKETPLACE:** `src/app/marketplace/` — public pages (no auth), `src/app/listings/` — breeder management.
 
 Any new page starts with `const breeder = await getBreeder()` and follows one
 of those patterns.
