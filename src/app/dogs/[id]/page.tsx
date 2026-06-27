@@ -170,6 +170,25 @@ export default async function DogProfilePage({
         </section>
       )}
 
+      {/* Paperwork */}
+      <section className="mb-5">
+        <p className="mb-2 px-1 text-xs text-neutral-400">Paperwork</p>
+        <div className="flex gap-2">
+          <Link
+            href={`/dogs/${dog.id}/contract`}
+            className="flex-1 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-center text-sm font-medium hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+          >
+            Puppy contract
+          </Link>
+          <Link
+            href={`/dogs/${dog.id}/info-pack`}
+            className="flex-1 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-center text-sm font-medium hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+          >
+            Info pack
+          </Link>
+        </div>
+      </section>
+
       {/* Recent weights */}
       <section>
         <p className="mb-2 px-1 text-xs text-neutral-400">
