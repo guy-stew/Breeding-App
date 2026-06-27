@@ -626,3 +626,81 @@ export async function addDog(input: AddDogInput): Promise<AddDogResult> {
   // action here — nothing after this line runs.
   redirect("/");
 }
+
+// ============================================================
+//  10. addHealthRecord — log a vaccination, worming, test, etc.
+// ============================================================
+type AddHealthRecordInput = {
+  dogId: string;
+  type: string;
+  description: string;
+  date: string;
+  nextDueDate: string;
+  vet: string;
+  result: string;
+  notes: string;
+};
+
+export async function addHealthRecord(
+  input: AddHealthRecordInput,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const { dogId, type, description, date, nextDueDate, vet, result, notes } =
+    input;
+
+  if (!dogId || !type || !date) {
+    return { ok: false, error: "Type and date are required." };
+  }
+
+  // Verify the dog belongs to this breeder.
+  const dog = await prisma.dog.findFirst({
+    where: { id: dogId, breederId: breeder.id, deletedAt: null },
+  });
+  if (!dog) return { ok: false, error: "Dog not found." };
+
+  await prisma.healthRecord.create({
+    data: {
+      dogId,
+      type: type as any,
+      description: description || null,
+      date: new Date(date),
+      nextDueDate: nextDueDate ? new Date(nextDueDate) : null,
+      vet: vet || null,
+      result: result || null,
+      notes: notes || null,
+    },
+  });
+
+  revalidatePath(`/dogs/${dogId}`);
+  redirect(`/dogs/${dogId}`);
+}
+
+// ============================================================
+//  11. deleteHealthRecord — soft-delete a health record.
+// ============================================================
+export async function deleteHealthRecord(
+  recordId: string,
+  dogId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  // Verify the record's dog belongs to this breeder.
+  const record = await prisma.healthRecord.findFirst({
+    where: { id: recordId, deletedAt: null },
+    include: { dog: { select: { breederId: true } } },
+  });
+  if (!record || record.dog.breederId !== breeder.id) {
+    return { ok: false, error: "Record not found." };
+  }
+
+  await prisma.healthRecord.update({
+    where: { id: recordId },
+    data: { deletedAt: new Date() },
+  });
+
+  revalidatePath(`/dogs/${dogId}`);
+  return { ok: true };
+}

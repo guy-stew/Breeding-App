@@ -351,6 +351,23 @@ export type EnumBuyerStatusWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumBuyerStatusFilter<$PrismaModel>
 }
 
+export type EnumHealthRecordTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HealthRecordType | Prisma.EnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HealthRecordType[] | Prisma.ListEnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HealthRecordType[] | Prisma.ListEnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel> | $Enums.HealthRecordType
+}
+
+export type EnumHealthRecordTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HealthRecordType | Prisma.EnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HealthRecordType[] | Prisma.ListEnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HealthRecordType[] | Prisma.ListEnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHealthRecordTypeWithAggregatesFilter<$PrismaModel> | $Enums.HealthRecordType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel>
+}
+
 export type NestedStringFilter<$PrismaModel = never> = {
   equals?: string | Prisma.StringFieldRefInput<$PrismaModel>
   in?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
@@ -699,6 +716,23 @@ export type NestedEnumBuyerStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumBuyerStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumBuyerStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumHealthRecordTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HealthRecordType | Prisma.EnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HealthRecordType[] | Prisma.ListEnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HealthRecordType[] | Prisma.ListEnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel> | $Enums.HealthRecordType
+}
+
+export type NestedEnumHealthRecordTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HealthRecordType | Prisma.EnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HealthRecordType[] | Prisma.ListEnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HealthRecordType[] | Prisma.ListEnumHealthRecordTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHealthRecordTypeWithAggregatesFilter<$PrismaModel> | $Enums.HealthRecordType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel>
 }
 
 

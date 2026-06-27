@@ -57,7 +57,8 @@ export const ModelName = {
   Litter: 'Litter',
   Puppy: 'Puppy',
   WeightLog: 'WeightLog',
-  Buyer: 'Buyer'
+  Buyer: 'Buyer',
+  HealthRecord: 'HealthRecord'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -206,6 +207,24 @@ export const BuyerScalarFieldEnum = {
 } as const
 
 export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
+
+
+export const HealthRecordScalarFieldEnum = {
+  id: 'id',
+  dogId: 'dogId',
+  type: 'type',
+  description: 'description',
+  date: 'date',
+  nextDueDate: 'nextDueDate',
+  vet: 'vet',
+  result: 'result',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HealthRecordScalarFieldEnum = (typeof HealthRecordScalarFieldEnum)[keyof typeof HealthRecordScalarFieldEnum]
 
 
 export const SortOrder = {

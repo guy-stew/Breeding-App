@@ -49,6 +49,10 @@ export default async function DogProfilePage({
         orderBy: { date: "desc" },
         take: 10,
       },
+      healthRecords: {
+        where: { deletedAt: null },
+        orderBy: { date: "desc" },
+      },
       puppyRecord: {
         select: {
           collarColour: true,
@@ -187,6 +191,54 @@ export default async function DogProfilePage({
             Info pack
           </Link>
         </div>
+      </section>
+
+      {/* Health records */}
+      <section className="mb-5">
+        <div className="mb-2 flex items-center justify-between px-1">
+          <p className="text-xs text-neutral-400">
+            Health records · {dog.healthRecords.length}
+          </p>
+          <Link
+            href={`/dogs/${dog.id}/health/new`}
+            className="text-xs font-medium text-blue-600 dark:text-blue-400"
+          >
+            + Add record
+          </Link>
+        </div>
+        {dog.healthRecords.length === 0 ? (
+          <p className="rounded-xl border border-neutral-200 bg-white p-4 text-center text-sm text-neutral-400 dark:border-neutral-800 dark:bg-neutral-900">
+            No health records yet.
+          </p>
+        ) : (
+          <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
+            {dog.healthRecords.map((rec) => (
+              <li key={rec.id} className="px-4 py-2.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">
+                    {rec.type.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+                  </span>
+                  <span className="text-xs text-neutral-500">
+                    {formatDate(rec.date)}
+                  </span>
+                </div>
+                {rec.description && (
+                  <p className="text-xs text-neutral-500">{rec.description}</p>
+                )}
+                {rec.result && (
+                  <p className="text-xs text-neutral-500">
+                    Result: {rec.result}
+                  </p>
+                )}
+                {rec.nextDueDate && (
+                  <p className="text-xs text-neutral-400">
+                    Next due: {formatDate(rec.nextDueDate)}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       {/* Recent weights */}

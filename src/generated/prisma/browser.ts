@@ -52,3 +52,8 @@ export type WeightLog = Prisma.WeightLogModel
  * 
  */
 export type Buyer = Prisma.BuyerModel
+/**
+ * Model HealthRecord
+ * 
+ */
+export type HealthRecord = Prisma.HealthRecordModel

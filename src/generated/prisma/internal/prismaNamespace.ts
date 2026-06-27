@@ -390,7 +390,8 @@ export const ModelName = {
   Litter: 'Litter',
   Puppy: 'Puppy',
   WeightLog: 'WeightLog',
-  Buyer: 'Buyer'
+  Buyer: 'Buyer',
+  HealthRecord: 'HealthRecord'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -406,7 +407,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer"
+    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -928,6 +929,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HealthRecord: {
+      payload: Prisma.$HealthRecordPayload<ExtArgs>
+      fields: Prisma.HealthRecordFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HealthRecordFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HealthRecordFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>
+        }
+        findFirst: {
+          args: Prisma.HealthRecordFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HealthRecordFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>
+        }
+        findMany: {
+          args: Prisma.HealthRecordFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>[]
+        }
+        create: {
+          args: Prisma.HealthRecordCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>
+        }
+        createMany: {
+          args: Prisma.HealthRecordCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HealthRecordCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>[]
+        }
+        delete: {
+          args: Prisma.HealthRecordDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>
+        }
+        update: {
+          args: Prisma.HealthRecordUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>
+        }
+        deleteMany: {
+          args: Prisma.HealthRecordDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HealthRecordUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HealthRecordUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>[]
+        }
+        upsert: {
+          args: Prisma.HealthRecordUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HealthRecordPayload>
+        }
+        aggregate: {
+          args: Prisma.HealthRecordAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHealthRecord>
+        }
+        groupBy: {
+          args: Prisma.HealthRecordGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HealthRecordGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HealthRecordCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HealthRecordCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1097,6 +1172,24 @@ export const BuyerScalarFieldEnum = {
 } as const
 
 export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
+
+
+export const HealthRecordScalarFieldEnum = {
+  id: 'id',
+  dogId: 'dogId',
+  type: 'type',
+  description: 'description',
+  date: 'date',
+  nextDueDate: 'nextDueDate',
+  vet: 'vet',
+  result: 'result',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HealthRecordScalarFieldEnum = (typeof HealthRecordScalarFieldEnum)[keyof typeof HealthRecordScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1291,6 +1384,20 @@ export type ListEnumBuyerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'HealthRecordType'
+ */
+export type EnumHealthRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HealthRecordType'>
+    
+
+
+/**
+ * Reference to a field of type 'HealthRecordType[]'
+ */
+export type ListEnumHealthRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HealthRecordType[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1420,6 +1527,7 @@ export type GlobalOmitConfig = {
   puppy?: Prisma.PuppyOmit
   weightLog?: Prisma.WeightLogOmit
   buyer?: Prisma.BuyerOmit
+  healthRecord?: Prisma.HealthRecordOmit
 }
 
 /* Types for Logging */

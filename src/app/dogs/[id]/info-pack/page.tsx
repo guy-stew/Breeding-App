@@ -64,6 +64,10 @@ export default async function InfoPackPage({
           litter: { select: { whelpDate: true, name: true } },
         },
       },
+      healthRecords: {
+        where: { deletedAt: null },
+        orderBy: { date: "asc" },
+      },
     },
   });
 
@@ -253,23 +257,49 @@ export default async function InfoPackPage({
                 <th className="py-1.5 font-normal">Treatment</th>
                 <th className="py-1.5 font-normal">Product / details</th>
                 <th className="py-1.5 font-normal">Date</th>
+                <th className="py-1.5 font-normal">Next due</th>
               </tr>
             </thead>
             <tbody>
-              {[
-                "1st vaccination",
-                "2nd vaccination",
-                "Worming (1)",
-                "Worming (2)",
-                "Worming (3)",
-                "Flea treatment",
-              ].map((treatment) => (
-                <tr key={treatment} className="border-b border-neutral-200">
-                  <td className="py-2">{treatment}</td>
-                  <td className="py-2">___________________</td>
-                  <td className="py-2">___________</td>
-                </tr>
-              ))}
+              {dog.healthRecords.length > 0
+                ? dog.healthRecords.map((rec) => (
+                    <tr
+                      key={rec.id}
+                      className="border-b border-neutral-200"
+                    >
+                      <td className="py-2">
+                        {rec.type
+                          .replace("_", " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}
+                      </td>
+                      <td className="py-2">
+                        {rec.description ?? "—"}
+                        {rec.result ? ` (${rec.result})` : ""}
+                      </td>
+                      <td className="py-2">{formatDate(rec.date)}</td>
+                      <td className="py-2">
+                        {rec.nextDueDate ? formatDate(rec.nextDueDate) : "—"}
+                      </td>
+                    </tr>
+                  ))
+                : [
+                    "1st vaccination",
+                    "2nd vaccination",
+                    "Worming (1)",
+                    "Worming (2)",
+                    "Worming (3)",
+                    "Flea treatment",
+                  ].map((treatment) => (
+                    <tr
+                      key={treatment}
+                      className="border-b border-neutral-200"
+                    >
+                      <td className="py-2">{treatment}</td>
+                      <td className="py-2">___________________</td>
+                      <td className="py-2">___________</td>
+                      <td className="py-2">___________</td>
+                    </tr>
+                  ))}
             </tbody>
           </table>
         </Section>

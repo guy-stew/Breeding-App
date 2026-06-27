@@ -76,6 +76,21 @@ export const BuyerStatus = {
 export type BuyerStatus = (typeof BuyerStatus)[keyof typeof BuyerStatus]
 
 
+export const HealthRecordType = {
+  vaccination: 'vaccination',
+  worming: 'worming',
+  flea_treatment: 'flea_treatment',
+  vet_check: 'vet_check',
+  dna_test: 'dna_test',
+  hip_score: 'hip_score',
+  elbow_score: 'elbow_score',
+  eye_test: 'eye_test',
+  other: 'other'
+} as const
+
+export type HealthRecordType = (typeof HealthRecordType)[keyof typeof HealthRecordType]
+
+
 export const PuppyStatus = {
   available: 'available',
   reserved: 'reserved',

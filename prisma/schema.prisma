@@ -99,6 +99,7 @@ model Dog {
   mathingsAsDam  Mating[] @relation("MatingDam")
   matingsAsSire  Mating[] @relation("MatingSire")
   weightLogs     WeightLog[]
+  healthRecords  HealthRecord[]
   // If this Dog record IS a puppy in a litter, this links to that role.
   puppyRecord    Puppy?
 
@@ -307,6 +308,18 @@ enum BuyerStatus {
   collected
 }
 
+enum HealthRecordType {
+  vaccination
+  worming
+  flea_treatment
+  vet_check
+  dna_test
+  hip_score
+  elbow_score
+  eye_test
+  other
+}
+
 enum PuppyStatus {
   available
   reserved
@@ -315,15 +328,39 @@ enum PuppyStatus {
   deceased
 }
 
+// ------------------------------------------------------------
+//  8. HealthRecord — vaccinations, worming, flea treatments,
+//     vet checks, DNA tests, hip/elbow scores, eye tests.
+//     Attached to a Dog so the record follows a kept puppy.
+// ------------------------------------------------------------
+model HealthRecord {
+  id    String @id @default(uuid())
+  dog   Dog    @relation(fields: [dogId], references: [id])
+  dogId String
+
+  type        HealthRecordType
+  description String?          // product name or test detail
+  date        DateTime
+  nextDueDate DateTime?        // for recurring treatments
+  vet         String?          // vet name or practice
+  result      String?          // test results, e.g. "4/4"
+  notes       String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([dogId])
+  @@index([dogId, date])
+}
+
 // ============================================================
 //  Reserved for later builds — shape noted, not yet modelled.
 //  Uncomment and flesh out when each phase arrives.
 // ============================================================
 //
-//  model HealthRecord { ... }   // hip scores, DNA, vaccinations
 //  model HeatCycle    { ... }   // seasons + progesterone readings
 //  model WelfareCheck { ... }   // timestamped in-person litter checks
-//  model Buyer        { ... }   // CRM: enquiry -> waitlist -> collected
 //  model Document     { ... }   // generated contracts / packs
 //  model Listing      { ... }   // marketplace view onto records
 //
