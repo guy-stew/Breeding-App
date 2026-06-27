@@ -5,10 +5,10 @@ what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
 *Last updated: 27 June 2026 — all planned milestones complete plus photo
-uploads and UI overhaul. The app covers the full breeding cycle, buyer
-management, health records, heat cycle tracking, public marketplace, photo
-uploads, and a polished app shell with dark mode. Login required for breeder
-pages; marketplace is public.*
+uploads, UI overhaul, and welfare checks. The app covers the full breeding
+cycle, buyer management, health records, heat cycle tracking, public
+marketplace, photo uploads, welfare checks, and a polished app shell with
+dark mode. Login required for breeder pages; marketplace is public.*
 
 ---
 
@@ -116,6 +116,13 @@ once, and re-arrange/print it differently** for each feature.
       (falling back to colour banner). Info pack includes puppy photo at top.
       Requires a public Supabase Storage bucket named `photos`.
 
+- [x] **Welfare checks** — WelfareCheck model linked to Litter. Record
+      timestamped welfare visits at `/litters/[id]/welfare/new` with fields for
+      general observations, dam condition, concerns, and action taken. Litter
+      detail page shows all checks with amber "Concern" badges when concerns
+      are flagged. Delete button on each check. Contextual placeholders guide
+      the breeder on what to record.
+
 - [x] **UI overhaul** — App shell with persistent bottom tab navigation (Home,
       Dogs, Litters, Buyers, Listings) and sticky top header with kennel name
       and dark mode toggle. Class-based dark mode with localStorage persistence
@@ -156,7 +163,8 @@ breeding-app/
 │   │   │                       addHealthRecord, deleteHealthRecord,
 │   │   │                       createHeatCycle, addProgesteroneTest,
 │   │   │                       createListing, updateListingStatus,
-│   │   │                       savePhoto, deletePhoto)
+│   │   │                       savePhoto, deletePhoto,
+│   │   │                       createWelfareCheck, deleteWelfareCheck)
 │   │   ├── ThemeProvider.tsx ← class-based dark mode (localStorage + system pref)
 │   │   ├── AppShell.tsx     ← app shell: top header + bottom nav (client component)
 │   │   ├── AppShellWrapper.tsx ← server component loading kennel name for AppShell
@@ -223,7 +231,12 @@ breeding-app/
 │   │       │   ├── page.tsx      ← NEW LITTER (pick parents, enter details)
 │   │       │   └── NewLitterForm.tsx ← litter form (client component)
 │   │       └── [id]/
-│   │           ├── page.tsx      ← LITTER DETAIL (summary, puppies, chart)
+│   │           ├── page.tsx      ← LITTER DETAIL (summary, welfare, puppies, chart)
+│   │           ├── welfare/
+│   │           │   ├── DeleteWelfareCheckButton.tsx ← delete button (client)
+│   │           │   └── new/
+│   │           │       ├── page.tsx      ← ADD WELFARE CHECK
+│   │           │       └── WelfareCheckForm.tsx ← form (client component)
 │   │           ├── GrowthChart.tsx ← Recharts line chart (client component)
 │   │           ├── AssignBuyer.tsx ← buyer dropdown per puppy (client component)
 │   │           ├── edit/
@@ -383,14 +396,12 @@ npx prisma studio
 
 ---
 
-## Next steps (all original milestones complete — future ideas)
+## Next steps (future ideas)
 
-1. **Welfare checks** — timestamped litter welfare visits (the WelfareCheck
-   stub is reserved in the schema).
-2. **Document generation** — save contracts and info packs as stored records
+1. **Document generation** — save contracts and info packs as stored records
    rather than just print-on-demand.
-3. **Multi-breeder** — support co-owned dogs and shared litter access.
-4. **Notifications** — email/push reminders for upcoming vaccinations,
+2. **Multi-breeder** — support co-owned dogs and shared litter access.
+3. **Notifications** — email/push reminders for upcoming vaccinations,
    progesterone tests, and whelp dates.
 
 ---
@@ -414,6 +425,7 @@ data model. Worked examples exist for every pattern:
 - **HEAT CYCLE:** `src/app/dogs/[id]/heat-cycles/` — cycle + progesterone tests, Recharts chart, predicted whelp date.
 - **MARKETPLACE:** `src/app/marketplace/` — public pages (no auth), `src/app/listings/` — breeder management.
 - **PHOTO UPLOAD:** `src/app/dogs/[id]/PhotoUpload.tsx` — client-side Supabase Storage upload → server action saves URL.
+- **WELFARE CHECK:** `src/app/litters/[id]/welfare/new/` — timestamped litter welfare visits with concerns tracking.
 - **APP SHELL:** `src/app/AppShell.tsx` + `AppShellWrapper.tsx` — persistent bottom nav + top header, excluded from public/print pages.
 - **DARK MODE:** `src/app/ThemeProvider.tsx` — class-based toggle with localStorage, `@custom-variant dark` in globals.css.
 
