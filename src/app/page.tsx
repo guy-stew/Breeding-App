@@ -12,6 +12,7 @@
 //   - the breeder's dogs as a list below
 // ============================================================
 
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 // Small helper: turn a whelp date into "Day N" of the litter.
@@ -85,6 +86,15 @@ export default async function HomePage() {
                 </div>
               </div>
             </div>
+
+            {/* Through to the weigh-in round — the daily job during
+                the early weeks. */}
+            <Link
+              href="/weigh-in"
+              className="mt-3 block rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white"
+            >
+              Start weigh-in round
+            </Link>
           </div>
         </section>
       )}
