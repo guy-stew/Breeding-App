@@ -1,65 +1,119 @@
-import Image from "next/image";
+// ============================================================
+//  src/app/page.tsx — the home screen.
+//
+//  This is a "server component": the code here runs on the
+//  server, BEFORE the page is sent to the browser. That means
+//  we can ask the database for data right here, and the page
+//  arrives already filled in. No loading spinners, no extra
+//  round-trips.
+//
+//  What it shows (matching the mockup):
+//   - the active litter as a card at the top, if there is one
+//   - the breeder's dogs as a list below
+// ============================================================
 
-export default function Home() {
+import { prisma } from "@/lib/prisma";
+
+// Small helper: turn a whelp date into "Day N" of the litter.
+function dayOfLitter(whelpDate: Date): number {
+  const ms = Date.now() - whelpDate.getTime();
+  return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
+}
+
+export default async function HomePage() {
+  // ----------------------------------------------------------
+  // Fetch the breeder, their dogs, and any active litter.
+  // We grab the first breeder for now — once login is added,
+  // this becomes "the logged-in breeder".
+  // ----------------------------------------------------------
+  const breeder = await prisma.breeder.findFirst({
+    where: { deletedAt: null },
+  });
+
+  // The adult dogs (not the puppies — puppies have a litter link).
+  const dogs = await prisma.dog.findMany({
+    where: {
+      deletedAt: null,
+      breederId: breeder?.id,
+      puppyRecord: null, // exclude dogs that are puppies in a litter
+    },
+    orderBy: { callName: "asc" },
+  });
+
+  // The most recent litter that isn't fully homed yet.
+  const activeLitter = await prisma.litter.findFirst({
+    where: {
+      deletedAt: null,
+      breederId: breeder?.id,
+      status: { not: "all_homed" },
+    },
+    orderBy: { whelpDate: "desc" },
+    include: { puppies: { where: { deletedAt: null } } },
+  });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="mx-auto max-w-md p-4">
+      {/* Kennel header */}
+      <header className="mb-4 flex items-center justify-between px-1">
+        <h1 className="text-lg font-medium">
+          {breeder?.kennelName ?? "My kennel"}
+        </h1>
+      </header>
+
+      {/* Active litter card */}
+      {activeLitter && (
+        <section className="mb-5">
+          <p className="mb-1 px-1 text-xs text-neutral-400">Happening now</p>
+          <div className="rounded-xl border border-blue-500/40 bg-white p-4 dark:bg-neutral-900">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="font-medium">{activeLitter.name}</span>
+              <span className="rounded-full bg-blue-50 px-3 py-1 text-xs text-blue-800 dark:bg-blue-950 dark:text-blue-200">
+                Day {dayOfLitter(activeLitter.whelpDate)}
+              </span>
+            </div>
+            <div className="flex gap-3">
+              <div className="flex-1 rounded-lg bg-neutral-50 p-2 dark:bg-neutral-800">
+                <div className="text-xs text-neutral-400">Puppies</div>
+                <div className="text-xl font-medium">
+                  {activeLitter.puppies.length}
+                </div>
+              </div>
+              <div className="flex-1 rounded-lg bg-neutral-50 p-2 dark:bg-neutral-800">
+                <div className="text-xs text-neutral-400">Born alive</div>
+                <div className="text-xl font-medium">
+                  {activeLitter.bornAlive ?? "—"}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Dogs list */}
+      <section>
+        <p className="mb-2 px-1 text-xs text-neutral-400">My dogs</p>
+        <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
+          {dogs.map((dog) => (
+            <li key={dog.id} className="flex items-center gap-3 p-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+                {(dog.callName ?? "?").slice(0, 2).toUpperCase()}
+              </div>
+              <div className="flex-1">
+                <div className="text-sm font-medium">{dog.callName}</div>
+                <div className="text-xs text-neutral-500">
+                  {dog.breed} · {dog.sex === "bitch" ? "bitch" : "dog"}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        {dogs.length === 0 && (
+          <p className="mt-4 text-center text-sm text-neutral-400">
+            No dogs yet. Run the seed script, or add your first dog.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+        )}
+      </section>
+    </main>
   );
 }
