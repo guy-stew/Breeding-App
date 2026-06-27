@@ -121,6 +121,82 @@ type AddDogInput = {
   microchip?: string;
 };
 
+// ============================================================
+//  updateDog — edit an existing dog record.
+//
+//  Same shape as addDog but updates instead of creates, and
+//  includes extra fields (registeredName, markings, kcRegNumber)
+//  that the quick-add form skips.
+// ============================================================
+
+type UpdateDogInput = {
+  id: string;
+  callName: string;
+  registeredName?: string;
+  breed: string;
+  sex: string;
+  colour?: string;
+  markings?: string;
+  dateOfBirth?: string;
+  microchip?: string;
+  kcRegNumber?: string;
+};
+
+export async function updateDog(
+  input: UpdateDogInput,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not logged in." };
+
+  // Make sure this dog belongs to the logged-in breeder.
+  const existing = await prisma.dog.findFirst({
+    where: { id: input.id, breederId: breeder.id, deletedAt: null },
+  });
+  if (!existing) return { ok: false, error: "Dog not found." };
+
+  const breed = input.breed?.trim();
+  if (!breed) return { ok: false, error: "Breed is required." };
+
+  if (input.sex !== "dog" && input.sex !== "bitch") {
+    return { ok: false, error: "Choose whether the dog is a dog or a bitch." };
+  }
+
+  let dob: Date | undefined;
+  if (input.dateOfBirth) {
+    const parsed = new Date(input.dateOfBirth);
+    if (Number.isNaN(parsed.getTime())) {
+      return { ok: false, error: "That date of birth isn't valid." };
+    }
+    if (parsed.getTime() > Date.now()) {
+      return { ok: false, error: "Date of birth can't be in the future." };
+    }
+    dob = parsed;
+  }
+
+  try {
+    await prisma.dog.update({
+      where: { id: input.id },
+      data: {
+        breed,
+        sex: input.sex,
+        callName: input.callName?.trim() || null,
+        registeredName: input.registeredName?.trim() || null,
+        colour: input.colour?.trim() || null,
+        markings: input.markings?.trim() || null,
+        microchip: input.microchip?.trim() || null,
+        kcRegNumber: input.kcRegNumber?.trim() || null,
+        ...(dob ? { dateOfBirth: dob } : {}),
+      },
+    });
+  } catch {
+    return { ok: false, error: "Could not save — please try again." };
+  }
+
+  revalidatePath(`/dogs/${input.id}`);
+  revalidatePath("/");
+  redirect(`/dogs/${input.id}`);
+}
+
 export async function addDog(input: AddDogInput): Promise<AddDogResult> {
   // --- Find the breeder this dog belongs to. ---
   const breeder = await getBreeder();

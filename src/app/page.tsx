@@ -46,7 +46,9 @@ export default async function HomePage() {
           <p className="mb-1 px-1 text-xs text-neutral-400">Happening now</p>
           <div className="rounded-xl border border-blue-500/40 bg-white p-4 dark:bg-neutral-900">
             <div className="mb-3 flex items-center justify-between">
-              <span className="font-medium">{activeLitter.name}</span>
+              <Link href={`/litters/${activeLitter.id}`} className="font-medium hover:text-blue-600">
+                {activeLitter.name}
+              </Link>
               <span className="rounded-full bg-blue-50 px-3 py-1 text-xs text-blue-800 dark:bg-blue-950 dark:text-blue-200">
                 Day {dayOfLitter(activeLitter.whelpDate)}
               </span>
@@ -88,16 +90,21 @@ export default async function HomePage() {
         </div>
         <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
           {dogs.map((dog) => (
-            <li key={dog.id} className="flex items-center gap-3 p-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
-                {(dog.callName ?? "?").slice(0, 2).toUpperCase()}
-              </div>
-              <div className="flex-1">
-                <div className="text-sm font-medium">{dog.callName}</div>
-                <div className="text-xs text-neutral-500">
-                  {dog.breed} · {dog.sex === "bitch" ? "bitch" : "dog"}
+            <li key={dog.id}>
+              <Link
+                href={`/dogs/${dog.id}`}
+                className="flex items-center gap-3 p-3 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+                  {(dog.callName ?? "?").slice(0, 2).toUpperCase()}
                 </div>
-              </div>
+                <div className="flex-1">
+                  <div className="text-sm font-medium">{dog.callName}</div>
+                  <div className="text-xs text-neutral-500">
+                    {dog.breed} · {dog.sex === "bitch" ? "bitch" : "dog"}
+                  </div>
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
