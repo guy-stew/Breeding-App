@@ -154,6 +154,50 @@ export default async function LitterDetailPage({
         </dl>
       </section>
 
+      {/* Inbreeding Coefficient */}
+      {litter.mating?.coiPercent != null && (
+        <section className="mb-5">
+          {(() => {
+            const coi = litter.mating!.coiPercent!;
+            const avg = litter.mating!.breedAvgCoi;
+            let colour = "bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300";
+            let label = "Below average";
+            if (avg != null) {
+              if (coi > avg) {
+                colour = "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300";
+                label = "Above average";
+              } else if (coi > avg * 0.8) {
+                colour = "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300";
+                label = "Near average";
+              }
+            } else {
+              colour = "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400";
+              label = "No breed average set";
+            }
+            return (
+              <div className={`rounded-xl p-3 ${colour}`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide opacity-70">
+                      Inbreeding Coefficient
+                    </p>
+                    <p className="mt-0.5 text-lg font-bold">{coi.toFixed(2)}%</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-medium">{label}</p>
+                    {avg != null && (
+                      <p className="text-xs opacity-70">
+                        Breed avg: {avg.toFixed(2)}%
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+        </section>
+      )}
+
       {litter.notes && (
         <p className="mb-5 rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-400">
           {litter.notes}

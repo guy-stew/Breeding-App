@@ -215,6 +215,8 @@ type CreateLitterInput = {
   totalBorn?: string;
   bornAlive?: string;
   notes?: string;
+  coiPercent?: string;
+  breedAvgCoi?: string;
 };
 
 export async function createLitter(
@@ -244,6 +246,9 @@ export async function createLitter(
   const totalBorn = input.totalBorn ? parseInt(input.totalBorn, 10) : undefined;
   const bornAlive = input.bornAlive ? parseInt(input.bornAlive, 10) : undefined;
 
+  const coiPercent = input.coiPercent ? parseFloat(input.coiPercent) : undefined;
+  const breedAvgCoi = input.breedAvgCoi ? parseFloat(input.breedAvgCoi) : undefined;
+
   try {
     const mating = await prisma.mating.create({
       data: {
@@ -251,6 +256,12 @@ export async function createLitter(
         sireId: input.sireId,
         ...(matingDate ? { matingDate } : {}),
         method,
+        ...(coiPercent !== undefined && !Number.isNaN(coiPercent)
+          ? { coiPercent }
+          : {}),
+        ...(breedAvgCoi !== undefined && !Number.isNaN(breedAvgCoi)
+          ? { breedAvgCoi }
+          : {}),
       },
     });
 
@@ -290,6 +301,8 @@ type UpdateLitterInput = {
   bornAlive?: string;
   notes?: string;
   status?: string;
+  coiPercent?: string;
+  breedAvgCoi?: string;
 };
 
 export async function updateLitter(
@@ -300,6 +313,7 @@ export async function updateLitter(
 
   const existing = await prisma.litter.findFirst({
     where: { id: input.id, breederId: breeder.id, deletedAt: null },
+    select: { id: true, matingId: true },
   });
   if (!existing) return { ok: false, error: "Litter not found." };
 
@@ -315,6 +329,9 @@ export async function updateLitter(
 
   const totalBorn = input.totalBorn ? parseInt(input.totalBorn, 10) : undefined;
   const bornAlive = input.bornAlive ? parseInt(input.bornAlive, 10) : undefined;
+
+  const coiPercent = input.coiPercent ? parseFloat(input.coiPercent) : undefined;
+  const breedAvgCoi = input.breedAvgCoi ? parseFloat(input.breedAvgCoi) : undefined;
 
   try {
     await prisma.litter.update({
@@ -332,6 +349,21 @@ export async function updateLitter(
         ...(status ? { status } : {}),
       },
     });
+
+    // Update COI on the linked mating record.
+    if (existing.matingId && (coiPercent !== undefined || breedAvgCoi !== undefined)) {
+      await prisma.mating.update({
+        where: { id: existing.matingId },
+        data: {
+          ...(coiPercent !== undefined && !Number.isNaN(coiPercent)
+            ? { coiPercent }
+            : {}),
+          ...(breedAvgCoi !== undefined && !Number.isNaN(breedAvgCoi)
+            ? { breedAvgCoi }
+            : {}),
+        },
+      });
+    }
   } catch {
     return { ok: false, error: "Could not save — please try again." };
   }

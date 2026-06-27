@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Mating" ADD COLUMN "coiPercent" DOUBLE PRECISION;
+ALTER TABLE "Mating" ADD COLUMN "breedAvgCoi" DOUBLE PRECISION;

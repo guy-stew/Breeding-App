@@ -130,6 +130,10 @@ model Mating {
   method              MatingMethod @default(natural)
   predictedWhelpDate  DateTime?
 
+  // Inbreeding Coefficient — looked up from KC Mate Select.
+  coiPercent    Float?     // COI % for this pairing (e.g. 6.25)
+  breedAvgCoi   Float?     // breed average COI % to compare against
+
   litter Litter?
 
   createdAt DateTime  @default(now())

@@ -134,6 +134,8 @@ export const MatingScalarFieldEnum = {
   matingDate: 'matingDate',
   method: 'method',
   predictedWhelpDate: 'predictedWhelpDate',
+  coiPercent: 'coiPercent',
+  breedAvgCoi: 'breedAvgCoi',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'

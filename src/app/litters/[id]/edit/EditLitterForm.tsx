@@ -12,6 +12,8 @@ type Props = {
   bornAlive: string;
   notes: string;
   status: string;
+  coiPercent: string;
+  breedAvgCoi: string;
 };
 
 export default function EditLitterForm(props: Props) {
@@ -23,6 +25,8 @@ export default function EditLitterForm(props: Props) {
   const [bornAlive, setBornAlive] = useState(props.bornAlive);
   const [notes, setNotes] = useState(props.notes);
   const [status, setStatus] = useState(props.status);
+  const [coiPercent, setCoiPercent] = useState(props.coiPercent);
+  const [breedAvgCoi, setBreedAvgCoi] = useState(props.breedAvgCoi);
 
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -40,6 +44,8 @@ export default function EditLitterForm(props: Props) {
           bornAlive,
           notes,
           status,
+          coiPercent,
+          breedAvgCoi,
         });
         if (result && !result.ok) {
           setError(result.error);
@@ -107,6 +113,41 @@ export default function EditLitterForm(props: Props) {
       <div>
         <label className={labelClass} htmlFor="notes">Notes</label>
         <textarea id="notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className={inputClass} />
+      </div>
+
+      <p className="px-1 pt-2 text-xs font-medium text-neutral-400 uppercase tracking-wide">
+        Inbreeding Coefficient (KC Mate Select)
+      </p>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className={labelClass} htmlFor="coiPercent">COI %</label>
+          <input
+            id="coiPercent"
+            type="number"
+            step="0.01"
+            min="0"
+            max="100"
+            value={coiPercent}
+            onChange={(e) => setCoiPercent(e.target.value)}
+            placeholder="e.g. 6.25"
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className={labelClass} htmlFor="breedAvgCoi">Breed average %</label>
+          <input
+            id="breedAvgCoi"
+            type="number"
+            step="0.01"
+            min="0"
+            max="100"
+            value={breedAvgCoi}
+            onChange={(e) => setBreedAvgCoi(e.target.value)}
+            placeholder="e.g. 8.5"
+            className={inputClass}
+          />
+        </div>
       </div>
 
       {error && (

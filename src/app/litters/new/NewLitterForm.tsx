@@ -25,6 +25,8 @@ export default function NewLitterForm({
   const [totalBorn, setTotalBorn] = useState("");
   const [bornAlive, setBornAlive] = useState("");
   const [notes, setNotes] = useState("");
+  const [coiPercent, setCoiPercent] = useState("");
+  const [breedAvgCoi, setBreedAvgCoi] = useState("");
 
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -46,6 +48,8 @@ export default function NewLitterForm({
         totalBorn,
         bornAlive,
         notes,
+        coiPercent,
+        breedAvgCoi,
       });
 
       if (!result.ok) {
@@ -146,6 +150,46 @@ export default function NewLitterForm({
             <option value="ai_chilled">AI (chilled)</option>
             <option value="ai_frozen">AI (frozen)</option>
           </select>
+        </div>
+
+        {/* Inbreeding Coefficient */}
+        <p className="px-1 pt-2 text-xs font-medium text-neutral-400 uppercase tracking-wide">
+          Inbreeding Coefficient (KC Mate Select)
+        </p>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className={labelClass} htmlFor="coiPercent">
+              COI %
+            </label>
+            <input
+              id="coiPercent"
+              type="number"
+              step="0.01"
+              min="0"
+              max="100"
+              value={coiPercent}
+              onChange={(e) => setCoiPercent(e.target.value)}
+              placeholder="e.g. 6.25"
+              className={inputClass}
+            />
+          </div>
+          <div>
+            <label className={labelClass} htmlFor="breedAvgCoi">
+              Breed average %
+            </label>
+            <input
+              id="breedAvgCoi"
+              type="number"
+              step="0.01"
+              min="0"
+              max="100"
+              value={breedAvgCoi}
+              onChange={(e) => setBreedAvgCoi(e.target.value)}
+              placeholder="e.g. 8.5"
+              className={inputClass}
+            />
+          </div>
         </div>
 
         {/* Litter details */}

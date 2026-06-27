@@ -20,8 +20,20 @@ export type MatingModel = runtime.Types.Result.DefaultSelection<Prisma.$MatingPa
 
 export type AggregateMating = {
   _count: MatingCountAggregateOutputType | null
+  _avg: MatingAvgAggregateOutputType | null
+  _sum: MatingSumAggregateOutputType | null
   _min: MatingMinAggregateOutputType | null
   _max: MatingMaxAggregateOutputType | null
+}
+
+export type MatingAvgAggregateOutputType = {
+  coiPercent: number | null
+  breedAvgCoi: number | null
+}
+
+export type MatingSumAggregateOutputType = {
+  coiPercent: number | null
+  breedAvgCoi: number | null
 }
 
 export type MatingMinAggregateOutputType = {
@@ -31,6 +43,8 @@ export type MatingMinAggregateOutputType = {
   matingDate: Date | null
   method: $Enums.MatingMethod | null
   predictedWhelpDate: Date | null
+  coiPercent: number | null
+  breedAvgCoi: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -43,6 +57,8 @@ export type MatingMaxAggregateOutputType = {
   matingDate: Date | null
   method: $Enums.MatingMethod | null
   predictedWhelpDate: Date | null
+  coiPercent: number | null
+  breedAvgCoi: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -55,12 +71,24 @@ export type MatingCountAggregateOutputType = {
   matingDate: number
   method: number
   predictedWhelpDate: number
+  coiPercent: number
+  breedAvgCoi: number
   createdAt: number
   updatedAt: number
   deletedAt: number
   _all: number
 }
 
+
+export type MatingAvgAggregateInputType = {
+  coiPercent?: true
+  breedAvgCoi?: true
+}
+
+export type MatingSumAggregateInputType = {
+  coiPercent?: true
+  breedAvgCoi?: true
+}
 
 export type MatingMinAggregateInputType = {
   id?: true
@@ -69,6 +97,8 @@ export type MatingMinAggregateInputType = {
   matingDate?: true
   method?: true
   predictedWhelpDate?: true
+  coiPercent?: true
+  breedAvgCoi?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -81,6 +111,8 @@ export type MatingMaxAggregateInputType = {
   matingDate?: true
   method?: true
   predictedWhelpDate?: true
+  coiPercent?: true
+  breedAvgCoi?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -93,6 +125,8 @@ export type MatingCountAggregateInputType = {
   matingDate?: true
   method?: true
   predictedWhelpDate?: true
+  coiPercent?: true
+  breedAvgCoi?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -137,6 +171,18 @@ export type MatingAggregateArgs<ExtArgs extends runtime.Types.Extensions.Interna
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: MatingAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: MatingSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: MatingMinAggregateInputType
@@ -167,6 +213,8 @@ export type MatingGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   _count?: MatingCountAggregateInputType | true
+  _avg?: MatingAvgAggregateInputType
+  _sum?: MatingSumAggregateInputType
   _min?: MatingMinAggregateInputType
   _max?: MatingMaxAggregateInputType
 }
@@ -178,10 +226,14 @@ export type MatingGroupByOutputType = {
   matingDate: Date | null
   method: $Enums.MatingMethod
   predictedWhelpDate: Date | null
+  coiPercent: number | null
+  breedAvgCoi: number | null
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
   _count: MatingCountAggregateOutputType | null
+  _avg: MatingAvgAggregateOutputType | null
+  _sum: MatingSumAggregateOutputType | null
   _min: MatingMinAggregateOutputType | null
   _max: MatingMaxAggregateOutputType | null
 }
@@ -211,6 +263,8 @@ export type MatingWhereInput = {
   matingDate?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
   method?: Prisma.EnumMatingMethodFilter<"Mating"> | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
+  coiPercent?: Prisma.FloatNullableFilter<"Mating"> | number | null
+  breedAvgCoi?: Prisma.FloatNullableFilter<"Mating"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Mating"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mating"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
@@ -226,6 +280,8 @@ export type MatingOrderByWithRelationInput = {
   matingDate?: Prisma.SortOrderInput | Prisma.SortOrder
   method?: Prisma.SortOrder
   predictedWhelpDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  coiPercent?: Prisma.SortOrderInput | Prisma.SortOrder
+  breedAvgCoi?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -244,6 +300,8 @@ export type MatingWhereUniqueInput = Prisma.AtLeast<{
   matingDate?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
   method?: Prisma.EnumMatingMethodFilter<"Mating"> | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
+  coiPercent?: Prisma.FloatNullableFilter<"Mating"> | number | null
+  breedAvgCoi?: Prisma.FloatNullableFilter<"Mating"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Mating"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mating"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
@@ -259,12 +317,16 @@ export type MatingOrderByWithAggregationInput = {
   matingDate?: Prisma.SortOrderInput | Prisma.SortOrder
   method?: Prisma.SortOrder
   predictedWhelpDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  coiPercent?: Prisma.SortOrderInput | Prisma.SortOrder
+  breedAvgCoi?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.MatingCountOrderByAggregateInput
+  _avg?: Prisma.MatingAvgOrderByAggregateInput
   _max?: Prisma.MatingMaxOrderByAggregateInput
   _min?: Prisma.MatingMinOrderByAggregateInput
+  _sum?: Prisma.MatingSumOrderByAggregateInput
 }
 
 export type MatingScalarWhereWithAggregatesInput = {
@@ -277,6 +339,8 @@ export type MatingScalarWhereWithAggregatesInput = {
   matingDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Mating"> | Date | string | null
   method?: Prisma.EnumMatingMethodWithAggregatesFilter<"Mating"> | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Mating"> | Date | string | null
+  coiPercent?: Prisma.FloatNullableWithAggregatesFilter<"Mating"> | number | null
+  breedAvgCoi?: Prisma.FloatNullableWithAggregatesFilter<"Mating"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Mating"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Mating"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Mating"> | Date | string | null
@@ -287,6 +351,8 @@ export type MatingCreateInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -302,6 +368,8 @@ export type MatingUncheckedCreateInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -313,6 +381,8 @@ export type MatingUpdateInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -328,6 +398,8 @@ export type MatingUncheckedUpdateInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -341,6 +413,8 @@ export type MatingCreateManyInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -351,6 +425,8 @@ export type MatingUpdateManyMutationInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -363,6 +439,8 @@ export type MatingUncheckedUpdateManyInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -385,9 +463,16 @@ export type MatingCountOrderByAggregateInput = {
   matingDate?: Prisma.SortOrder
   method?: Prisma.SortOrder
   predictedWhelpDate?: Prisma.SortOrder
+  coiPercent?: Prisma.SortOrder
+  breedAvgCoi?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type MatingAvgOrderByAggregateInput = {
+  coiPercent?: Prisma.SortOrder
+  breedAvgCoi?: Prisma.SortOrder
 }
 
 export type MatingMaxOrderByAggregateInput = {
@@ -397,6 +482,8 @@ export type MatingMaxOrderByAggregateInput = {
   matingDate?: Prisma.SortOrder
   method?: Prisma.SortOrder
   predictedWhelpDate?: Prisma.SortOrder
+  coiPercent?: Prisma.SortOrder
+  breedAvgCoi?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -409,9 +496,16 @@ export type MatingMinOrderByAggregateInput = {
   matingDate?: Prisma.SortOrder
   method?: Prisma.SortOrder
   predictedWhelpDate?: Prisma.SortOrder
+  coiPercent?: Prisma.SortOrder
+  breedAvgCoi?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type MatingSumOrderByAggregateInput = {
+  coiPercent?: Prisma.SortOrder
+  breedAvgCoi?: Prisma.SortOrder
 }
 
 export type MatingNullableScalarRelationFilter = {
@@ -507,6 +601,14 @@ export type EnumMatingMethodFieldUpdateOperationsInput = {
   set?: $Enums.MatingMethod
 }
 
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type MatingCreateNestedOneWithoutLitterInput = {
   create?: Prisma.XOR<Prisma.MatingCreateWithoutLitterInput, Prisma.MatingUncheckedCreateWithoutLitterInput>
   connectOrCreate?: Prisma.MatingCreateOrConnectWithoutLitterInput
@@ -528,6 +630,8 @@ export type MatingCreateWithoutDamInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -541,6 +645,8 @@ export type MatingUncheckedCreateWithoutDamInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -562,6 +668,8 @@ export type MatingCreateWithoutSireInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -575,6 +683,8 @@ export type MatingUncheckedCreateWithoutSireInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -617,6 +727,8 @@ export type MatingScalarWhereInput = {
   matingDate?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
   method?: Prisma.EnumMatingMethodFilter<"Mating"> | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
+  coiPercent?: Prisma.FloatNullableFilter<"Mating"> | number | null
+  breedAvgCoi?: Prisma.FloatNullableFilter<"Mating"> | number | null
   createdAt?: Prisma.DateTimeFilter<"Mating"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Mating"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Mating"> | Date | string | null
@@ -643,6 +755,8 @@ export type MatingCreateWithoutLitterInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -657,6 +771,8 @@ export type MatingUncheckedCreateWithoutLitterInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -683,6 +799,8 @@ export type MatingUpdateWithoutLitterInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -697,6 +815,8 @@ export type MatingUncheckedUpdateWithoutLitterInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -708,6 +828,8 @@ export type MatingCreateManyDamInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -719,6 +841,8 @@ export type MatingCreateManySireInput = {
   matingDate?: Date | string | null
   method?: $Enums.MatingMethod
   predictedWhelpDate?: Date | string | null
+  coiPercent?: number | null
+  breedAvgCoi?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -729,6 +853,8 @@ export type MatingUpdateWithoutDamInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -742,6 +868,8 @@ export type MatingUncheckedUpdateWithoutDamInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -754,6 +882,8 @@ export type MatingUncheckedUpdateManyWithoutDamInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -764,6 +894,8 @@ export type MatingUpdateWithoutSireInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -777,6 +909,8 @@ export type MatingUncheckedUpdateWithoutSireInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -789,6 +923,8 @@ export type MatingUncheckedUpdateManyWithoutSireInput = {
   matingDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   method?: Prisma.EnumMatingMethodFieldUpdateOperationsInput | $Enums.MatingMethod
   predictedWhelpDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coiPercent?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  breedAvgCoi?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -803,6 +939,8 @@ export type MatingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   matingDate?: boolean
   method?: boolean
   predictedWhelpDate?: boolean
+  coiPercent?: boolean
+  breedAvgCoi?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -818,6 +956,8 @@ export type MatingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   matingDate?: boolean
   method?: boolean
   predictedWhelpDate?: boolean
+  coiPercent?: boolean
+  breedAvgCoi?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -832,6 +972,8 @@ export type MatingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   matingDate?: boolean
   method?: boolean
   predictedWhelpDate?: boolean
+  coiPercent?: boolean
+  breedAvgCoi?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -846,12 +988,14 @@ export type MatingSelectScalar = {
   matingDate?: boolean
   method?: boolean
   predictedWhelpDate?: boolean
+  coiPercent?: boolean
+  breedAvgCoi?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type MatingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "damId" | "sireId" | "matingDate" | "method" | "predictedWhelpDate" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["mating"]>
+export type MatingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "damId" | "sireId" | "matingDate" | "method" | "predictedWhelpDate" | "coiPercent" | "breedAvgCoi" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["mating"]>
 export type MatingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dam?: boolean | Prisma.DogDefaultArgs<ExtArgs>
   sire?: boolean | Prisma.DogDefaultArgs<ExtArgs>
@@ -880,6 +1024,8 @@ export type $MatingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     matingDate: Date | null
     method: $Enums.MatingMethod
     predictedWhelpDate: Date | null
+    coiPercent: number | null
+    breedAvgCoi: number | null
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -1315,6 +1461,8 @@ export interface MatingFieldRefs {
   readonly matingDate: Prisma.FieldRef<"Mating", 'DateTime'>
   readonly method: Prisma.FieldRef<"Mating", 'MatingMethod'>
   readonly predictedWhelpDate: Prisma.FieldRef<"Mating", 'DateTime'>
+  readonly coiPercent: Prisma.FieldRef<"Mating", 'Float'>
+  readonly breedAvgCoi: Prisma.FieldRef<"Mating", 'Float'>
   readonly createdAt: Prisma.FieldRef<"Mating", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Mating", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Mating", 'DateTime'>

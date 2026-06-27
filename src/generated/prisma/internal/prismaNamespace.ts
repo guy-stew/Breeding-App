@@ -1469,6 +1469,8 @@ export const MatingScalarFieldEnum = {
   matingDate: 'matingDate',
   method: 'method',
   predictedWhelpDate: 'predictedWhelpDate',
+  coiPercent: 'coiPercent',
+  breedAvgCoi: 'breedAvgCoi',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -1790,6 +1792,20 @@ export type ListEnumMatingMethodFieldRefInput<$PrismaModel> = FieldRefInputType<
 
 
 /**
+ * Reference to a field of type 'Float'
+ */
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+/**
+ * Reference to a field of type 'Float[]'
+ */
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+    
+
+
+/**
  * Reference to a field of type 'LitterStatus'
  */
 export type EnumLitterStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LitterStatus'>
@@ -1842,20 +1858,6 @@ export type EnumHealthRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'HealthRecordType[]'
  */
 export type ListEnumHealthRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HealthRecordType[]'>
-    
-
-
-/**
- * Reference to a field of type 'Float'
- */
-export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
-    
-
-
-/**
- * Reference to a field of type 'Float[]'
- */
-export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 

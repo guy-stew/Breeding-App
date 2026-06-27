@@ -17,6 +17,7 @@ export default async function EditLitterPage({
 
   const litter = await prisma.litter.findFirst({
     where: { id, breederId: breeder.id, deletedAt: null },
+    include: { mating: { select: { coiPercent: true, breedAvgCoi: true } } },
   });
 
   if (!litter) notFound();
@@ -41,6 +42,8 @@ export default async function EditLitterPage({
         bornAlive={litter.bornAlive?.toString() ?? ""}
         notes={litter.notes ?? ""}
         status={litter.status}
+        coiPercent={litter.mating?.coiPercent?.toString() ?? ""}
+        breedAvgCoi={litter.mating?.breedAvgCoi?.toString() ?? ""}
       />
     </div>
   );
