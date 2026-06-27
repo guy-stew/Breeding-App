@@ -4,10 +4,10 @@ A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 27 June 2026 — all planned milestones complete. The app covers
-the full breeding cycle, buyer management, health records, heat cycle tracking,
-and a public marketplace. Login required for breeder pages; marketplace is
-public.*
+*Last updated: 27 June 2026 — all planned milestones complete plus photo
+uploads. The app covers the full breeding cycle, buyer management, health
+records, heat cycle tracking, public marketplace, and photo uploads. Login
+required for breeder pages; marketplace is public.*
 
 ---
 
@@ -109,11 +109,17 @@ once, and re-arrange/print it differently** for each feature.
       buttons. Middleware updated to allow `/marketplace` without auth.
       "Listings" quick link on home screen.
 
+- [x] **Photo uploads** — Photo model linked to Dog, stored in Supabase Storage.
+      Upload component on dog profile with caption and 5 MB limit. Delete button
+      on hover. Marketplace listing cards and detail pages show real photos
+      (falling back to colour banner). Info pack includes puppy photo at top.
+      Requires a public Supabase Storage bucket named `photos`.
+
 **All planned milestones complete.** The app now supports the full workflow:
 add dogs → record matings and litters → add puppies → track daily weights →
 view growth charts → log health records → track heat cycles with progesterone
 → manage buyers → assign buyers to puppies → generate pre-filled contracts
-and info packs → publish puppies to the public marketplace.
+and info packs → upload photos → publish puppies to the public marketplace.
 
 ---
 
@@ -138,7 +144,8 @@ breeding-app/
 │   │   │                       createBuyer, updateBuyer, assignBuyer,
 │   │   │                       addHealthRecord, deleteHealthRecord,
 │   │   │                       createHeatCycle, addProgesteroneTest,
-│   │   │                       createListing, updateListingStatus)
+│   │   │                       createListing, updateListingStatus,
+│   │   │                       savePhoto, deletePhoto)
 │   │   ├── SignOutButton.tsx ← sign-out link (client component)
 │   │   ├── login/
 │   │   │   ├── page.tsx     ← the LOGIN PAGE
@@ -158,6 +165,8 @@ breeding-app/
 │   │   │       ├── edit/
 │   │   │       │   ├── page.tsx      ← EDIT DOG screen
 │   │   │       │   └── EditDogForm.tsx ← edit form (client component)
+│   │   │       ├── PhotoUpload.tsx    ← upload form (client component)
+│   │   │       ├── DeletePhotoButton.tsx ← delete button (client component)
 │   │   │       ├── health/
 │   │   │       │   └── new/
 │   │   │       │       ├── page.tsx      ← ADD HEALTH RECORD
@@ -351,18 +360,23 @@ npx prisma studio
 - **Restart `npm run dev` after `prisma generate`.** The dev server caches the
   Prisma client in memory. If you add a new field and run `prisma generate`, the
   dev server won't see it until you stop (Ctrl+C) and restart `npm run dev`.
+- **Photo uploads need a Supabase Storage bucket.** Go to Supabase dashboard →
+  Storage → New bucket → name it `photos` → toggle **Public bucket** ON. Without
+  this, uploads will fail with a "bucket not found" error.
+- **Prisma can't mix `select` and `include`** on the same relation. Use `include`
+  when you need both specific fields and nested relations. We hit this when
+  adding photos to the marketplace queries.
 
 ---
 
 ## Next steps (all original milestones complete — future ideas)
 
-1. **Photo uploads** — puppy photos on listings, dog profiles, and info packs.
-2. **Welfare checks** — timestamped litter welfare visits (the WelfareCheck
+1. **Welfare checks** — timestamped litter welfare visits (the WelfareCheck
    stub is reserved in the schema).
-3. **Document generation** — save contracts and info packs as stored records
+2. **Document generation** — save contracts and info packs as stored records
    rather than just print-on-demand.
-4. **Multi-breeder** — support co-owned dogs and shared litter access.
-5. **Notifications** — email/push reminders for upcoming vaccinations,
+3. **Multi-breeder** — support co-owned dogs and shared litter access.
+4. **Notifications** — email/push reminders for upcoming vaccinations,
    progesterone tests, and whelp dates.
 
 ---
@@ -385,6 +399,7 @@ data model. Worked examples exist for every pattern:
 - **HEALTH:** `src/app/dogs/[id]/health/new/` — typed record form, info pack auto-fills from real data.
 - **HEAT CYCLE:** `src/app/dogs/[id]/heat-cycles/` — cycle + progesterone tests, Recharts chart, predicted whelp date.
 - **MARKETPLACE:** `src/app/marketplace/` — public pages (no auth), `src/app/listings/` — breeder management.
+- **PHOTO UPLOAD:** `src/app/dogs/[id]/PhotoUpload.tsx` — client-side Supabase Storage upload → server action saves URL.
 
 Any new page starts with `const breeder = await getBreeder()` and follows one
 of those patterns.
