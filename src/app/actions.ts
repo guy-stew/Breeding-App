@@ -924,3 +924,69 @@ export async function deletePhoto(
   revalidatePath("/marketplace");
   return { ok: true };
 }
+
+// ============================================================
+//  18. createWelfareCheck — log a welfare visit for a litter.
+// ============================================================
+export async function createWelfareCheck(
+  formData: FormData,
+): Promise<void> {
+  const breeder = await getBreeder();
+  if (!breeder) redirect("/login");
+
+  const litterId = formData.get("litterId") as string;
+  const date = formData.get("date") as string;
+  const notes = (formData.get("notes") as string) || null;
+  const damCondition = (formData.get("damCondition") as string) || null;
+  const concerns = (formData.get("concerns") as string) || null;
+  const actionTaken = (formData.get("actionTaken") as string) || null;
+
+  if (!litterId || !date) return;
+
+  // Verify the litter belongs to this breeder.
+  const litter = await prisma.litter.findFirst({
+    where: { id: litterId, breederId: breeder.id, deletedAt: null },
+  });
+  if (!litter) return;
+
+  await prisma.welfareCheck.create({
+    data: {
+      litterId,
+      date: new Date(date),
+      notes,
+      damCondition,
+      concerns,
+      actionTaken,
+    },
+  });
+
+  revalidatePath(`/litters/${litterId}`);
+  redirect(`/litters/${litterId}`);
+}
+
+// ============================================================
+//  19. deleteWelfareCheck — soft-delete a welfare check.
+// ============================================================
+export async function deleteWelfareCheck(
+  checkId: string,
+  litterId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const check = await prisma.welfareCheck.findFirst({
+    where: { id: checkId, deletedAt: null },
+    include: { litter: { select: { breederId: true } } },
+  });
+  if (!check || check.litter.breederId !== breeder.id) {
+    return { ok: false, error: "Check not found." };
+  }
+
+  await prisma.welfareCheck.update({
+    where: { id: checkId },
+    data: { deletedAt: new Date() },
+  });
+
+  revalidatePath(`/litters/${litterId}`);
+  return { ok: true };
+}

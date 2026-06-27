@@ -5,6 +5,7 @@ import { getBreeder } from "@/lib/breeder";
 import { redirect } from "next/navigation";
 import GrowthChart from "./GrowthChart";
 import AssignBuyer from "./AssignBuyer";
+import DeleteWelfareCheckButton from "./welfare/DeleteWelfareCheckButton";
 
 function formatDate(date: Date | null | undefined): string {
   if (!date) return "—";
@@ -43,6 +44,10 @@ export default async function LitterDetailPage({
           dam: { select: { id: true, callName: true } },
           sire: { select: { id: true, callName: true } },
         },
+      },
+      welfareChecks: {
+        where: { deletedAt: null },
+        orderBy: { date: "desc" },
       },
       puppies: {
         where: { deletedAt: null },
@@ -161,6 +166,71 @@ export default async function LitterDetailPage({
       >
         Start weigh-in round
       </Link>
+
+      {/* Welfare checks */}
+      <section className="mb-5">
+        <div className="mb-2 flex items-center justify-between px-1">
+          <p className="text-xs text-neutral-400">
+            Welfare checks · {litter.welfareChecks.length}
+          </p>
+          <Link
+            href={`/litters/${litter.id}/welfare/new`}
+            className="text-xs font-medium text-blue-600 dark:text-blue-400"
+          >
+            + Add check
+          </Link>
+        </div>
+        {litter.welfareChecks.length === 0 ? (
+          <p className="rounded-xl border border-neutral-200 bg-white p-4 text-center text-sm text-neutral-400 dark:border-neutral-800 dark:bg-neutral-900">
+            No welfare checks recorded yet.
+          </p>
+        ) : (
+          <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
+            {litter.welfareChecks.map((check) => (
+              <li key={check.id} className="px-4 py-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium">
+                        {formatDate(check.date)}
+                      </span>
+                      {check.concerns && (
+                        <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 dark:bg-amber-950 dark:text-amber-300">
+                          Concern
+                        </span>
+                      )}
+                    </div>
+                    {check.notes && (
+                      <p className="mt-1 text-xs text-neutral-600 dark:text-neutral-400">
+                        {check.notes}
+                      </p>
+                    )}
+                    {check.damCondition && (
+                      <p className="mt-0.5 text-xs text-neutral-500">
+                        Dam: {check.damCondition}
+                      </p>
+                    )}
+                    {check.concerns && (
+                      <p className="mt-0.5 text-xs text-amber-600 dark:text-amber-400">
+                        Concerns: {check.concerns}
+                      </p>
+                    )}
+                    {check.actionTaken && (
+                      <p className="mt-0.5 text-xs text-neutral-500">
+                        Action: {check.actionTaken}
+                      </p>
+                    )}
+                  </div>
+                  <DeleteWelfareCheckButton
+                    checkId={check.id}
+                    litterId={litter.id}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       {/* Growth chart */}
       {litter.puppies.length > 0 && (

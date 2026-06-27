@@ -395,7 +395,8 @@ export const ModelName = {
   HeatCycle: 'HeatCycle',
   ProgesteroneTest: 'ProgesteroneTest',
   Photo: 'Photo',
-  Listing: 'Listing'
+  Listing: 'Listing',
+  WelfareCheck: 'WelfareCheck'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -411,7 +412,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "progesteroneTest" | "photo" | "listing"
+    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "progesteroneTest" | "photo" | "listing" | "welfareCheck"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1303,6 +1304,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    WelfareCheck: {
+      payload: Prisma.$WelfareCheckPayload<ExtArgs>
+      fields: Prisma.WelfareCheckFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WelfareCheckFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WelfareCheckFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>
+        }
+        findFirst: {
+          args: Prisma.WelfareCheckFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WelfareCheckFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>
+        }
+        findMany: {
+          args: Prisma.WelfareCheckFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>[]
+        }
+        create: {
+          args: Prisma.WelfareCheckCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>
+        }
+        createMany: {
+          args: Prisma.WelfareCheckCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WelfareCheckCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>[]
+        }
+        delete: {
+          args: Prisma.WelfareCheckDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>
+        }
+        update: {
+          args: Prisma.WelfareCheckUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>
+        }
+        deleteMany: {
+          args: Prisma.WelfareCheckDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WelfareCheckUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WelfareCheckUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>[]
+        }
+        upsert: {
+          args: Prisma.WelfareCheckUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WelfareCheckPayload>
+        }
+        aggregate: {
+          args: Prisma.WelfareCheckAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWelfareCheck>
+        }
+        groupBy: {
+          args: Prisma.WelfareCheckGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WelfareCheckGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WelfareCheckCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WelfareCheckCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1547,6 +1622,22 @@ export const ListingScalarFieldEnum = {
 } as const
 
 export type ListingScalarFieldEnum = (typeof ListingScalarFieldEnum)[keyof typeof ListingScalarFieldEnum]
+
+
+export const WelfareCheckScalarFieldEnum = {
+  id: 'id',
+  litterId: 'litterId',
+  date: 'date',
+  notes: 'notes',
+  damCondition: 'damCondition',
+  concerns: 'concerns',
+  actionTaken: 'actionTaken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type WelfareCheckScalarFieldEnum = (typeof WelfareCheckScalarFieldEnum)[keyof typeof WelfareCheckScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1903,6 +1994,7 @@ export type GlobalOmitConfig = {
   progesteroneTest?: Prisma.ProgesteroneTestOmit
   photo?: Prisma.PhotoOmit
   listing?: Prisma.ListingOmit
+  welfareCheck?: Prisma.WelfareCheckOmit
 }
 
 /* Types for Logging */

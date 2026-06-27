@@ -161,7 +161,8 @@ model Litter {
   notes      String?
   status     LitterStatus @default(whelped)
 
-  puppies Puppy[]
+  puppies        Puppy[]
+  welfareChecks  WelfareCheck[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -447,12 +448,34 @@ model Listing {
   deletedAt DateTime?
 }
 
+// ------------------------------------------------------------
+//  13. WelfareCheck — timestamped litter welfare visits.
+//      Tracks general observations, dam condition, and any
+//      concerns raised during routine checks.
+// ------------------------------------------------------------
+model WelfareCheck {
+  id       String @id @default(uuid())
+  litter   Litter @relation(fields: [litterId], references: [id])
+  litterId String
+
+  date         DateTime @default(now())
+  notes        String?          // general observations
+  damCondition String?          // how the dam is doing
+  concerns     String?          // any worries flagged
+  actionTaken  String?          // what was done about concerns
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([litterId])
+  @@index([litterId, date])
+}
+
 // ============================================================
 //  Reserved for later builds — shape noted, not yet modelled.
-//  Uncomment and flesh out when each phase arrives.
 // ============================================================
 //
-//  model WelfareCheck { ... }   // timestamped in-person litter checks
-//  model Document     { ... }   // generated contracts / packs
+//  model Document { ... }   // generated contracts / packs
 //
 // ============================================================

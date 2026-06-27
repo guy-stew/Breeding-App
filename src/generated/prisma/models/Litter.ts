@@ -279,6 +279,7 @@ export type LitterWhereInput = {
   breeder?: Prisma.XOR<Prisma.BreederScalarRelationFilter, Prisma.BreederWhereInput>
   mating?: Prisma.XOR<Prisma.MatingNullableScalarRelationFilter, Prisma.MatingWhereInput> | null
   puppies?: Prisma.PuppyListRelationFilter
+  welfareChecks?: Prisma.WelfareCheckListRelationFilter
 }
 
 export type LitterOrderByWithRelationInput = {
@@ -297,6 +298,7 @@ export type LitterOrderByWithRelationInput = {
   breeder?: Prisma.BreederOrderByWithRelationInput
   mating?: Prisma.MatingOrderByWithRelationInput
   puppies?: Prisma.PuppyOrderByRelationAggregateInput
+  welfareChecks?: Prisma.WelfareCheckOrderByRelationAggregateInput
 }
 
 export type LitterWhereUniqueInput = Prisma.AtLeast<{
@@ -318,6 +320,7 @@ export type LitterWhereUniqueInput = Prisma.AtLeast<{
   breeder?: Prisma.XOR<Prisma.BreederScalarRelationFilter, Prisma.BreederWhereInput>
   mating?: Prisma.XOR<Prisma.MatingNullableScalarRelationFilter, Prisma.MatingWhereInput> | null
   puppies?: Prisma.PuppyListRelationFilter
+  welfareChecks?: Prisma.WelfareCheckListRelationFilter
 }, "id" | "matingId">
 
 export type LitterOrderByWithAggregationInput = {
@@ -372,6 +375,7 @@ export type LitterCreateInput = {
   breeder: Prisma.BreederCreateNestedOneWithoutLittersInput
   mating?: Prisma.MatingCreateNestedOneWithoutLitterInput
   puppies?: Prisma.PuppyCreateNestedManyWithoutLitterInput
+  welfareChecks?: Prisma.WelfareCheckCreateNestedManyWithoutLitterInput
 }
 
 export type LitterUncheckedCreateInput = {
@@ -388,6 +392,7 @@ export type LitterUncheckedCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   puppies?: Prisma.PuppyUncheckedCreateNestedManyWithoutLitterInput
+  welfareChecks?: Prisma.WelfareCheckUncheckedCreateNestedManyWithoutLitterInput
 }
 
 export type LitterUpdateInput = {
@@ -404,6 +409,7 @@ export type LitterUpdateInput = {
   breeder?: Prisma.BreederUpdateOneRequiredWithoutLittersNestedInput
   mating?: Prisma.MatingUpdateOneWithoutLitterNestedInput
   puppies?: Prisma.PuppyUpdateManyWithoutLitterNestedInput
+  welfareChecks?: Prisma.WelfareCheckUpdateManyWithoutLitterNestedInput
 }
 
 export type LitterUncheckedUpdateInput = {
@@ -420,6 +426,7 @@ export type LitterUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   puppies?: Prisma.PuppyUncheckedUpdateManyWithoutLitterNestedInput
+  welfareChecks?: Prisma.WelfareCheckUncheckedUpdateManyWithoutLitterNestedInput
 }
 
 export type LitterCreateManyInput = {
@@ -640,6 +647,20 @@ export type LitterUpdateOneRequiredWithoutPuppiesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.LitterUpdateToOneWithWhereWithoutPuppiesInput, Prisma.LitterUpdateWithoutPuppiesInput>, Prisma.LitterUncheckedUpdateWithoutPuppiesInput>
 }
 
+export type LitterCreateNestedOneWithoutWelfareChecksInput = {
+  create?: Prisma.XOR<Prisma.LitterCreateWithoutWelfareChecksInput, Prisma.LitterUncheckedCreateWithoutWelfareChecksInput>
+  connectOrCreate?: Prisma.LitterCreateOrConnectWithoutWelfareChecksInput
+  connect?: Prisma.LitterWhereUniqueInput
+}
+
+export type LitterUpdateOneRequiredWithoutWelfareChecksNestedInput = {
+  create?: Prisma.XOR<Prisma.LitterCreateWithoutWelfareChecksInput, Prisma.LitterUncheckedCreateWithoutWelfareChecksInput>
+  connectOrCreate?: Prisma.LitterCreateOrConnectWithoutWelfareChecksInput
+  upsert?: Prisma.LitterUpsertWithoutWelfareChecksInput
+  connect?: Prisma.LitterWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.LitterUpdateToOneWithWhereWithoutWelfareChecksInput, Prisma.LitterUpdateWithoutWelfareChecksInput>, Prisma.LitterUncheckedUpdateWithoutWelfareChecksInput>
+}
+
 export type LitterCreateWithoutBreederInput = {
   id?: string
   name?: string | null
@@ -653,6 +674,7 @@ export type LitterCreateWithoutBreederInput = {
   deletedAt?: Date | string | null
   mating?: Prisma.MatingCreateNestedOneWithoutLitterInput
   puppies?: Prisma.PuppyCreateNestedManyWithoutLitterInput
+  welfareChecks?: Prisma.WelfareCheckCreateNestedManyWithoutLitterInput
 }
 
 export type LitterUncheckedCreateWithoutBreederInput = {
@@ -668,6 +690,7 @@ export type LitterUncheckedCreateWithoutBreederInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   puppies?: Prisma.PuppyUncheckedCreateNestedManyWithoutLitterInput
+  welfareChecks?: Prisma.WelfareCheckUncheckedCreateNestedManyWithoutLitterInput
 }
 
 export type LitterCreateOrConnectWithoutBreederInput = {
@@ -727,6 +750,7 @@ export type LitterCreateWithoutMatingInput = {
   deletedAt?: Date | string | null
   breeder: Prisma.BreederCreateNestedOneWithoutLittersInput
   puppies?: Prisma.PuppyCreateNestedManyWithoutLitterInput
+  welfareChecks?: Prisma.WelfareCheckCreateNestedManyWithoutLitterInput
 }
 
 export type LitterUncheckedCreateWithoutMatingInput = {
@@ -742,6 +766,7 @@ export type LitterUncheckedCreateWithoutMatingInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   puppies?: Prisma.PuppyUncheckedCreateNestedManyWithoutLitterInput
+  welfareChecks?: Prisma.WelfareCheckUncheckedCreateNestedManyWithoutLitterInput
 }
 
 export type LitterCreateOrConnectWithoutMatingInput = {
@@ -773,6 +798,7 @@ export type LitterUpdateWithoutMatingInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   breeder?: Prisma.BreederUpdateOneRequiredWithoutLittersNestedInput
   puppies?: Prisma.PuppyUpdateManyWithoutLitterNestedInput
+  welfareChecks?: Prisma.WelfareCheckUpdateManyWithoutLitterNestedInput
 }
 
 export type LitterUncheckedUpdateWithoutMatingInput = {
@@ -788,6 +814,7 @@ export type LitterUncheckedUpdateWithoutMatingInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   puppies?: Prisma.PuppyUncheckedUpdateManyWithoutLitterNestedInput
+  welfareChecks?: Prisma.WelfareCheckUncheckedUpdateManyWithoutLitterNestedInput
 }
 
 export type LitterCreateWithoutPuppiesInput = {
@@ -803,6 +830,7 @@ export type LitterCreateWithoutPuppiesInput = {
   deletedAt?: Date | string | null
   breeder: Prisma.BreederCreateNestedOneWithoutLittersInput
   mating?: Prisma.MatingCreateNestedOneWithoutLitterInput
+  welfareChecks?: Prisma.WelfareCheckCreateNestedManyWithoutLitterInput
 }
 
 export type LitterUncheckedCreateWithoutPuppiesInput = {
@@ -818,6 +846,7 @@ export type LitterUncheckedCreateWithoutPuppiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  welfareChecks?: Prisma.WelfareCheckUncheckedCreateNestedManyWithoutLitterInput
 }
 
 export type LitterCreateOrConnectWithoutPuppiesInput = {
@@ -849,6 +878,7 @@ export type LitterUpdateWithoutPuppiesInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   breeder?: Prisma.BreederUpdateOneRequiredWithoutLittersNestedInput
   mating?: Prisma.MatingUpdateOneWithoutLitterNestedInput
+  welfareChecks?: Prisma.WelfareCheckUpdateManyWithoutLitterNestedInput
 }
 
 export type LitterUncheckedUpdateWithoutPuppiesInput = {
@@ -864,6 +894,87 @@ export type LitterUncheckedUpdateWithoutPuppiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  welfareChecks?: Prisma.WelfareCheckUncheckedUpdateManyWithoutLitterNestedInput
+}
+
+export type LitterCreateWithoutWelfareChecksInput = {
+  id?: string
+  name?: string | null
+  whelpDate: Date | string
+  totalBorn?: number | null
+  bornAlive?: number | null
+  notes?: string | null
+  status?: $Enums.LitterStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  breeder: Prisma.BreederCreateNestedOneWithoutLittersInput
+  mating?: Prisma.MatingCreateNestedOneWithoutLitterInput
+  puppies?: Prisma.PuppyCreateNestedManyWithoutLitterInput
+}
+
+export type LitterUncheckedCreateWithoutWelfareChecksInput = {
+  id?: string
+  breederId: string
+  matingId?: string | null
+  name?: string | null
+  whelpDate: Date | string
+  totalBorn?: number | null
+  bornAlive?: number | null
+  notes?: string | null
+  status?: $Enums.LitterStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  puppies?: Prisma.PuppyUncheckedCreateNestedManyWithoutLitterInput
+}
+
+export type LitterCreateOrConnectWithoutWelfareChecksInput = {
+  where: Prisma.LitterWhereUniqueInput
+  create: Prisma.XOR<Prisma.LitterCreateWithoutWelfareChecksInput, Prisma.LitterUncheckedCreateWithoutWelfareChecksInput>
+}
+
+export type LitterUpsertWithoutWelfareChecksInput = {
+  update: Prisma.XOR<Prisma.LitterUpdateWithoutWelfareChecksInput, Prisma.LitterUncheckedUpdateWithoutWelfareChecksInput>
+  create: Prisma.XOR<Prisma.LitterCreateWithoutWelfareChecksInput, Prisma.LitterUncheckedCreateWithoutWelfareChecksInput>
+  where?: Prisma.LitterWhereInput
+}
+
+export type LitterUpdateToOneWithWhereWithoutWelfareChecksInput = {
+  where?: Prisma.LitterWhereInput
+  data: Prisma.XOR<Prisma.LitterUpdateWithoutWelfareChecksInput, Prisma.LitterUncheckedUpdateWithoutWelfareChecksInput>
+}
+
+export type LitterUpdateWithoutWelfareChecksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whelpDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  totalBorn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bornAlive?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  breeder?: Prisma.BreederUpdateOneRequiredWithoutLittersNestedInput
+  mating?: Prisma.MatingUpdateOneWithoutLitterNestedInput
+  puppies?: Prisma.PuppyUpdateManyWithoutLitterNestedInput
+}
+
+export type LitterUncheckedUpdateWithoutWelfareChecksInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  breederId?: Prisma.StringFieldUpdateOperationsInput | string
+  matingId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whelpDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  totalBorn?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  bornAlive?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumLitterStatusFieldUpdateOperationsInput | $Enums.LitterStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  puppies?: Prisma.PuppyUncheckedUpdateManyWithoutLitterNestedInput
 }
 
 export type LitterCreateManyBreederInput = {
@@ -893,6 +1004,7 @@ export type LitterUpdateWithoutBreederInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   mating?: Prisma.MatingUpdateOneWithoutLitterNestedInput
   puppies?: Prisma.PuppyUpdateManyWithoutLitterNestedInput
+  welfareChecks?: Prisma.WelfareCheckUpdateManyWithoutLitterNestedInput
 }
 
 export type LitterUncheckedUpdateWithoutBreederInput = {
@@ -908,6 +1020,7 @@ export type LitterUncheckedUpdateWithoutBreederInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   puppies?: Prisma.PuppyUncheckedUpdateManyWithoutLitterNestedInput
+  welfareChecks?: Prisma.WelfareCheckUncheckedUpdateManyWithoutLitterNestedInput
 }
 
 export type LitterUncheckedUpdateManyWithoutBreederInput = {
@@ -931,10 +1044,12 @@ export type LitterUncheckedUpdateManyWithoutBreederInput = {
 
 export type LitterCountOutputType = {
   puppies: number
+  welfareChecks: number
 }
 
 export type LitterCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   puppies?: boolean | LitterCountOutputTypeCountPuppiesArgs
+  welfareChecks?: boolean | LitterCountOutputTypeCountWelfareChecksArgs
 }
 
 /**
@@ -954,6 +1069,13 @@ export type LitterCountOutputTypeCountPuppiesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.PuppyWhereInput
 }
 
+/**
+ * LitterCountOutputType without action
+ */
+export type LitterCountOutputTypeCountWelfareChecksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WelfareCheckWhereInput
+}
+
 
 export type LitterSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -971,6 +1093,7 @@ export type LitterSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   breeder?: boolean | Prisma.BreederDefaultArgs<ExtArgs>
   mating?: boolean | Prisma.Litter$matingArgs<ExtArgs>
   puppies?: boolean | Prisma.Litter$puppiesArgs<ExtArgs>
+  welfareChecks?: boolean | Prisma.Litter$welfareChecksArgs<ExtArgs>
   _count?: boolean | Prisma.LitterCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["litter"]>
 
@@ -1028,6 +1151,7 @@ export type LitterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   breeder?: boolean | Prisma.BreederDefaultArgs<ExtArgs>
   mating?: boolean | Prisma.Litter$matingArgs<ExtArgs>
   puppies?: boolean | Prisma.Litter$puppiesArgs<ExtArgs>
+  welfareChecks?: boolean | Prisma.Litter$welfareChecksArgs<ExtArgs>
   _count?: boolean | Prisma.LitterCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type LitterIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1045,6 +1169,7 @@ export type $LitterPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     breeder: Prisma.$BreederPayload<ExtArgs>
     mating: Prisma.$MatingPayload<ExtArgs> | null
     puppies: Prisma.$PuppyPayload<ExtArgs>[]
+    welfareChecks: Prisma.$WelfareCheckPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1456,6 +1581,7 @@ export interface Prisma__LitterClient<T, Null = never, ExtArgs extends runtime.T
   breeder<T extends Prisma.BreederDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.BreederDefaultArgs<ExtArgs>>): Prisma.Prisma__BreederClient<runtime.Types.Result.GetResult<Prisma.$BreederPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   mating<T extends Prisma.Litter$matingArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Litter$matingArgs<ExtArgs>>): Prisma.Prisma__MatingClient<runtime.Types.Result.GetResult<Prisma.$MatingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   puppies<T extends Prisma.Litter$puppiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Litter$puppiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PuppyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  welfareChecks<T extends Prisma.Litter$welfareChecksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Litter$welfareChecksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WelfareCheckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1938,6 +2064,30 @@ export type Litter$puppiesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.PuppyScalarFieldEnum | Prisma.PuppyScalarFieldEnum[]
+}
+
+/**
+ * Litter.welfareChecks
+ */
+export type Litter$welfareChecksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WelfareCheck
+   */
+  select?: Prisma.WelfareCheckSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WelfareCheck
+   */
+  omit?: Prisma.WelfareCheckOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WelfareCheckInclude<ExtArgs> | null
+  where?: Prisma.WelfareCheckWhereInput
+  orderBy?: Prisma.WelfareCheckOrderByWithRelationInput | Prisma.WelfareCheckOrderByWithRelationInput[]
+  cursor?: Prisma.WelfareCheckWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WelfareCheckScalarFieldEnum | Prisma.WelfareCheckScalarFieldEnum[]
 }
 
 /**

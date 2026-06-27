@@ -77,3 +77,8 @@ export type Photo = Prisma.PhotoModel
  * 
  */
 export type Listing = Prisma.ListingModel
+/**
+ * Model WelfareCheck
+ * 
+ */
+export type WelfareCheck = Prisma.WelfareCheckModel

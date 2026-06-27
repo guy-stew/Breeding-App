@@ -62,7 +62,8 @@ export const ModelName = {
   HeatCycle: 'HeatCycle',
   ProgesteroneTest: 'ProgesteroneTest',
   Photo: 'Photo',
-  Listing: 'Listing'
+  Listing: 'Listing',
+  WelfareCheck: 'WelfareCheck'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -286,6 +287,22 @@ export const ListingScalarFieldEnum = {
 } as const
 
 export type ListingScalarFieldEnum = (typeof ListingScalarFieldEnum)[keyof typeof ListingScalarFieldEnum]
+
+
+export const WelfareCheckScalarFieldEnum = {
+  id: 'id',
+  litterId: 'litterId',
+  date: 'date',
+  notes: 'notes',
+  damCondition: 'damCondition',
+  concerns: 'concerns',
+  actionTaken: 'actionTaken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type WelfareCheckScalarFieldEnum = (typeof WelfareCheckScalarFieldEnum)[keyof typeof WelfareCheckScalarFieldEnum]
 
 
 export const SortOrder = {
