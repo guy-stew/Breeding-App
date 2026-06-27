@@ -5,9 +5,10 @@ what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
 *Last updated: 27 June 2026 — all planned milestones complete plus photo
-uploads. The app covers the full breeding cycle, buyer management, health
-records, heat cycle tracking, public marketplace, and photo uploads. Login
-required for breeder pages; marketplace is public.*
+uploads and UI overhaul. The app covers the full breeding cycle, buyer
+management, health records, heat cycle tracking, public marketplace, photo
+uploads, and a polished app shell with dark mode. Login required for breeder
+pages; marketplace is public.*
 
 ---
 
@@ -115,11 +116,21 @@ once, and re-arrange/print it differently** for each feature.
       (falling back to colour banner). Info pack includes puppy photo at top.
       Requires a public Supabase Storage bucket named `photos`.
 
+- [x] **UI overhaul** — App shell with persistent bottom tab navigation (Home,
+      Dogs, Litters, Buyers, Listings) and sticky top header with kennel name
+      and dark mode toggle. Class-based dark mode with localStorage persistence
+      and system-preference fallback (Tailwind v4 `@custom-variant dark`).
+      Home page redesigned as a dashboard with stats cards (dogs, puppies,
+      active litter counts), active litter card, quick action buttons, and
+      polished dog list with gradient avatars. App shell excluded from login,
+      marketplace, contract, and info-pack pages.
+
 **All planned milestones complete.** The app now supports the full workflow:
 add dogs → record matings and litters → add puppies → track daily weights →
 view growth charts → log health records → track heat cycles with progesterone
 → manage buyers → assign buyers to puppies → generate pre-filled contracts
 and info packs → upload photos → publish puppies to the public marketplace.
+All wrapped in a polished app shell with dark mode support.
 
 ---
 
@@ -146,6 +157,9 @@ breeding-app/
 │   │   │                       createHeatCycle, addProgesteroneTest,
 │   │   │                       createListing, updateListingStatus,
 │   │   │                       savePhoto, deletePhoto)
+│   │   ├── ThemeProvider.tsx ← class-based dark mode (localStorage + system pref)
+│   │   ├── AppShell.tsx     ← app shell: top header + bottom nav (client component)
+│   │   ├── AppShellWrapper.tsx ← server component loading kennel name for AppShell
 │   │   ├── SignOutButton.tsx ← sign-out link (client component)
 │   │   ├── login/
 │   │   │   ├── page.tsx     ← the LOGIN PAGE
@@ -400,6 +414,8 @@ data model. Worked examples exist for every pattern:
 - **HEAT CYCLE:** `src/app/dogs/[id]/heat-cycles/` — cycle + progesterone tests, Recharts chart, predicted whelp date.
 - **MARKETPLACE:** `src/app/marketplace/` — public pages (no auth), `src/app/listings/` — breeder management.
 - **PHOTO UPLOAD:** `src/app/dogs/[id]/PhotoUpload.tsx` — client-side Supabase Storage upload → server action saves URL.
+- **APP SHELL:** `src/app/AppShell.tsx` + `AppShellWrapper.tsx` — persistent bottom nav + top header, excluded from public/print pages.
+- **DARK MODE:** `src/app/ThemeProvider.tsx` — class-based toggle with localStorage, `@custom-variant dark` in globals.css.
 
 Any new page starts with `const breeder = await getBreeder()` and follows one
 of those patterns.
