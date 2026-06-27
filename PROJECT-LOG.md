@@ -40,6 +40,7 @@ once, and re-arrange/print it differently** for each feature.
 - [x] Sample data loaded via `npx prisma db seed`
 - [x] Home screen reads live data and renders in the browser
 - [x] Code pushed to GitHub (`guy-stew/Breeding-App`)
+- [x] Live on Vercel (breeding-app.vercel.app)
 
 **Right now the app can READ data but cannot WRITE it.** That's the next big step.
 
