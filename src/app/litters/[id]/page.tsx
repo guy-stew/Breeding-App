@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getBreeder } from "@/lib/breeder";
 import { redirect } from "next/navigation";
+import GrowthChart from "./GrowthChart";
 
 function formatDate(date: Date | null | undefined): string {
   if (!date) return "—";
@@ -50,8 +51,7 @@ export default async function LitterDetailPage({
             include: {
               weightLogs: {
                 where: { deletedAt: null },
-                orderBy: { date: "desc" },
-                take: 1,
+                orderBy: { date: "asc" },
               },
             },
           },
@@ -145,6 +145,24 @@ export default async function LitterDetailPage({
         Start weigh-in round
       </Link>
 
+      {/* Growth chart */}
+      {litter.puppies.length > 0 && (
+        <section className="mb-5">
+          <p className="mb-2 px-1 text-xs text-neutral-400">Growth chart</p>
+          <GrowthChart
+            whelpDate={litter.whelpDate.toISOString()}
+            puppies={litter.puppies.map((p) => ({
+              collarColour: p.collarColour,
+              callName: p.dog.callName,
+              weights: p.dog.weightLogs.map((w) => ({
+                date: w.date.toISOString(),
+                weightG: w.weightG,
+              })),
+            }))}
+          />
+        </section>
+      )}
+
       {/* Puppies */}
       <section>
         <p className="mb-2 px-1 text-xs text-neutral-400">
@@ -157,7 +175,7 @@ export default async function LitterDetailPage({
         ) : (
           <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
             {litter.puppies.map((puppy) => {
-              const latestWeight = puppy.dog.weightLogs[0];
+              const latestWeight = puppy.dog.weightLogs.at(-1);
               return (
                 <li key={puppy.id}>
                   <Link
