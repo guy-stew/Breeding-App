@@ -92,6 +92,11 @@ export type HeatCycle = Prisma.HeatCycleModel
  */
 export type ProgesteroneTest = Prisma.ProgesteroneTestModel
 /**
+ * Model Photo
+ * 
+ */
+export type Photo = Prisma.PhotoModel
+/**
  * Model Listing
  * 
  */

@@ -338,6 +338,7 @@ export type DogWhereInput = {
   weightLogs?: Prisma.WeightLogListRelationFilter
   healthRecords?: Prisma.HealthRecordListRelationFilter
   heatCycles?: Prisma.HeatCycleListRelationFilter
+  photos?: Prisma.PhotoListRelationFilter
   puppyRecord?: Prisma.XOR<Prisma.PuppyNullableScalarRelationFilter, Prisma.PuppyWhereInput> | null
 }
 
@@ -371,6 +372,7 @@ export type DogOrderByWithRelationInput = {
   weightLogs?: Prisma.WeightLogOrderByRelationAggregateInput
   healthRecords?: Prisma.HealthRecordOrderByRelationAggregateInput
   heatCycles?: Prisma.HeatCycleOrderByRelationAggregateInput
+  photos?: Prisma.PhotoOrderByRelationAggregateInput
   puppyRecord?: Prisma.PuppyOrderByWithRelationInput
 }
 
@@ -407,6 +409,7 @@ export type DogWhereUniqueInput = Prisma.AtLeast<{
   weightLogs?: Prisma.WeightLogListRelationFilter
   healthRecords?: Prisma.HealthRecordListRelationFilter
   heatCycles?: Prisma.HeatCycleListRelationFilter
+  photos?: Prisma.PhotoListRelationFilter
   puppyRecord?: Prisma.XOR<Prisma.PuppyNullableScalarRelationFilter, Prisma.PuppyWhereInput> | null
 }, "id">
 
@@ -489,6 +492,7 @@ export type DogCreateInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -519,6 +523,7 @@ export type DogUncheckedCreateInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -549,6 +554,7 @@ export type DogUpdateInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -579,6 +585,7 @@ export type DogUncheckedUpdateInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -1001,6 +1008,20 @@ export type DogUpdateOneRequiredWithoutHeatCyclesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.DogUpdateToOneWithWhereWithoutHeatCyclesInput, Prisma.DogUpdateWithoutHeatCyclesInput>, Prisma.DogUncheckedUpdateWithoutHeatCyclesInput>
 }
 
+export type DogCreateNestedOneWithoutPhotosInput = {
+  create?: Prisma.XOR<Prisma.DogCreateWithoutPhotosInput, Prisma.DogUncheckedCreateWithoutPhotosInput>
+  connectOrCreate?: Prisma.DogCreateOrConnectWithoutPhotosInput
+  connect?: Prisma.DogWhereUniqueInput
+}
+
+export type DogUpdateOneRequiredWithoutPhotosNestedInput = {
+  create?: Prisma.XOR<Prisma.DogCreateWithoutPhotosInput, Prisma.DogUncheckedCreateWithoutPhotosInput>
+  connectOrCreate?: Prisma.DogCreateOrConnectWithoutPhotosInput
+  upsert?: Prisma.DogUpsertWithoutPhotosInput
+  connect?: Prisma.DogWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DogUpdateToOneWithWhereWithoutPhotosInput, Prisma.DogUpdateWithoutPhotosInput>, Prisma.DogUncheckedUpdateWithoutPhotosInput>
+}
+
 export type DogCreateWithoutBreederInput = {
   id?: string
   registeredName?: string | null
@@ -1027,6 +1048,7 @@ export type DogCreateWithoutBreederInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -1056,6 +1078,7 @@ export type DogUncheckedCreateWithoutBreederInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -1136,6 +1159,7 @@ export type DogCreateWithoutSiredLittersInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -1165,6 +1189,7 @@ export type DogUncheckedCreateWithoutSiredLittersInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -1199,6 +1224,7 @@ export type DogCreateWithoutBoreLittersInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -1228,6 +1254,7 @@ export type DogUncheckedCreateWithoutBoreLittersInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -1262,6 +1289,7 @@ export type DogCreateWithoutSireInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -1291,6 +1319,7 @@ export type DogUncheckedCreateWithoutSireInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -1330,6 +1359,7 @@ export type DogCreateWithoutDamInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -1359,6 +1389,7 @@ export type DogUncheckedCreateWithoutDamInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -1409,6 +1440,7 @@ export type DogUpdateWithoutSiredLittersInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -1438,6 +1470,7 @@ export type DogUncheckedUpdateWithoutSiredLittersInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -1478,6 +1511,7 @@ export type DogUpdateWithoutBoreLittersInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -1507,6 +1541,7 @@ export type DogUncheckedUpdateWithoutBoreLittersInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -1568,6 +1603,7 @@ export type DogCreateWithoutMathingsAsDamInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -1597,6 +1633,7 @@ export type DogUncheckedCreateWithoutMathingsAsDamInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -1631,6 +1668,7 @@ export type DogCreateWithoutMatingsAsSireInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -1660,6 +1698,7 @@ export type DogUncheckedCreateWithoutMatingsAsSireInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -1705,6 +1744,7 @@ export type DogUpdateWithoutMathingsAsDamInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -1734,6 +1774,7 @@ export type DogUncheckedUpdateWithoutMathingsAsDamInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -1774,6 +1815,7 @@ export type DogUpdateWithoutMatingsAsSireInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -1803,6 +1845,7 @@ export type DogUncheckedUpdateWithoutMatingsAsSireInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -1833,6 +1876,7 @@ export type DogCreateWithoutPuppyRecordInput = {
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
 }
 
 export type DogUncheckedCreateWithoutPuppyRecordInput = {
@@ -1862,6 +1906,7 @@ export type DogUncheckedCreateWithoutPuppyRecordInput = {
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
 }
 
 export type DogCreateOrConnectWithoutPuppyRecordInput = {
@@ -1907,6 +1952,7 @@ export type DogUpdateWithoutPuppyRecordInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
 }
 
 export type DogUncheckedUpdateWithoutPuppyRecordInput = {
@@ -1936,6 +1982,7 @@ export type DogUncheckedUpdateWithoutPuppyRecordInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
 }
 
 export type DogCreateWithoutWeightLogsInput = {
@@ -1964,6 +2011,7 @@ export type DogCreateWithoutWeightLogsInput = {
   matingsAsSire?: Prisma.MatingCreateNestedManyWithoutSireInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -1993,6 +2041,7 @@ export type DogUncheckedCreateWithoutWeightLogsInput = {
   matingsAsSire?: Prisma.MatingUncheckedCreateNestedManyWithoutSireInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -2038,6 +2087,7 @@ export type DogUpdateWithoutWeightLogsInput = {
   matingsAsSire?: Prisma.MatingUpdateManyWithoutSireNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -2067,6 +2117,7 @@ export type DogUncheckedUpdateWithoutWeightLogsInput = {
   matingsAsSire?: Prisma.MatingUncheckedUpdateManyWithoutSireNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -2096,6 +2147,7 @@ export type DogCreateWithoutHealthRecordsInput = {
   matingsAsSire?: Prisma.MatingCreateNestedManyWithoutSireInput
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -2125,6 +2177,7 @@ export type DogUncheckedCreateWithoutHealthRecordsInput = {
   matingsAsSire?: Prisma.MatingUncheckedCreateNestedManyWithoutSireInput
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -2170,6 +2223,7 @@ export type DogUpdateWithoutHealthRecordsInput = {
   matingsAsSire?: Prisma.MatingUpdateManyWithoutSireNestedInput
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -2199,6 +2253,7 @@ export type DogUncheckedUpdateWithoutHealthRecordsInput = {
   matingsAsSire?: Prisma.MatingUncheckedUpdateManyWithoutSireNestedInput
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -2228,6 +2283,7 @@ export type DogCreateWithoutHeatCyclesInput = {
   matingsAsSire?: Prisma.MatingCreateNestedManyWithoutSireInput
   weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
 }
 
@@ -2257,6 +2313,7 @@ export type DogUncheckedCreateWithoutHeatCyclesInput = {
   matingsAsSire?: Prisma.MatingUncheckedCreateNestedManyWithoutSireInput
   weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
   healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
+  photos?: Prisma.PhotoUncheckedCreateNestedManyWithoutDogInput
   puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
 }
 
@@ -2302,6 +2359,7 @@ export type DogUpdateWithoutHeatCyclesInput = {
   matingsAsSire?: Prisma.MatingUpdateManyWithoutSireNestedInput
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -2331,6 +2389,143 @@ export type DogUncheckedUpdateWithoutHeatCyclesInput = {
   matingsAsSire?: Prisma.MatingUncheckedUpdateManyWithoutSireNestedInput
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
+  puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
+}
+
+export type DogCreateWithoutPhotosInput = {
+  id?: string
+  registeredName?: string | null
+  callName?: string | null
+  breed: string
+  sex: $Enums.Sex
+  colour?: string | null
+  markings?: string | null
+  dateOfBirth?: Date | string | null
+  microchip?: string | null
+  kcRegNumber?: string | null
+  ownership?: $Enums.Ownership
+  status?: $Enums.DogStatus
+  caesareanCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  breeder: Prisma.BreederCreateNestedOneWithoutDogsInput
+  sire?: Prisma.DogCreateNestedOneWithoutSiredLittersInput
+  dam?: Prisma.DogCreateNestedOneWithoutBoreLittersInput
+  siredLitters?: Prisma.DogCreateNestedManyWithoutSireInput
+  boreLitters?: Prisma.DogCreateNestedManyWithoutDamInput
+  mathingsAsDam?: Prisma.MatingCreateNestedManyWithoutDamInput
+  matingsAsSire?: Prisma.MatingCreateNestedManyWithoutSireInput
+  weightLogs?: Prisma.WeightLogCreateNestedManyWithoutDogInput
+  healthRecords?: Prisma.HealthRecordCreateNestedManyWithoutDogInput
+  heatCycles?: Prisma.HeatCycleCreateNestedManyWithoutDogInput
+  puppyRecord?: Prisma.PuppyCreateNestedOneWithoutDogInput
+}
+
+export type DogUncheckedCreateWithoutPhotosInput = {
+  id?: string
+  breederId: string
+  registeredName?: string | null
+  callName?: string | null
+  breed: string
+  sex: $Enums.Sex
+  colour?: string | null
+  markings?: string | null
+  dateOfBirth?: Date | string | null
+  microchip?: string | null
+  kcRegNumber?: string | null
+  sireId?: string | null
+  damId?: string | null
+  ownership?: $Enums.Ownership
+  status?: $Enums.DogStatus
+  caesareanCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  siredLitters?: Prisma.DogUncheckedCreateNestedManyWithoutSireInput
+  boreLitters?: Prisma.DogUncheckedCreateNestedManyWithoutDamInput
+  mathingsAsDam?: Prisma.MatingUncheckedCreateNestedManyWithoutDamInput
+  matingsAsSire?: Prisma.MatingUncheckedCreateNestedManyWithoutSireInput
+  weightLogs?: Prisma.WeightLogUncheckedCreateNestedManyWithoutDogInput
+  healthRecords?: Prisma.HealthRecordUncheckedCreateNestedManyWithoutDogInput
+  heatCycles?: Prisma.HeatCycleUncheckedCreateNestedManyWithoutDogInput
+  puppyRecord?: Prisma.PuppyUncheckedCreateNestedOneWithoutDogInput
+}
+
+export type DogCreateOrConnectWithoutPhotosInput = {
+  where: Prisma.DogWhereUniqueInput
+  create: Prisma.XOR<Prisma.DogCreateWithoutPhotosInput, Prisma.DogUncheckedCreateWithoutPhotosInput>
+}
+
+export type DogUpsertWithoutPhotosInput = {
+  update: Prisma.XOR<Prisma.DogUpdateWithoutPhotosInput, Prisma.DogUncheckedUpdateWithoutPhotosInput>
+  create: Prisma.XOR<Prisma.DogCreateWithoutPhotosInput, Prisma.DogUncheckedCreateWithoutPhotosInput>
+  where?: Prisma.DogWhereInput
+}
+
+export type DogUpdateToOneWithWhereWithoutPhotosInput = {
+  where?: Prisma.DogWhereInput
+  data: Prisma.XOR<Prisma.DogUpdateWithoutPhotosInput, Prisma.DogUncheckedUpdateWithoutPhotosInput>
+}
+
+export type DogUpdateWithoutPhotosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  registeredName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  callName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  breed?: Prisma.StringFieldUpdateOperationsInput | string
+  sex?: Prisma.EnumSexFieldUpdateOperationsInput | $Enums.Sex
+  colour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  markings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  microchip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kcRegNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownership?: Prisma.EnumOwnershipFieldUpdateOperationsInput | $Enums.Ownership
+  status?: Prisma.EnumDogStatusFieldUpdateOperationsInput | $Enums.DogStatus
+  caesareanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  breeder?: Prisma.BreederUpdateOneRequiredWithoutDogsNestedInput
+  sire?: Prisma.DogUpdateOneWithoutSiredLittersNestedInput
+  dam?: Prisma.DogUpdateOneWithoutBoreLittersNestedInput
+  siredLitters?: Prisma.DogUpdateManyWithoutSireNestedInput
+  boreLitters?: Prisma.DogUpdateManyWithoutDamNestedInput
+  mathingsAsDam?: Prisma.MatingUpdateManyWithoutDamNestedInput
+  matingsAsSire?: Prisma.MatingUpdateManyWithoutSireNestedInput
+  weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
+  healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
+  heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
+}
+
+export type DogUncheckedUpdateWithoutPhotosInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  breederId?: Prisma.StringFieldUpdateOperationsInput | string
+  registeredName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  callName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  breed?: Prisma.StringFieldUpdateOperationsInput | string
+  sex?: Prisma.EnumSexFieldUpdateOperationsInput | $Enums.Sex
+  colour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  markings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  microchip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  kcRegNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sireId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  damId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ownership?: Prisma.EnumOwnershipFieldUpdateOperationsInput | $Enums.Ownership
+  status?: Prisma.EnumDogStatusFieldUpdateOperationsInput | $Enums.DogStatus
+  caesareanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  siredLitters?: Prisma.DogUncheckedUpdateManyWithoutSireNestedInput
+  boreLitters?: Prisma.DogUncheckedUpdateManyWithoutDamNestedInput
+  mathingsAsDam?: Prisma.MatingUncheckedUpdateManyWithoutDamNestedInput
+  matingsAsSire?: Prisma.MatingUncheckedUpdateManyWithoutSireNestedInput
+  weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
+  healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
+  heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -2381,6 +2576,7 @@ export type DogUpdateWithoutBreederInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -2410,6 +2606,7 @@ export type DogUncheckedUpdateWithoutBreederInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -2502,6 +2699,7 @@ export type DogUpdateWithoutSireInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -2531,6 +2729,7 @@ export type DogUncheckedUpdateWithoutSireInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -2581,6 +2780,7 @@ export type DogUpdateWithoutDamInput = {
   weightLogs?: Prisma.WeightLogUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUpdateOneWithoutDogNestedInput
 }
 
@@ -2610,6 +2810,7 @@ export type DogUncheckedUpdateWithoutDamInput = {
   weightLogs?: Prisma.WeightLogUncheckedUpdateManyWithoutDogNestedInput
   healthRecords?: Prisma.HealthRecordUncheckedUpdateManyWithoutDogNestedInput
   heatCycles?: Prisma.HeatCycleUncheckedUpdateManyWithoutDogNestedInput
+  photos?: Prisma.PhotoUncheckedUpdateManyWithoutDogNestedInput
   puppyRecord?: Prisma.PuppyUncheckedUpdateOneWithoutDogNestedInput
 }
 
@@ -2647,6 +2848,7 @@ export type DogCountOutputType = {
   weightLogs: number
   healthRecords: number
   heatCycles: number
+  photos: number
 }
 
 export type DogCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2657,6 +2859,7 @@ export type DogCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.In
   weightLogs?: boolean | DogCountOutputTypeCountWeightLogsArgs
   healthRecords?: boolean | DogCountOutputTypeCountHealthRecordsArgs
   heatCycles?: boolean | DogCountOutputTypeCountHeatCyclesArgs
+  photos?: boolean | DogCountOutputTypeCountPhotosArgs
 }
 
 /**
@@ -2718,6 +2921,13 @@ export type DogCountOutputTypeCountHeatCyclesArgs<ExtArgs extends runtime.Types.
   where?: Prisma.HeatCycleWhereInput
 }
 
+/**
+ * DogCountOutputType without action
+ */
+export type DogCountOutputTypeCountPhotosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PhotoWhereInput
+}
+
 
 export type DogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2749,6 +2959,7 @@ export type DogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   weightLogs?: boolean | Prisma.Dog$weightLogsArgs<ExtArgs>
   healthRecords?: boolean | Prisma.Dog$healthRecordsArgs<ExtArgs>
   heatCycles?: boolean | Prisma.Dog$heatCyclesArgs<ExtArgs>
+  photos?: boolean | Prisma.Dog$photosArgs<ExtArgs>
   puppyRecord?: boolean | Prisma.Dog$puppyRecordArgs<ExtArgs>
   _count?: boolean | Prisma.DogCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["dog"]>
@@ -2837,6 +3048,7 @@ export type DogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   weightLogs?: boolean | Prisma.Dog$weightLogsArgs<ExtArgs>
   healthRecords?: boolean | Prisma.Dog$healthRecordsArgs<ExtArgs>
   heatCycles?: boolean | Prisma.Dog$heatCyclesArgs<ExtArgs>
+  photos?: boolean | Prisma.Dog$photosArgs<ExtArgs>
   puppyRecord?: boolean | Prisma.Dog$puppyRecordArgs<ExtArgs>
   _count?: boolean | Prisma.DogCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -2864,6 +3076,7 @@ export type $DogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     weightLogs: Prisma.$WeightLogPayload<ExtArgs>[]
     healthRecords: Prisma.$HealthRecordPayload<ExtArgs>[]
     heatCycles: Prisma.$HeatCyclePayload<ExtArgs>[]
+    photos: Prisma.$PhotoPayload<ExtArgs>[]
     puppyRecord: Prisma.$PuppyPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -3290,6 +3503,7 @@ export interface Prisma__DogClient<T, Null = never, ExtArgs extends runtime.Type
   weightLogs<T extends Prisma.Dog$weightLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dog$weightLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WeightLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   healthRecords<T extends Prisma.Dog$healthRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dog$healthRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HealthRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   heatCycles<T extends Prisma.Dog$heatCyclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dog$heatCyclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HeatCyclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  photos<T extends Prisma.Dog$photosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dog$photosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   puppyRecord<T extends Prisma.Dog$puppyRecordArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Dog$puppyRecordArgs<ExtArgs>>): Prisma.Prisma__PuppyClient<runtime.Types.Result.GetResult<Prisma.$PuppyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3943,6 +4157,30 @@ export type Dog$heatCyclesArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.HeatCycleScalarFieldEnum | Prisma.HeatCycleScalarFieldEnum[]
+}
+
+/**
+ * Dog.photos
+ */
+export type Dog$photosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Photo
+   */
+  select?: Prisma.PhotoSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Photo
+   */
+  omit?: Prisma.PhotoOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PhotoInclude<ExtArgs> | null
+  where?: Prisma.PhotoWhereInput
+  orderBy?: Prisma.PhotoOrderByWithRelationInput | Prisma.PhotoOrderByWithRelationInput[]
+  cursor?: Prisma.PhotoWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PhotoScalarFieldEnum | Prisma.PhotoScalarFieldEnum[]
 }
 
 /**

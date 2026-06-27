@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getBreeder } from "@/lib/breeder";
 import { redirect } from "next/navigation";
+import PhotoUpload from "./PhotoUpload";
+import DeletePhotoButton from "./DeletePhotoButton";
 
 function formatDate(date: Date | null | undefined): string {
   if (!date) return "—";
@@ -52,6 +54,10 @@ export default async function DogProfilePage({
       healthRecords: {
         where: { deletedAt: null },
         orderBy: { date: "desc" },
+      },
+      photos: {
+        where: { deletedAt: null },
+        orderBy: { sortOrder: "asc" },
       },
       heatCycles: {
         where: { deletedAt: null },
@@ -141,6 +147,35 @@ export default async function DogProfilePage({
           )}
         </div>
       )}
+
+      {/* Photos */}
+      <section className="mb-5">
+        {dog.photos.length > 0 && (
+          <div className="mb-3 grid grid-cols-3 gap-2">
+            {dog.photos.map((photo) => (
+              <div key={photo.id} className="group relative">
+                <img
+                  src={photo.url}
+                  alt={photo.caption || dog.callName || "Dog photo"}
+                  className="h-24 w-full rounded-lg object-cover"
+                />
+                <DeletePhotoButton photoId={photo.id} dogId={dog.id} />
+                {photo.caption && (
+                  <p className="mt-0.5 truncate text-xs text-neutral-400">
+                    {photo.caption}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="mb-2 flex items-center justify-between px-1">
+          <p className="text-xs text-neutral-400">
+            Photos · {dog.photos.length}
+          </p>
+        </div>
+        <PhotoUpload dogId={dog.id} />
+      </section>
 
       {/* Details card */}
       <section className="mb-5 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">

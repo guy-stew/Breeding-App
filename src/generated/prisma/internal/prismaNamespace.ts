@@ -394,6 +394,7 @@ export const ModelName = {
   HealthRecord: 'HealthRecord',
   HeatCycle: 'HeatCycle',
   ProgesteroneTest: 'ProgesteroneTest',
+  Photo: 'Photo',
   Listing: 'Listing'
 } as const
 
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "progesteroneTest" | "listing"
+    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "progesteroneTest" | "photo" | "listing"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1154,6 +1155,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Photo: {
+      payload: Prisma.$PhotoPayload<ExtArgs>
+      fields: Prisma.PhotoFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PhotoFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PhotoFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>
+        }
+        findFirst: {
+          args: Prisma.PhotoFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PhotoFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>
+        }
+        findMany: {
+          args: Prisma.PhotoFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>[]
+        }
+        create: {
+          args: Prisma.PhotoCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>
+        }
+        createMany: {
+          args: Prisma.PhotoCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PhotoCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>[]
+        }
+        delete: {
+          args: Prisma.PhotoDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>
+        }
+        update: {
+          args: Prisma.PhotoUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>
+        }
+        deleteMany: {
+          args: Prisma.PhotoDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PhotoUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PhotoUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>[]
+        }
+        upsert: {
+          args: Prisma.PhotoUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoPayload>
+        }
+        aggregate: {
+          args: Prisma.PhotoAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePhoto>
+        }
+        groupBy: {
+          args: Prisma.PhotoGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PhotoGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PhotoCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PhotoCountAggregateOutputType> | number
+        }
+      }
+    }
     Listing: {
       payload: Prisma.$ListingPayload<ExtArgs>
       fields: Prisma.ListingFieldRefs
@@ -1443,6 +1518,20 @@ export const ProgesteroneTestScalarFieldEnum = {
 } as const
 
 export type ProgesteroneTestScalarFieldEnum = (typeof ProgesteroneTestScalarFieldEnum)[keyof typeof ProgesteroneTestScalarFieldEnum]
+
+
+export const PhotoScalarFieldEnum = {
+  id: 'id',
+  dogId: 'dogId',
+  url: 'url',
+  caption: 'caption',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PhotoScalarFieldEnum = (typeof PhotoScalarFieldEnum)[keyof typeof PhotoScalarFieldEnum]
 
 
 export const ListingScalarFieldEnum = {
@@ -1812,6 +1901,7 @@ export type GlobalOmitConfig = {
   healthRecord?: Prisma.HealthRecordOmit
   heatCycle?: Prisma.HeatCycleOmit
   progesteroneTest?: Prisma.ProgesteroneTestOmit
+  photo?: Prisma.PhotoOmit
   listing?: Prisma.ListingOmit
 }
 

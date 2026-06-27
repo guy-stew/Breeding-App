@@ -61,6 +61,7 @@ export const ModelName = {
   HealthRecord: 'HealthRecord',
   HeatCycle: 'HeatCycle',
   ProgesteroneTest: 'ProgesteroneTest',
+  Photo: 'Photo',
   Listing: 'Listing'
 } as const
 
@@ -256,6 +257,20 @@ export const ProgesteroneTestScalarFieldEnum = {
 } as const
 
 export type ProgesteroneTestScalarFieldEnum = (typeof ProgesteroneTestScalarFieldEnum)[keyof typeof ProgesteroneTestScalarFieldEnum]
+
+
+export const PhotoScalarFieldEnum = {
+  id: 'id',
+  dogId: 'dogId',
+  url: 'url',
+  caption: 'caption',
+  sortOrder: 'sortOrder',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type PhotoScalarFieldEnum = (typeof PhotoScalarFieldEnum)[keyof typeof PhotoScalarFieldEnum]
 
 
 export const ListingScalarFieldEnum = {

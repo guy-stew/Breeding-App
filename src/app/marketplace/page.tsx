@@ -18,12 +18,13 @@ export default async function MarketplacePage() {
       puppy: {
         include: {
           dog: {
-            select: {
-              callName: true,
-              breed: true,
-              sex: true,
-              colour: true,
-              dateOfBirth: true,
+            include: {
+              photos: {
+                where: { deletedAt: null },
+                orderBy: { sortOrder: "asc" },
+                take: 1,
+                select: { url: true },
+              },
             },
           },
           litter: {
@@ -64,14 +65,22 @@ export default async function MarketplacePage() {
                 href={`/marketplace/${listing.id}`}
                 className="block overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900"
               >
-                {/* Colour banner */}
-                <div
-                  className="h-24 w-full"
-                  style={{
-                    backgroundColor:
-                      listing.puppy.collarColour?.toLowerCase() ?? "#e5e5e5",
-                  }}
-                />
+                {/* Photo or colour banner */}
+                {dog.photos[0] ? (
+                  <img
+                    src={dog.photos[0].url}
+                    alt={listing.title || dog.callName || "Puppy"}
+                    className="h-40 w-full object-cover"
+                  />
+                ) : (
+                  <div
+                    className="h-40 w-full"
+                    style={{
+                      backgroundColor:
+                        listing.puppy.collarColour?.toLowerCase() ?? "#e5e5e5",
+                    }}
+                  />
+                )}
 
                 <div className="p-4">
                   <h2 className="text-sm font-bold">

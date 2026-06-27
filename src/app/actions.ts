@@ -861,3 +861,66 @@ export async function updateListingStatus(
   revalidatePath("/marketplace");
   return { ok: true };
 }
+
+// ============================================================
+//  16. savePhoto — save a photo record after client-side upload.
+// ============================================================
+export async function savePhoto(
+  dogId: string,
+  url: string,
+  caption: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const dog = await prisma.dog.findFirst({
+    where: { id: dogId, breederId: breeder.id, deletedAt: null },
+  });
+  if (!dog) return { ok: false, error: "Dog not found." };
+
+  // Set sort order to next available.
+  const count = await prisma.photo.count({
+    where: { dogId, deletedAt: null },
+  });
+
+  await prisma.photo.create({
+    data: {
+      dogId,
+      url,
+      caption: caption || null,
+      sortOrder: count,
+    },
+  });
+
+  revalidatePath(`/dogs/${dogId}`);
+  revalidatePath("/marketplace");
+  return { ok: true };
+}
+
+// ============================================================
+//  17. deletePhoto — soft-delete a photo record.
+// ============================================================
+export async function deletePhoto(
+  photoId: string,
+  dogId: string,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const photo = await prisma.photo.findFirst({
+    where: { id: photoId, deletedAt: null },
+    include: { dog: { select: { breederId: true } } },
+  });
+  if (!photo || photo.dog.breederId !== breeder.id) {
+    return { ok: false, error: "Photo not found." };
+  }
+
+  await prisma.photo.update({
+    where: { id: photoId },
+    data: { deletedAt: new Date() },
+  });
+
+  revalidatePath(`/dogs/${dogId}`);
+  revalidatePath("/marketplace");
+  return { ok: true };
+}

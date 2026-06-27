@@ -33,16 +33,6 @@ export default async function ListingDetailPage({
       puppy: {
         include: {
           dog: {
-            select: {
-              callName: true,
-              registeredName: true,
-              breed: true,
-              sex: true,
-              colour: true,
-              markings: true,
-              dateOfBirth: true,
-              microchip: true,
-            },
             include: {
               sire: {
                 select: { callName: true, breed: true, colour: true },
@@ -54,6 +44,11 @@ export default async function ListingDetailPage({
                 where: { deletedAt: null },
                 orderBy: { date: "desc" },
                 select: { type: true, description: true, date: true },
+              },
+              photos: {
+                where: { deletedAt: null },
+                orderBy: { sortOrder: "asc" },
+                select: { url: true, caption: true },
               },
             },
           },
@@ -106,14 +101,36 @@ export default async function ListingDetailPage({
         </Link>
       </header>
 
-      {/* Colour banner */}
-      <div
-        className="mb-4 h-32 w-full rounded-xl"
-        style={{
-          backgroundColor:
-            listing.puppy.collarColour?.toLowerCase() ?? "#e5e5e5",
-        }}
-      />
+      {/* Photos or colour banner */}
+      {dog.photos.length > 0 ? (
+        <div className="mb-4">
+          <img
+            src={dog.photos[0].url}
+            alt={listing.title || dog.callName || "Puppy"}
+            className="h-56 w-full rounded-xl object-cover"
+          />
+          {dog.photos.length > 1 && (
+            <div className="mt-2 grid grid-cols-4 gap-2">
+              {dog.photos.slice(1).map((photo, i) => (
+                <img
+                  key={i}
+                  src={photo.url}
+                  alt={photo.caption || `Photo ${i + 2}`}
+                  className="h-20 w-full rounded-lg object-cover"
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        <div
+          className="mb-4 h-32 w-full rounded-xl"
+          style={{
+            backgroundColor:
+              listing.puppy.collarColour?.toLowerCase() ?? "#e5e5e5",
+          }}
+        />
+      )}
 
       <h1 className="text-xl font-bold">
         {listing.title || dog.callName || "Puppy"}

@@ -101,6 +101,7 @@ model Dog {
   weightLogs     WeightLog[]
   healthRecords  HealthRecord[]
   heatCycles     HeatCycle[]
+  photos         Photo[]
   // If this Dog record IS a puppy in a litter, this links to that role.
   puppyRecord    Puppy?
 
@@ -408,7 +409,27 @@ model ProgesteroneTest {
 }
 
 // ------------------------------------------------------------
-//  11. Listing — a public marketplace entry for an available
+//  11. Photo — images stored in Supabase Storage, linked to a Dog.
+//      Used on dog profiles, marketplace listings, and info packs.
+// ------------------------------------------------------------
+model Photo {
+  id    String @id @default(uuid())
+  dog   Dog    @relation(fields: [dogId], references: [id])
+  dogId String
+
+  url       String   // Supabase Storage public URL
+  caption   String?
+  sortOrder Int      @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([dogId])
+}
+
+// ------------------------------------------------------------
+//  12. Listing — a public marketplace entry for an available
 //      puppy. One-to-one with Puppy. Status controls visibility.
 // ------------------------------------------------------------
 model Listing {

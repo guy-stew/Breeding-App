@@ -68,6 +68,12 @@ export default async function InfoPackPage({
         where: { deletedAt: null },
         orderBy: { date: "asc" },
       },
+      photos: {
+        where: { deletedAt: null },
+        orderBy: { sortOrder: "asc" },
+        take: 1,
+        select: { url: true },
+      },
     },
   });
 
@@ -95,6 +101,17 @@ export default async function InfoPackPage({
           <p className="mb-6 text-center text-sm text-neutral-500">
             {breeder.kennelName}
           </p>
+        )}
+
+        {/* Photo */}
+        {dog.photos[0] && (
+          <div className="mb-6 flex justify-center">
+            <img
+              src={dog.photos[0].url}
+              alt={dog.callName || "Puppy"}
+              className="h-48 w-48 rounded-xl object-cover"
+            />
+          </div>
         )}
 
         {/* Puppy details */}
