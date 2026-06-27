@@ -5,9 +5,10 @@ what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
 *Last updated: 27 June 2026 — app now covers the full breeding cycle plus
-buyer management and health records: add dogs, record matings + litters, add
-puppies, track weights, view growth charts, generate contracts + info packs,
-manage buyers, and log vaccinations/worming/tests/scores. Login required.*
+buyer management, health records, and heat cycle tracking: add dogs, record
+matings + litters, add puppies, track weights, view growth charts, generate
+contracts + info packs, manage buyers, log vaccinations/worming/tests/scores,
+and track heat cycles with progesterone testing. Login required.*
 
 ---
 
@@ -94,10 +95,18 @@ once, and re-arrange/print it differently** for each feature.
       next-due dates. Info pack healthcare table auto-fills from real records
       (falls back to blank rows when empty).
 
-**The app now supports a complete breeding cycle plus buyer management and
-health records: add dogs → record a mating and litter → add puppies → track
-daily weights → view growth charts → log health records → manage buyers →
-assign buyers to puppies → generate pre-filled contracts and info packs.**
+- [x] **Heat cycle tracking** — HeatCycle and ProgesteroneTest models. Record
+      heat cycles for bitches (`/dogs/[id]/heat-cycles/new`), view cycle detail
+      with progesterone test log and Recharts chart (`/dogs/[id]/heat-cycles/[cycleId]`).
+      Reference lines at 2 ng/ml (LH surge) and 5 ng/ml (ovulation). Auto-calculates
+      predicted whelp date (ovulation + 63 days). Inline form to add test results.
+      Dog profile shows heat cycles section for bitches only.
+
+**The app now supports a complete breeding cycle plus buyer management, health
+records, and heat cycle tracking: add dogs → record a mating and litter → add
+puppies → track daily weights → view growth charts → log health records →
+track heat cycles with progesterone → manage buyers → assign buyers to
+puppies → generate pre-filled contracts and info packs.**
 
 ---
 
@@ -120,7 +129,8 @@ breeding-app/
 │   │   ├── actions.ts       ← SERVER ACTIONS (logWeight, addDog, updateDog,
 │   │   │                       createLitter, updateLitter, addPuppy,
 │   │   │                       createBuyer, updateBuyer, assignBuyer,
-│   │   │                       addHealthRecord, deleteHealthRecord)
+│   │   │                       addHealthRecord, deleteHealthRecord,
+│   │   │                       createHeatCycle, addProgesteroneTest)
 │   │   ├── SignOutButton.tsx ← sign-out link (client component)
 │   │   ├── login/
 │   │   │   ├── page.tsx     ← the LOGIN PAGE
@@ -144,6 +154,14 @@ breeding-app/
 │   │   │       │   └── new/
 │   │   │       │       ├── page.tsx      ← ADD HEALTH RECORD
 │   │   │       │       └── AddHealthRecordForm.tsx ← form (client component)
+│   │   │       ├── heat-cycles/
+│   │   │       │   ├── new/
+│   │   │       │   │   ├── page.tsx      ← RECORD HEAT CYCLE
+│   │   │       │   │   └── NewHeatCycleForm.tsx ← form (client component)
+│   │   │       │   └── [cycleId]/
+│   │   │       │       ├── page.tsx      ← CYCLE DETAIL (summary, tests, chart)
+│   │   │       │       ├── ProgesteroneChart.tsx ← Recharts chart (client)
+│   │   │       │       └── AddProgTestForm.tsx ← inline test form (client)
 │   │   │       ├── contract/
 │   │   │       │   ├── page.tsx      ← CONTRACT GENERATOR
 │   │   │       │   └── ContractView.tsx ← buyer form + contract preview (client)
@@ -320,9 +338,7 @@ npx prisma studio
 
 ## Next steps (roughly in order of value)
 
-1. **Heat cycle tracking** — season dates, progesterone readings, predicted
-   whelp dates. The schema has a stub for this (`HeatCycle`).
-2. **Public marketplace** — a Pets4Homes-style listing page for available
+1. **Public marketplace** — a Pets4Homes-style listing page for available
    puppies, built from the existing data. The "Listing" model stub is
    reserved in the schema.
 
@@ -344,6 +360,7 @@ data model. Worked examples exist for every pattern:
 - **MULTI-CREATE:** `src/app/litters/new/` — creates two linked records (Mating + Litter) in one action.
 - **CRM / ASSIGN:** `src/app/buyers/` + `AssignBuyer.tsx` — CRUD pages, dropdown assigns buyer to puppy, contract pre-fills.
 - **HEALTH:** `src/app/dogs/[id]/health/new/` — typed record form, info pack auto-fills from real data.
+- **HEAT CYCLE:** `src/app/dogs/[id]/heat-cycles/` — cycle + progesterone tests, Recharts chart, predicted whelp date.
 
 Any new page starts with `const breeder = await getBreeder()` and follows one
 of those patterns.
