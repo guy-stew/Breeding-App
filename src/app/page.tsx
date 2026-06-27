@@ -101,7 +101,15 @@ export default async function HomePage() {
 
       {/* Dogs list */}
       <section>
-        <p className="mb-2 px-1 text-xs text-neutral-400">My dogs</p>
+        <div className="mb-2 flex items-center justify-between px-1">
+          <p className="text-xs text-neutral-400">My dogs</p>
+          <Link
+            href="/dogs/new"
+            className="text-xs font-medium text-blue-600 dark:text-blue-400"
+          >
+            + Add dog
+          </Link>
+        </div>
         <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
           {dogs.map((dog) => (
             <li key={dog.id} className="flex items-center gap-3 p-3">
@@ -120,7 +128,11 @@ export default async function HomePage() {
 
         {dogs.length === 0 && (
           <p className="mt-4 text-center text-sm text-neutral-400">
-            No dogs yet. Run the seed script, or add your first dog.
+            No dogs yet. Run the seed script, or{" "}
+            <Link href="/dogs/new" className="text-blue-600 dark:text-blue-400">
+              add your first dog
+            </Link>
+            .
           </p>
         )}
       </section>

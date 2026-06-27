@@ -16,6 +16,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 // The shape of what we hand back to the form after a save attempt,
 // so the screen can show "Saved" or a clear error instead of just
@@ -89,4 +90,94 @@ export async function logWeight(
   revalidatePath("/");
 
   return { ok: true, weightG: grams };
+}
+
+// ============================================================
+//  addDog — create a new dog record for the current breeder.
+//
+//  The second write feature. Same shape as logWeight: validate
+//  what came in, write it with Prisma, refresh the screens that
+//  show dogs. The only genuinely required fields are breed and
+//  sex (plus the breeder it belongs to); everything else is
+//  optional and simply left blank if not given.
+//
+//  On success this REDIRECTS back to the home screen rather than
+//  returning a result, because adding a dog is a "do it and move
+//  on" action — there's nothing to stay on the form for.
+// ============================================================
+
+export type AddDogResult =
+  // We only ever RETURN on failure; success redirects away.
+  { ok: false; error: string };
+
+// The shape of the data the form hands over.
+type AddDogInput = {
+  callName: string;
+  breed: string;
+  sex: string;            // must end up as "dog" or "bitch"
+  colour?: string;
+  dateOfBirth?: string;   // a date string like "2023-04-15", or empty
+  microchip?: string;
+};
+
+export async function addDog(input: AddDogInput): Promise<AddDogResult> {
+  // --- Find the breeder this dog belongs to. ---
+  // For now we use the first breeder, same as the home screen does.
+  // Once login is added, this becomes "the logged-in breeder".
+  const breeder = await prisma.breeder.findFirst({
+    where: { deletedAt: null },
+  });
+
+  if (!breeder) {
+    return { ok: false, error: "No breeder found to attach the dog to." };
+  }
+
+  // --- Validation (the clerk checking the slip). ---
+  const breed = input.breed?.trim();
+  if (!breed) {
+    return { ok: false, error: "Breed is required." };
+  }
+
+  // Sex must be one of the two allowed values the database accepts.
+  if (input.sex !== "dog" && input.sex !== "bitch") {
+    return { ok: false, error: "Choose whether the dog is a dog or a bitch." };
+  }
+
+  // Date of birth is optional. If given, make sure it's a real date
+  // and not in the future (a dog can't be born tomorrow).
+  let dob: Date | undefined;
+  if (input.dateOfBirth) {
+    const parsed = new Date(input.dateOfBirth);
+    if (Number.isNaN(parsed.getTime())) {
+      return { ok: false, error: "That date of birth isn't valid." };
+    }
+    if (parsed.getTime() > Date.now()) {
+      return { ok: false, error: "Date of birth can't be in the future." };
+    }
+    dob = parsed;
+  }
+
+  try {
+    await prisma.dog.create({
+      data: {
+        breederId: breeder.id,
+        breed,
+        sex: input.sex, // already checked to be "dog" | "bitch"
+        // Optional fields: only set them if the form actually sent something.
+        callName: input.callName?.trim() || null,
+        colour: input.colour?.trim() || null,
+        microchip: input.microchip?.trim() || null,
+        ...(dob ? { dateOfBirth: dob } : {}),
+      },
+    });
+  } catch {
+    return { ok: false, error: "Could not save the dog — please try again." };
+  }
+
+  // Refresh the home screen so the new dog shows in "My dogs".
+  revalidatePath("/");
+
+  // Then send the breeder back home to see it. redirect() ends the
+  // action here — nothing after this line runs.
+  redirect("/");
 }
