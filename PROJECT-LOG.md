@@ -4,9 +4,9 @@ A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 27 June 2026 — all three original milestones complete: login,
-full screen set (profile, edit, litter detail, growth chart), and paperwork
-engine (contracts + info packs).*
+*Last updated: 27 June 2026 — app is now usable for a real breeding cycle:
+add dogs, record matings + litters, add puppies, track weights, view growth
+charts, and generate contracts + info packs. Login required.*
 
 ---
 
@@ -33,7 +33,7 @@ once, and re-arrange/print it differently** for each feature.
 
 ---
 
-## Current status — ✅ All three original milestones complete
+## Current status — ✅ Full breeding cycle workflow live
 
 - [x] Local dev environment set up (Node, VS Code, Git)
 - [x] Next.js project created
@@ -72,8 +72,15 @@ once, and re-arrange/print it differently** for each feature.
       document: puppy details, parentage, full weight record, feeding guide,
       healthcare record table, microchip info, breeder contact.
 
-**The app now covers the full whelping workflow: record dogs and litters, track
-weights with a growth chart, and generate the paperwork a buyer takes home.**
+- [x] **Litter management** — full workflow: record a new mating + litter
+      (`/litters/new`), edit litter details and status (`/litters/[id]/edit`),
+      add individual puppies (`/litters/[id]/add-puppy`). Home screen shows
+      "+ Record a new litter" when no active litter, or "+ New litter" link
+      when one exists. Litter detail page has Edit and + Add puppy buttons.
+
+**The app now supports a complete breeding cycle: add dogs → record a mating
+and litter → add puppies → track daily weights → view growth charts → generate
+contracts and info packs for buyers.**
 
 ---
 
@@ -93,7 +100,8 @@ breeding-app/
 │   ├── middleware.ts        ← AUTH GATE — refreshes session, redirects to /login if not signed in
 │   ├── app/
 │   │   ├── page.tsx         ← the HOME SCREEN (reads dogs + active litter)
-│   │   ├── actions.ts       ← SERVER ACTIONS (logWeight, addDog, updateDog)
+│   │   ├── actions.ts       ← SERVER ACTIONS (logWeight, addDog, updateDog,
+│   │   │                       createLitter, updateLitter, addPuppy)
 │   │   ├── SignOutButton.tsx ← sign-out link (client component)
 │   │   ├── login/
 │   │   │   ├── page.tsx     ← the LOGIN PAGE
@@ -120,9 +128,18 @@ breeding-app/
 │   │   │           ├── page.tsx      ← INFO PACK (printable)
 │   │   │           └── PrintButton.tsx ← print trigger (client component)
 │   │   └── litters/
+│   │       ├── new/
+│   │       │   ├── page.tsx      ← NEW LITTER (pick parents, enter details)
+│   │       │   └── NewLitterForm.tsx ← litter form (client component)
 │   │       └── [id]/
 │   │           ├── page.tsx      ← LITTER DETAIL (summary, puppies, chart)
-│   │           └── GrowthChart.tsx ← Recharts line chart (client component)
+│   │           ├── GrowthChart.tsx ← Recharts line chart (client component)
+│   │           ├── edit/
+│   │           │   ├── page.tsx      ← EDIT LITTER screen
+│   │           │   └── EditLitterForm.tsx ← edit form (client component)
+│   │           └── add-puppy/
+│   │               ├── page.tsx      ← ADD PUPPY to litter
+│   │               └── AddPuppyForm.tsx ← puppy form (client component)
 │   ├── lib/
 │   │   ├── prisma.ts        ← the shared database connection helper
 │   │   ├── breeder.ts       ← getBreeder() — finds the Breeder for the logged-in user
@@ -279,9 +296,7 @@ npx prisma studio
    with real data.
 3. **Heat cycle tracking** — season dates, progesterone readings, predicted
    whelp dates. The schema has a stub for this (`HeatCycle`).
-4. **Litter management** — add/edit litter, record a new mating, add puppies
-   to a litter. Currently litters only come from the seed data.
-5. **Public marketplace** — a Pets4Homes-style listing page for available
+4. **Public marketplace** — a Pets4Homes-style listing page for available
    puppies, built from the existing data. The "Listing" model stub is
    reserved in the schema.
 
@@ -300,6 +315,7 @@ data model. Worked examples exist for every pattern:
 - **EDIT FORM:** `src/app/dogs/[id]/edit/` — pre-filled form → updateDog action → redirect.
 - **PRINTABLE DOC:** `src/app/dogs/[id]/info-pack/` — server-rendered, print CSS hides chrome.
 - **CHART:** `src/app/litters/[id]/GrowthChart.tsx` — Recharts client component fed from server data.
+- **MULTI-CREATE:** `src/app/litters/new/` — creates two linked records (Mating + Litter) in one action.
 
 Any new page starts with `const breeder = await getBreeder()` and follows one
 of those patterns.
