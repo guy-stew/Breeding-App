@@ -26,7 +26,15 @@ type DogData = {
     microchip: string | null;
     kcRegNumber: string | null;
   } | null;
-  puppyRecord: { priceP: number | null } | null;
+  puppyRecord: {
+    priceP: number | null;
+    buyer: {
+      name: string;
+      email: string | null;
+      phone: string | null;
+      address: string | null;
+    } | null;
+  } | null;
 };
 
 type BreederData = {
@@ -59,10 +67,11 @@ export default function ContractView({
   dog: DogData;
   breeder: BreederData;
 }) {
-  const [buyerName, setBuyerName] = useState("");
-  const [buyerAddress, setBuyerAddress] = useState("");
-  const [buyerEmail, setBuyerEmail] = useState("");
-  const [buyerPhone, setBuyerPhone] = useState("");
+  const linked = dog.puppyRecord?.buyer;
+  const [buyerName, setBuyerName] = useState(linked?.name ?? "");
+  const [buyerAddress, setBuyerAddress] = useState(linked?.address ?? "");
+  const [buyerEmail, setBuyerEmail] = useState(linked?.email ?? "");
+  const [buyerPhone, setBuyerPhone] = useState(linked?.phone ?? "");
   const [salePrice, setSalePrice] = useState(
     dog.puppyRecord?.priceP ? penceToDisplay(dog.puppyRecord.priceP) : "",
   );

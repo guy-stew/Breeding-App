@@ -256,6 +256,7 @@ export type BreederWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"Breeder"> | Date | string | null
   dogs?: Prisma.DogListRelationFilter
   litters?: Prisma.LitterListRelationFilter
+  buyers?: Prisma.BuyerListRelationFilter
 }
 
 export type BreederOrderByWithRelationInput = {
@@ -275,6 +276,7 @@ export type BreederOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   dogs?: Prisma.DogOrderByRelationAggregateInput
   litters?: Prisma.LitterOrderByRelationAggregateInput
+  buyers?: Prisma.BuyerOrderByRelationAggregateInput
 }
 
 export type BreederWhereUniqueInput = Prisma.AtLeast<{
@@ -297,6 +299,7 @@ export type BreederWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"Breeder"> | Date | string | null
   dogs?: Prisma.DogListRelationFilter
   litters?: Prisma.LitterListRelationFilter
+  buyers?: Prisma.BuyerListRelationFilter
 }, "id" | "email" | "supabaseUserId">
 
 export type BreederOrderByWithAggregationInput = {
@@ -356,6 +359,7 @@ export type BreederCreateInput = {
   deletedAt?: Date | string | null
   dogs?: Prisma.DogCreateNestedManyWithoutBreederInput
   litters?: Prisma.LitterCreateNestedManyWithoutBreederInput
+  buyers?: Prisma.BuyerCreateNestedManyWithoutBreederInput
 }
 
 export type BreederUncheckedCreateInput = {
@@ -375,6 +379,7 @@ export type BreederUncheckedCreateInput = {
   deletedAt?: Date | string | null
   dogs?: Prisma.DogUncheckedCreateNestedManyWithoutBreederInput
   litters?: Prisma.LitterUncheckedCreateNestedManyWithoutBreederInput
+  buyers?: Prisma.BuyerUncheckedCreateNestedManyWithoutBreederInput
 }
 
 export type BreederUpdateInput = {
@@ -394,6 +399,7 @@ export type BreederUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dogs?: Prisma.DogUpdateManyWithoutBreederNestedInput
   litters?: Prisma.LitterUpdateManyWithoutBreederNestedInput
+  buyers?: Prisma.BuyerUpdateManyWithoutBreederNestedInput
 }
 
 export type BreederUncheckedUpdateInput = {
@@ -413,6 +419,7 @@ export type BreederUncheckedUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dogs?: Prisma.DogUncheckedUpdateManyWithoutBreederNestedInput
   litters?: Prisma.LitterUncheckedUpdateManyWithoutBreederNestedInput
+  buyers?: Prisma.BuyerUncheckedUpdateManyWithoutBreederNestedInput
 }
 
 export type BreederCreateManyInput = {
@@ -574,6 +581,20 @@ export type BreederUpdateOneRequiredWithoutLittersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.BreederUpdateToOneWithWhereWithoutLittersInput, Prisma.BreederUpdateWithoutLittersInput>, Prisma.BreederUncheckedUpdateWithoutLittersInput>
 }
 
+export type BreederCreateNestedOneWithoutBuyersInput = {
+  create?: Prisma.XOR<Prisma.BreederCreateWithoutBuyersInput, Prisma.BreederUncheckedCreateWithoutBuyersInput>
+  connectOrCreate?: Prisma.BreederCreateOrConnectWithoutBuyersInput
+  connect?: Prisma.BreederWhereUniqueInput
+}
+
+export type BreederUpdateOneRequiredWithoutBuyersNestedInput = {
+  create?: Prisma.XOR<Prisma.BreederCreateWithoutBuyersInput, Prisma.BreederUncheckedCreateWithoutBuyersInput>
+  connectOrCreate?: Prisma.BreederCreateOrConnectWithoutBuyersInput
+  upsert?: Prisma.BreederUpsertWithoutBuyersInput
+  connect?: Prisma.BreederWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.BreederUpdateToOneWithWhereWithoutBuyersInput, Prisma.BreederUpdateWithoutBuyersInput>, Prisma.BreederUncheckedUpdateWithoutBuyersInput>
+}
+
 export type BreederCreateWithoutDogsInput = {
   id?: string
   name: string
@@ -590,6 +611,7 @@ export type BreederCreateWithoutDogsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   litters?: Prisma.LitterCreateNestedManyWithoutBreederInput
+  buyers?: Prisma.BuyerCreateNestedManyWithoutBreederInput
 }
 
 export type BreederUncheckedCreateWithoutDogsInput = {
@@ -608,6 +630,7 @@ export type BreederUncheckedCreateWithoutDogsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   litters?: Prisma.LitterUncheckedCreateNestedManyWithoutBreederInput
+  buyers?: Prisma.BuyerUncheckedCreateNestedManyWithoutBreederInput
 }
 
 export type BreederCreateOrConnectWithoutDogsInput = {
@@ -642,6 +665,7 @@ export type BreederUpdateWithoutDogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   litters?: Prisma.LitterUpdateManyWithoutBreederNestedInput
+  buyers?: Prisma.BuyerUpdateManyWithoutBreederNestedInput
 }
 
 export type BreederUncheckedUpdateWithoutDogsInput = {
@@ -660,6 +684,7 @@ export type BreederUncheckedUpdateWithoutDogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   litters?: Prisma.LitterUncheckedUpdateManyWithoutBreederNestedInput
+  buyers?: Prisma.BuyerUncheckedUpdateManyWithoutBreederNestedInput
 }
 
 export type BreederCreateWithoutLittersInput = {
@@ -678,6 +703,7 @@ export type BreederCreateWithoutLittersInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   dogs?: Prisma.DogCreateNestedManyWithoutBreederInput
+  buyers?: Prisma.BuyerCreateNestedManyWithoutBreederInput
 }
 
 export type BreederUncheckedCreateWithoutLittersInput = {
@@ -696,6 +722,7 @@ export type BreederUncheckedCreateWithoutLittersInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   dogs?: Prisma.DogUncheckedCreateNestedManyWithoutBreederInput
+  buyers?: Prisma.BuyerUncheckedCreateNestedManyWithoutBreederInput
 }
 
 export type BreederCreateOrConnectWithoutLittersInput = {
@@ -730,6 +757,7 @@ export type BreederUpdateWithoutLittersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dogs?: Prisma.DogUpdateManyWithoutBreederNestedInput
+  buyers?: Prisma.BuyerUpdateManyWithoutBreederNestedInput
 }
 
 export type BreederUncheckedUpdateWithoutLittersInput = {
@@ -748,6 +776,99 @@ export type BreederUncheckedUpdateWithoutLittersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dogs?: Prisma.DogUncheckedUpdateManyWithoutBreederNestedInput
+  buyers?: Prisma.BuyerUncheckedUpdateManyWithoutBreederNestedInput
+}
+
+export type BreederCreateWithoutBuyersInput = {
+  id?: string
+  name: string
+  kennelName?: string | null
+  email?: string | null
+  phone?: string | null
+  supabaseUserId?: string | null
+  ukNation?: $Enums.UkNation
+  isLicensed?: boolean
+  licenceNumber?: string | null
+  licenceAuthority?: string | null
+  licenceExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  dogs?: Prisma.DogCreateNestedManyWithoutBreederInput
+  litters?: Prisma.LitterCreateNestedManyWithoutBreederInput
+}
+
+export type BreederUncheckedCreateWithoutBuyersInput = {
+  id?: string
+  name: string
+  kennelName?: string | null
+  email?: string | null
+  phone?: string | null
+  supabaseUserId?: string | null
+  ukNation?: $Enums.UkNation
+  isLicensed?: boolean
+  licenceNumber?: string | null
+  licenceAuthority?: string | null
+  licenceExpiry?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  dogs?: Prisma.DogUncheckedCreateNestedManyWithoutBreederInput
+  litters?: Prisma.LitterUncheckedCreateNestedManyWithoutBreederInput
+}
+
+export type BreederCreateOrConnectWithoutBuyersInput = {
+  where: Prisma.BreederWhereUniqueInput
+  create: Prisma.XOR<Prisma.BreederCreateWithoutBuyersInput, Prisma.BreederUncheckedCreateWithoutBuyersInput>
+}
+
+export type BreederUpsertWithoutBuyersInput = {
+  update: Prisma.XOR<Prisma.BreederUpdateWithoutBuyersInput, Prisma.BreederUncheckedUpdateWithoutBuyersInput>
+  create: Prisma.XOR<Prisma.BreederCreateWithoutBuyersInput, Prisma.BreederUncheckedCreateWithoutBuyersInput>
+  where?: Prisma.BreederWhereInput
+}
+
+export type BreederUpdateToOneWithWhereWithoutBuyersInput = {
+  where?: Prisma.BreederWhereInput
+  data: Prisma.XOR<Prisma.BreederUpdateWithoutBuyersInput, Prisma.BreederUncheckedUpdateWithoutBuyersInput>
+}
+
+export type BreederUpdateWithoutBuyersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
+  isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenceAuthority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenceExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dogs?: Prisma.DogUpdateManyWithoutBreederNestedInput
+  litters?: Prisma.LitterUpdateManyWithoutBreederNestedInput
+}
+
+export type BreederUncheckedUpdateWithoutBuyersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
+  isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenceAuthority?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenceExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dogs?: Prisma.DogUncheckedUpdateManyWithoutBreederNestedInput
+  litters?: Prisma.LitterUncheckedUpdateManyWithoutBreederNestedInput
 }
 
 
@@ -758,11 +879,13 @@ export type BreederUncheckedUpdateWithoutLittersInput = {
 export type BreederCountOutputType = {
   dogs: number
   litters: number
+  buyers: number
 }
 
 export type BreederCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dogs?: boolean | BreederCountOutputTypeCountDogsArgs
   litters?: boolean | BreederCountOutputTypeCountLittersArgs
+  buyers?: boolean | BreederCountOutputTypeCountBuyersArgs
 }
 
 /**
@@ -789,6 +912,13 @@ export type BreederCountOutputTypeCountLittersArgs<ExtArgs extends runtime.Types
   where?: Prisma.LitterWhereInput
 }
 
+/**
+ * BreederCountOutputType without action
+ */
+export type BreederCountOutputTypeCountBuyersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.BuyerWhereInput
+}
+
 
 export type BreederSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -807,6 +937,7 @@ export type BreederSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   deletedAt?: boolean
   dogs?: boolean | Prisma.Breeder$dogsArgs<ExtArgs>
   litters?: boolean | Prisma.Breeder$littersArgs<ExtArgs>
+  buyers?: boolean | Prisma.Breeder$buyersArgs<ExtArgs>
   _count?: boolean | Prisma.BreederCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["breeder"]>
 
@@ -865,6 +996,7 @@ export type BreederOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type BreederInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dogs?: boolean | Prisma.Breeder$dogsArgs<ExtArgs>
   litters?: boolean | Prisma.Breeder$littersArgs<ExtArgs>
+  buyers?: boolean | Prisma.Breeder$buyersArgs<ExtArgs>
   _count?: boolean | Prisma.BreederCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BreederIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -875,6 +1007,7 @@ export type $BreederPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     dogs: Prisma.$DogPayload<ExtArgs>[]
     litters: Prisma.$LitterPayload<ExtArgs>[]
+    buyers: Prisma.$BuyerPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1287,6 +1420,7 @@ export interface Prisma__BreederClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   dogs<T extends Prisma.Breeder$dogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Breeder$dogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   litters<T extends Prisma.Breeder$littersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Breeder$littersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LitterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  buyers<T extends Prisma.Breeder$buyersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Breeder$buyersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BuyerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1768,6 +1902,30 @@ export type Breeder$littersArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.LitterScalarFieldEnum | Prisma.LitterScalarFieldEnum[]
+}
+
+/**
+ * Breeder.buyers
+ */
+export type Breeder$buyersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Buyer
+   */
+  select?: Prisma.BuyerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Buyer
+   */
+  omit?: Prisma.BuyerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BuyerInclude<ExtArgs> | null
+  where?: Prisma.BuyerWhereInput
+  orderBy?: Prisma.BuyerOrderByWithRelationInput | Prisma.BuyerOrderByWithRelationInput[]
+  cursor?: Prisma.BuyerWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.BuyerScalarFieldEnum | Prisma.BuyerScalarFieldEnum[]
 }
 
 /**

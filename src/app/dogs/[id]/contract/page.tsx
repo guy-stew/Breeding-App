@@ -27,6 +27,9 @@ export default async function ContractPage({
           litter: {
             select: { whelpDate: true, name: true },
           },
+          buyer: {
+            select: { name: true, email: true, phone: true, address: true },
+          },
         },
       },
     },
@@ -63,7 +66,17 @@ export default async function ContractPage({
         }
       : null,
     puppyRecord: dog.puppyRecord
-      ? { priceP: dog.puppyRecord.priceP }
+      ? {
+          priceP: dog.puppyRecord.priceP,
+          buyer: dog.puppyRecord.buyer
+            ? {
+                name: dog.puppyRecord.buyer.name,
+                email: dog.puppyRecord.buyer.email,
+                phone: dog.puppyRecord.buyer.phone,
+                address: dog.puppyRecord.buyer.address,
+              }
+            : null,
+        }
       : null,
   };
 

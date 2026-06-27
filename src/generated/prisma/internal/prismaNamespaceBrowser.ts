@@ -56,7 +56,8 @@ export const ModelName = {
   Mating: 'Mating',
   Litter: 'Litter',
   Puppy: 'Puppy',
-  WeightLog: 'WeightLog'
+  WeightLog: 'WeightLog',
+  Buyer: 'Buyer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -167,6 +168,7 @@ export const PuppyScalarFieldEnum = {
   microchipDate: 'microchipDate',
   status: 'status',
   priceP: 'priceP',
+  buyerId: 'buyerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -187,6 +189,23 @@ export const WeightLogScalarFieldEnum = {
 } as const
 
 export type WeightLogScalarFieldEnum = (typeof WeightLogScalarFieldEnum)[keyof typeof WeightLogScalarFieldEnum]
+
+
+export const BuyerScalarFieldEnum = {
+  id: 'id',
+  breederId: 'breederId',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  notes: 'notes',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
 
 
 export const SortOrder = {

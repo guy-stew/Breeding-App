@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getBreeder } from "@/lib/breeder";
 import { redirect } from "next/navigation";
 import GrowthChart from "./GrowthChart";
+import AssignBuyer from "./AssignBuyer";
 
 function formatDate(date: Date | null | undefined): string {
   if (!date) return "—";
@@ -55,12 +56,20 @@ export default async function LitterDetailPage({
               },
             },
           },
+          buyer: { select: { id: true, name: true } },
         },
       },
     },
   });
 
   if (!litter) notFound();
+
+  // Load buyers for the assign dropdown.
+  const buyers = await prisma.buyer.findMany({
+    where: { breederId: breeder.id, deletedAt: null },
+    orderBy: { name: "asc" },
+    select: { id: true, name: true },
+  });
 
   const dam = litter.mating?.dam;
   const sire = litter.mating?.sire;
@@ -193,10 +202,10 @@ export default async function LitterDetailPage({
             {litter.puppies.map((puppy) => {
               const latestWeight = puppy.dog.weightLogs.at(-1);
               return (
-                <li key={puppy.id}>
+                <li key={puppy.id} className="p-3">
                   <Link
                     href={`/dogs/${puppy.dogId}`}
-                    className="flex items-center gap-3 p-3 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                    className="flex items-center gap-3 hover:opacity-80"
                   >
                     <div
                       className="flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold text-white"
@@ -227,6 +236,14 @@ export default async function LitterDetailPage({
                       {puppy.status}
                     </span>
                   </Link>
+                  <div className="mt-1.5 flex items-center gap-2 pl-12 text-xs text-neutral-500">
+                    <span>Buyer:</span>
+                    <AssignBuyer
+                      puppyId={puppy.id}
+                      currentBuyerId={puppy.buyerId}
+                      buyers={buyers}
+                    />
+                  </div>
                 </li>
               );
             })}

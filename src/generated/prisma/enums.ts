@@ -66,6 +66,16 @@ export const LitterStatus = {
 export type LitterStatus = (typeof LitterStatus)[keyof typeof LitterStatus]
 
 
+export const BuyerStatus = {
+  enquiry: 'enquiry',
+  waitlist: 'waitlist',
+  deposit_paid: 'deposit_paid',
+  collected: 'collected'
+} as const
+
+export type BuyerStatus = (typeof BuyerStatus)[keyof typeof BuyerStatus]
+
+
 export const PuppyStatus = {
   available: 'available',
   reserved: 'reserved',

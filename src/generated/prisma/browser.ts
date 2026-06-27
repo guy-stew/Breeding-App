@@ -47,3 +47,8 @@ export type Puppy = Prisma.PuppyModel
  * 
  */
 export type WeightLog = Prisma.WeightLogModel
+/**
+ * Model Buyer
+ * 
+ */
+export type Buyer = Prisma.BuyerModel

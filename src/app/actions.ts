@@ -428,6 +428,147 @@ export async function addPuppy(
   redirect(`/litters/${input.litterId}`);
 }
 
+// ============================================================
+//  createBuyer — add a new buyer/enquiry to the CRM.
+// ============================================================
+
+type CreateBuyerInput = {
+  name: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+  status?: string;
+};
+
+export async function createBuyer(
+  input: CreateBuyerInput,
+): Promise<{ ok: true; buyerId: string } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not logged in." };
+
+  const name = input.name?.trim();
+  if (!name) return { ok: false, error: "Buyer name is required." };
+
+  const validStatuses = ["enquiry", "waitlist", "deposit_paid", "collected"];
+  const status = validStatuses.includes(input.status ?? "")
+    ? (input.status as "enquiry" | "waitlist" | "deposit_paid" | "collected")
+    : "enquiry";
+
+  try {
+    const buyer = await prisma.buyer.create({
+      data: {
+        breederId: breeder.id,
+        name,
+        email: input.email?.trim() || null,
+        phone: input.phone?.trim() || null,
+        address: input.address?.trim() || null,
+        notes: input.notes?.trim() || null,
+        status,
+      },
+    });
+    return { ok: true, buyerId: buyer.id };
+  } catch {
+    return { ok: false, error: "Could not save — please try again." };
+  }
+}
+
+// ============================================================
+//  updateBuyer — edit an existing buyer's details.
+// ============================================================
+
+type UpdateBuyerInput = {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  notes?: string;
+  status?: string;
+};
+
+export async function updateBuyer(
+  input: UpdateBuyerInput,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not logged in." };
+
+  const existing = await prisma.buyer.findFirst({
+    where: { id: input.id, breederId: breeder.id, deletedAt: null },
+  });
+  if (!existing) return { ok: false, error: "Buyer not found." };
+
+  const name = input.name?.trim();
+  if (!name) return { ok: false, error: "Buyer name is required." };
+
+  const validStatuses = ["enquiry", "waitlist", "deposit_paid", "collected"];
+  const status = validStatuses.includes(input.status ?? "")
+    ? (input.status as "enquiry" | "waitlist" | "deposit_paid" | "collected")
+    : undefined;
+
+  try {
+    await prisma.buyer.update({
+      where: { id: input.id },
+      data: {
+        name,
+        email: input.email?.trim() || null,
+        phone: input.phone?.trim() || null,
+        address: input.address?.trim() || null,
+        notes: input.notes?.trim() || null,
+        ...(status ? { status } : {}),
+      },
+    });
+  } catch {
+    return { ok: false, error: "Could not save — please try again." };
+  }
+
+  revalidatePath(`/buyers/${input.id}`);
+  revalidatePath("/buyers");
+  redirect(`/buyers/${input.id}`);
+}
+
+// ============================================================
+//  assignBuyer — link a buyer to a puppy (reserve/sell).
+// ============================================================
+
+export async function assignBuyer(
+  puppyId: string,
+  buyerId: string | null,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not logged in." };
+
+  const puppy = await prisma.puppy.findFirst({
+    where: { id: puppyId, deletedAt: null },
+    include: { litter: { select: { breederId: true, id: true } } },
+  });
+  if (!puppy || puppy.litter.breederId !== breeder.id) {
+    return { ok: false, error: "Puppy not found." };
+  }
+
+  if (buyerId) {
+    const buyer = await prisma.buyer.findFirst({
+      where: { id: buyerId, breederId: breeder.id, deletedAt: null },
+    });
+    if (!buyer) return { ok: false, error: "Buyer not found." };
+  }
+
+  try {
+    await prisma.puppy.update({
+      where: { id: puppyId },
+      data: {
+        buyerId: buyerId,
+        ...(buyerId ? { status: "reserved" } : { status: "available" }),
+      },
+    });
+  } catch {
+    return { ok: false, error: "Could not save — please try again." };
+  }
+
+  revalidatePath(`/litters/${puppy.litter.id}`);
+  return { ok: true };
+}
+
 export async function addDog(input: AddDogInput): Promise<AddDogResult> {
   // --- Find the breeder this dog belongs to. ---
   const breeder = await getBreeder();

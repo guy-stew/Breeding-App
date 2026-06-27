@@ -94,6 +94,16 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* Quick links */}
+      <div className="mb-5 flex gap-2">
+        <Link
+          href="/buyers"
+          className="flex-1 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-center text-sm font-medium hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-800"
+        >
+          Buyers
+        </Link>
+      </div>
+
       <section>
         <div className="mb-2 flex items-center justify-between px-1">
           <p className="text-xs text-neutral-400">My dogs</p>

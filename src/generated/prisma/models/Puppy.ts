@@ -52,6 +52,7 @@ export type PuppyMinAggregateOutputType = {
   microchipDate: Date | null
   status: $Enums.PuppyStatus | null
   priceP: number | null
+  buyerId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -71,6 +72,7 @@ export type PuppyMaxAggregateOutputType = {
   microchipDate: Date | null
   status: $Enums.PuppyStatus | null
   priceP: number | null
+  buyerId: string | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -90,6 +92,7 @@ export type PuppyCountAggregateOutputType = {
   microchipDate: number
   status: number
   priceP: number
+  buyerId: number
   createdAt: number
   updatedAt: number
   deletedAt: number
@@ -123,6 +126,7 @@ export type PuppyMinAggregateInputType = {
   microchipDate?: true
   status?: true
   priceP?: true
+  buyerId?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -142,6 +146,7 @@ export type PuppyMaxAggregateInputType = {
   microchipDate?: true
   status?: true
   priceP?: true
+  buyerId?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -161,6 +166,7 @@ export type PuppyCountAggregateInputType = {
   microchipDate?: true
   status?: true
   priceP?: true
+  buyerId?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -267,6 +273,7 @@ export type PuppyGroupByOutputType = {
   microchipDate: Date | null
   status: $Enums.PuppyStatus
   priceP: number | null
+  buyerId: string | null
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
@@ -309,11 +316,13 @@ export type PuppyWhereInput = {
   microchipDate?: Prisma.DateTimeNullableFilter<"Puppy"> | Date | string | null
   status?: Prisma.EnumPuppyStatusFilter<"Puppy"> | $Enums.PuppyStatus
   priceP?: Prisma.IntNullableFilter<"Puppy"> | number | null
+  buyerId?: Prisma.StringNullableFilter<"Puppy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Puppy"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Puppy"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Puppy"> | Date | string | null
   litter?: Prisma.XOR<Prisma.LitterScalarRelationFilter, Prisma.LitterWhereInput>
   dog?: Prisma.XOR<Prisma.DogScalarRelationFilter, Prisma.DogWhereInput>
+  buyer?: Prisma.XOR<Prisma.BuyerNullableScalarRelationFilter, Prisma.BuyerWhereInput> | null
 }
 
 export type PuppyOrderByWithRelationInput = {
@@ -330,11 +339,13 @@ export type PuppyOrderByWithRelationInput = {
   microchipDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   priceP?: Prisma.SortOrderInput | Prisma.SortOrder
+  buyerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   litter?: Prisma.LitterOrderByWithRelationInput
   dog?: Prisma.DogOrderByWithRelationInput
+  buyer?: Prisma.BuyerOrderByWithRelationInput
 }
 
 export type PuppyWhereUniqueInput = Prisma.AtLeast<{
@@ -354,11 +365,13 @@ export type PuppyWhereUniqueInput = Prisma.AtLeast<{
   microchipDate?: Prisma.DateTimeNullableFilter<"Puppy"> | Date | string | null
   status?: Prisma.EnumPuppyStatusFilter<"Puppy"> | $Enums.PuppyStatus
   priceP?: Prisma.IntNullableFilter<"Puppy"> | number | null
+  buyerId?: Prisma.StringNullableFilter<"Puppy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Puppy"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Puppy"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Puppy"> | Date | string | null
   litter?: Prisma.XOR<Prisma.LitterScalarRelationFilter, Prisma.LitterWhereInput>
   dog?: Prisma.XOR<Prisma.DogScalarRelationFilter, Prisma.DogWhereInput>
+  buyer?: Prisma.XOR<Prisma.BuyerNullableScalarRelationFilter, Prisma.BuyerWhereInput> | null
 }, "id" | "dogId">
 
 export type PuppyOrderByWithAggregationInput = {
@@ -375,6 +388,7 @@ export type PuppyOrderByWithAggregationInput = {
   microchipDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
   priceP?: Prisma.SortOrderInput | Prisma.SortOrder
+  buyerId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -402,6 +416,7 @@ export type PuppyScalarWhereWithAggregatesInput = {
   microchipDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Puppy"> | Date | string | null
   status?: Prisma.EnumPuppyStatusWithAggregatesFilter<"Puppy"> | $Enums.PuppyStatus
   priceP?: Prisma.IntNullableWithAggregatesFilter<"Puppy"> | number | null
+  buyerId?: Prisma.StringNullableWithAggregatesFilter<"Puppy"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Puppy"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Puppy"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Puppy"> | Date | string | null
@@ -424,6 +439,7 @@ export type PuppyCreateInput = {
   deletedAt?: Date | string | null
   litter: Prisma.LitterCreateNestedOneWithoutPuppiesInput
   dog: Prisma.DogCreateNestedOneWithoutPuppyRecordInput
+  buyer?: Prisma.BuyerCreateNestedOneWithoutPuppiesInput
 }
 
 export type PuppyUncheckedCreateInput = {
@@ -440,6 +456,7 @@ export type PuppyUncheckedCreateInput = {
   microchipDate?: Date | string | null
   status?: $Enums.PuppyStatus
   priceP?: number | null
+  buyerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -462,6 +479,7 @@ export type PuppyUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   litter?: Prisma.LitterUpdateOneRequiredWithoutPuppiesNestedInput
   dog?: Prisma.DogUpdateOneRequiredWithoutPuppyRecordNestedInput
+  buyer?: Prisma.BuyerUpdateOneWithoutPuppiesNestedInput
 }
 
 export type PuppyUncheckedUpdateInput = {
@@ -478,6 +496,7 @@ export type PuppyUncheckedUpdateInput = {
   microchipDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumPuppyStatusFieldUpdateOperationsInput | $Enums.PuppyStatus
   priceP?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -497,6 +516,7 @@ export type PuppyCreateManyInput = {
   microchipDate?: Date | string | null
   status?: $Enums.PuppyStatus
   priceP?: number | null
+  buyerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -533,6 +553,7 @@ export type PuppyUncheckedUpdateManyInput = {
   microchipDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumPuppyStatusFieldUpdateOperationsInput | $Enums.PuppyStatus
   priceP?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -567,6 +588,7 @@ export type PuppyCountOrderByAggregateInput = {
   microchipDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   priceP?: Prisma.SortOrder
+  buyerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -592,6 +614,7 @@ export type PuppyMaxOrderByAggregateInput = {
   microchipDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   priceP?: Prisma.SortOrder
+  buyerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -611,6 +634,7 @@ export type PuppyMinOrderByAggregateInput = {
   microchipDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   priceP?: Prisma.SortOrder
+  buyerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -704,6 +728,48 @@ export type EnumPuppyStatusFieldUpdateOperationsInput = {
   set?: $Enums.PuppyStatus
 }
 
+export type PuppyCreateNestedManyWithoutBuyerInput = {
+  create?: Prisma.XOR<Prisma.PuppyCreateWithoutBuyerInput, Prisma.PuppyUncheckedCreateWithoutBuyerInput> | Prisma.PuppyCreateWithoutBuyerInput[] | Prisma.PuppyUncheckedCreateWithoutBuyerInput[]
+  connectOrCreate?: Prisma.PuppyCreateOrConnectWithoutBuyerInput | Prisma.PuppyCreateOrConnectWithoutBuyerInput[]
+  createMany?: Prisma.PuppyCreateManyBuyerInputEnvelope
+  connect?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+}
+
+export type PuppyUncheckedCreateNestedManyWithoutBuyerInput = {
+  create?: Prisma.XOR<Prisma.PuppyCreateWithoutBuyerInput, Prisma.PuppyUncheckedCreateWithoutBuyerInput> | Prisma.PuppyCreateWithoutBuyerInput[] | Prisma.PuppyUncheckedCreateWithoutBuyerInput[]
+  connectOrCreate?: Prisma.PuppyCreateOrConnectWithoutBuyerInput | Prisma.PuppyCreateOrConnectWithoutBuyerInput[]
+  createMany?: Prisma.PuppyCreateManyBuyerInputEnvelope
+  connect?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+}
+
+export type PuppyUpdateManyWithoutBuyerNestedInput = {
+  create?: Prisma.XOR<Prisma.PuppyCreateWithoutBuyerInput, Prisma.PuppyUncheckedCreateWithoutBuyerInput> | Prisma.PuppyCreateWithoutBuyerInput[] | Prisma.PuppyUncheckedCreateWithoutBuyerInput[]
+  connectOrCreate?: Prisma.PuppyCreateOrConnectWithoutBuyerInput | Prisma.PuppyCreateOrConnectWithoutBuyerInput[]
+  upsert?: Prisma.PuppyUpsertWithWhereUniqueWithoutBuyerInput | Prisma.PuppyUpsertWithWhereUniqueWithoutBuyerInput[]
+  createMany?: Prisma.PuppyCreateManyBuyerInputEnvelope
+  set?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+  disconnect?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+  delete?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+  connect?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+  update?: Prisma.PuppyUpdateWithWhereUniqueWithoutBuyerInput | Prisma.PuppyUpdateWithWhereUniqueWithoutBuyerInput[]
+  updateMany?: Prisma.PuppyUpdateManyWithWhereWithoutBuyerInput | Prisma.PuppyUpdateManyWithWhereWithoutBuyerInput[]
+  deleteMany?: Prisma.PuppyScalarWhereInput | Prisma.PuppyScalarWhereInput[]
+}
+
+export type PuppyUncheckedUpdateManyWithoutBuyerNestedInput = {
+  create?: Prisma.XOR<Prisma.PuppyCreateWithoutBuyerInput, Prisma.PuppyUncheckedCreateWithoutBuyerInput> | Prisma.PuppyCreateWithoutBuyerInput[] | Prisma.PuppyUncheckedCreateWithoutBuyerInput[]
+  connectOrCreate?: Prisma.PuppyCreateOrConnectWithoutBuyerInput | Prisma.PuppyCreateOrConnectWithoutBuyerInput[]
+  upsert?: Prisma.PuppyUpsertWithWhereUniqueWithoutBuyerInput | Prisma.PuppyUpsertWithWhereUniqueWithoutBuyerInput[]
+  createMany?: Prisma.PuppyCreateManyBuyerInputEnvelope
+  set?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+  disconnect?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+  delete?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+  connect?: Prisma.PuppyWhereUniqueInput | Prisma.PuppyWhereUniqueInput[]
+  update?: Prisma.PuppyUpdateWithWhereUniqueWithoutBuyerInput | Prisma.PuppyUpdateWithWhereUniqueWithoutBuyerInput[]
+  updateMany?: Prisma.PuppyUpdateManyWithWhereWithoutBuyerInput | Prisma.PuppyUpdateManyWithWhereWithoutBuyerInput[]
+  deleteMany?: Prisma.PuppyScalarWhereInput | Prisma.PuppyScalarWhereInput[]
+}
+
 export type PuppyCreateWithoutDogInput = {
   id?: string
   birthOrder?: number | null
@@ -720,6 +786,7 @@ export type PuppyCreateWithoutDogInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   litter: Prisma.LitterCreateNestedOneWithoutPuppiesInput
+  buyer?: Prisma.BuyerCreateNestedOneWithoutPuppiesInput
 }
 
 export type PuppyUncheckedCreateWithoutDogInput = {
@@ -735,6 +802,7 @@ export type PuppyUncheckedCreateWithoutDogInput = {
   microchipDate?: Date | string | null
   status?: $Enums.PuppyStatus
   priceP?: number | null
+  buyerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -772,6 +840,7 @@ export type PuppyUpdateWithoutDogInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   litter?: Prisma.LitterUpdateOneRequiredWithoutPuppiesNestedInput
+  buyer?: Prisma.BuyerUpdateOneWithoutPuppiesNestedInput
 }
 
 export type PuppyUncheckedUpdateWithoutDogInput = {
@@ -787,6 +856,7 @@ export type PuppyUncheckedUpdateWithoutDogInput = {
   microchipDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumPuppyStatusFieldUpdateOperationsInput | $Enums.PuppyStatus
   priceP?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -808,6 +878,7 @@ export type PuppyCreateWithoutLitterInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   dog: Prisma.DogCreateNestedOneWithoutPuppyRecordInput
+  buyer?: Prisma.BuyerCreateNestedOneWithoutPuppiesInput
 }
 
 export type PuppyUncheckedCreateWithoutLitterInput = {
@@ -823,6 +894,7 @@ export type PuppyUncheckedCreateWithoutLitterInput = {
   microchipDate?: Date | string | null
   status?: $Enums.PuppyStatus
   priceP?: number | null
+  buyerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -871,9 +943,74 @@ export type PuppyScalarWhereInput = {
   microchipDate?: Prisma.DateTimeNullableFilter<"Puppy"> | Date | string | null
   status?: Prisma.EnumPuppyStatusFilter<"Puppy"> | $Enums.PuppyStatus
   priceP?: Prisma.IntNullableFilter<"Puppy"> | number | null
+  buyerId?: Prisma.StringNullableFilter<"Puppy"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Puppy"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Puppy"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Puppy"> | Date | string | null
+}
+
+export type PuppyCreateWithoutBuyerInput = {
+  id?: string
+  birthOrder?: number | null
+  collarColour?: string | null
+  birthWeightG?: number | null
+  sex: $Enums.Sex
+  markings?: string | null
+  palateCheck?: boolean | null
+  microchip?: string | null
+  microchipDate?: Date | string | null
+  status?: $Enums.PuppyStatus
+  priceP?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  litter: Prisma.LitterCreateNestedOneWithoutPuppiesInput
+  dog: Prisma.DogCreateNestedOneWithoutPuppyRecordInput
+}
+
+export type PuppyUncheckedCreateWithoutBuyerInput = {
+  id?: string
+  litterId: string
+  dogId: string
+  birthOrder?: number | null
+  collarColour?: string | null
+  birthWeightG?: number | null
+  sex: $Enums.Sex
+  markings?: string | null
+  palateCheck?: boolean | null
+  microchip?: string | null
+  microchipDate?: Date | string | null
+  status?: $Enums.PuppyStatus
+  priceP?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type PuppyCreateOrConnectWithoutBuyerInput = {
+  where: Prisma.PuppyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PuppyCreateWithoutBuyerInput, Prisma.PuppyUncheckedCreateWithoutBuyerInput>
+}
+
+export type PuppyCreateManyBuyerInputEnvelope = {
+  data: Prisma.PuppyCreateManyBuyerInput | Prisma.PuppyCreateManyBuyerInput[]
+  skipDuplicates?: boolean
+}
+
+export type PuppyUpsertWithWhereUniqueWithoutBuyerInput = {
+  where: Prisma.PuppyWhereUniqueInput
+  update: Prisma.XOR<Prisma.PuppyUpdateWithoutBuyerInput, Prisma.PuppyUncheckedUpdateWithoutBuyerInput>
+  create: Prisma.XOR<Prisma.PuppyCreateWithoutBuyerInput, Prisma.PuppyUncheckedCreateWithoutBuyerInput>
+}
+
+export type PuppyUpdateWithWhereUniqueWithoutBuyerInput = {
+  where: Prisma.PuppyWhereUniqueInput
+  data: Prisma.XOR<Prisma.PuppyUpdateWithoutBuyerInput, Prisma.PuppyUncheckedUpdateWithoutBuyerInput>
+}
+
+export type PuppyUpdateManyWithWhereWithoutBuyerInput = {
+  where: Prisma.PuppyScalarWhereInput
+  data: Prisma.XOR<Prisma.PuppyUpdateManyMutationInput, Prisma.PuppyUncheckedUpdateManyWithoutBuyerInput>
 }
 
 export type PuppyCreateManyLitterInput = {
@@ -889,6 +1026,7 @@ export type PuppyCreateManyLitterInput = {
   microchipDate?: Date | string | null
   status?: $Enums.PuppyStatus
   priceP?: number | null
+  buyerId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -910,10 +1048,88 @@ export type PuppyUpdateWithoutLitterInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dog?: Prisma.DogUpdateOneRequiredWithoutPuppyRecordNestedInput
+  buyer?: Prisma.BuyerUpdateOneWithoutPuppiesNestedInput
 }
 
 export type PuppyUncheckedUpdateWithoutLitterInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  dogId?: Prisma.StringFieldUpdateOperationsInput | string
+  birthOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  collarColour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthWeightG?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sex?: Prisma.EnumSexFieldUpdateOperationsInput | $Enums.Sex
+  markings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palateCheck?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  microchip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  microchipDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPuppyStatusFieldUpdateOperationsInput | $Enums.PuppyStatus
+  priceP?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type PuppyUncheckedUpdateManyWithoutLitterInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  dogId?: Prisma.StringFieldUpdateOperationsInput | string
+  birthOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  collarColour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthWeightG?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sex?: Prisma.EnumSexFieldUpdateOperationsInput | $Enums.Sex
+  markings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palateCheck?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  microchip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  microchipDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPuppyStatusFieldUpdateOperationsInput | $Enums.PuppyStatus
+  priceP?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  buyerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+}
+
+export type PuppyCreateManyBuyerInput = {
+  id?: string
+  litterId: string
+  dogId: string
+  birthOrder?: number | null
+  collarColour?: string | null
+  birthWeightG?: number | null
+  sex: $Enums.Sex
+  markings?: string | null
+  palateCheck?: boolean | null
+  microchip?: string | null
+  microchipDate?: Date | string | null
+  status?: $Enums.PuppyStatus
+  priceP?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+}
+
+export type PuppyUpdateWithoutBuyerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  birthOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  collarColour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  birthWeightG?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  sex?: Prisma.EnumSexFieldUpdateOperationsInput | $Enums.Sex
+  markings?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  palateCheck?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
+  microchip?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  microchipDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumPuppyStatusFieldUpdateOperationsInput | $Enums.PuppyStatus
+  priceP?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  litter?: Prisma.LitterUpdateOneRequiredWithoutPuppiesNestedInput
+  dog?: Prisma.DogUpdateOneRequiredWithoutPuppyRecordNestedInput
+}
+
+export type PuppyUncheckedUpdateWithoutBuyerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  litterId?: Prisma.StringFieldUpdateOperationsInput | string
   dogId?: Prisma.StringFieldUpdateOperationsInput | string
   birthOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   collarColour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -930,8 +1146,9 @@ export type PuppyUncheckedUpdateWithoutLitterInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
-export type PuppyUncheckedUpdateManyWithoutLitterInput = {
+export type PuppyUncheckedUpdateManyWithoutBuyerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  litterId?: Prisma.StringFieldUpdateOperationsInput | string
   dogId?: Prisma.StringFieldUpdateOperationsInput | string
   birthOrder?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   collarColour?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -964,11 +1181,13 @@ export type PuppySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   microchipDate?: boolean
   status?: boolean
   priceP?: boolean
+  buyerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
   litter?: boolean | Prisma.LitterDefaultArgs<ExtArgs>
   dog?: boolean | Prisma.DogDefaultArgs<ExtArgs>
+  buyer?: boolean | Prisma.Puppy$buyerArgs<ExtArgs>
 }, ExtArgs["result"]["puppy"]>
 
 export type PuppySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -985,11 +1204,13 @@ export type PuppySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   microchipDate?: boolean
   status?: boolean
   priceP?: boolean
+  buyerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
   litter?: boolean | Prisma.LitterDefaultArgs<ExtArgs>
   dog?: boolean | Prisma.DogDefaultArgs<ExtArgs>
+  buyer?: boolean | Prisma.Puppy$buyerArgs<ExtArgs>
 }, ExtArgs["result"]["puppy"]>
 
 export type PuppySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1006,11 +1227,13 @@ export type PuppySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   microchipDate?: boolean
   status?: boolean
   priceP?: boolean
+  buyerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
   litter?: boolean | Prisma.LitterDefaultArgs<ExtArgs>
   dog?: boolean | Prisma.DogDefaultArgs<ExtArgs>
+  buyer?: boolean | Prisma.Puppy$buyerArgs<ExtArgs>
 }, ExtArgs["result"]["puppy"]>
 
 export type PuppySelectScalar = {
@@ -1027,23 +1250,27 @@ export type PuppySelectScalar = {
   microchipDate?: boolean
   status?: boolean
   priceP?: boolean
+  buyerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type PuppyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "litterId" | "dogId" | "birthOrder" | "collarColour" | "birthWeightG" | "sex" | "markings" | "palateCheck" | "microchip" | "microchipDate" | "status" | "priceP" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["puppy"]>
+export type PuppyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "litterId" | "dogId" | "birthOrder" | "collarColour" | "birthWeightG" | "sex" | "markings" | "palateCheck" | "microchip" | "microchipDate" | "status" | "priceP" | "buyerId" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["puppy"]>
 export type PuppyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   litter?: boolean | Prisma.LitterDefaultArgs<ExtArgs>
   dog?: boolean | Prisma.DogDefaultArgs<ExtArgs>
+  buyer?: boolean | Prisma.Puppy$buyerArgs<ExtArgs>
 }
 export type PuppyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   litter?: boolean | Prisma.LitterDefaultArgs<ExtArgs>
   dog?: boolean | Prisma.DogDefaultArgs<ExtArgs>
+  buyer?: boolean | Prisma.Puppy$buyerArgs<ExtArgs>
 }
 export type PuppyIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   litter?: boolean | Prisma.LitterDefaultArgs<ExtArgs>
   dog?: boolean | Prisma.DogDefaultArgs<ExtArgs>
+  buyer?: boolean | Prisma.Puppy$buyerArgs<ExtArgs>
 }
 
 export type $PuppyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1051,6 +1278,7 @@ export type $PuppyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     litter: Prisma.$LitterPayload<ExtArgs>
     dog: Prisma.$DogPayload<ExtArgs>
+    buyer: Prisma.$BuyerPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1066,6 +1294,7 @@ export type $PuppyPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     microchipDate: Date | null
     status: $Enums.PuppyStatus
     priceP: number | null
+    buyerId: string | null
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -1465,6 +1694,7 @@ export interface Prisma__PuppyClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   litter<T extends Prisma.LitterDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.LitterDefaultArgs<ExtArgs>>): Prisma.Prisma__LitterClient<runtime.Types.Result.GetResult<Prisma.$LitterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   dog<T extends Prisma.DogDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DogDefaultArgs<ExtArgs>>): Prisma.Prisma__DogClient<runtime.Types.Result.GetResult<Prisma.$DogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  buyer<T extends Prisma.Puppy$buyerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Puppy$buyerArgs<ExtArgs>>): Prisma.Prisma__BuyerClient<runtime.Types.Result.GetResult<Prisma.$BuyerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1507,6 +1737,7 @@ export interface PuppyFieldRefs {
   readonly microchipDate: Prisma.FieldRef<"Puppy", 'DateTime'>
   readonly status: Prisma.FieldRef<"Puppy", 'PuppyStatus'>
   readonly priceP: Prisma.FieldRef<"Puppy", 'Int'>
+  readonly buyerId: Prisma.FieldRef<"Puppy", 'String'>
   readonly createdAt: Prisma.FieldRef<"Puppy", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Puppy", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Puppy", 'DateTime'>
@@ -1908,6 +2139,25 @@ export type PuppyDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Puppies to delete.
    */
   limit?: number
+}
+
+/**
+ * Puppy.buyer
+ */
+export type Puppy$buyerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Buyer
+   */
+  select?: Prisma.BuyerSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Buyer
+   */
+  omit?: Prisma.BuyerOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.BuyerInclude<ExtArgs> | null
+  where?: Prisma.BuyerWhereInput
 }
 
 /**

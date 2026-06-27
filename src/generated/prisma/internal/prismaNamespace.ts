@@ -389,7 +389,8 @@ export const ModelName = {
   Mating: 'Mating',
   Litter: 'Litter',
   Puppy: 'Puppy',
-  WeightLog: 'WeightLog'
+  WeightLog: 'WeightLog',
+  Buyer: 'Buyer'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -405,7 +406,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog"
+    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -853,6 +854,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Buyer: {
+      payload: Prisma.$BuyerPayload<ExtArgs>
+      fields: Prisma.BuyerFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BuyerFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BuyerFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        findFirst: {
+          args: Prisma.BuyerFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BuyerFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        findMany: {
+          args: Prisma.BuyerFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>[]
+        }
+        create: {
+          args: Prisma.BuyerCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        createMany: {
+          args: Prisma.BuyerCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BuyerCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>[]
+        }
+        delete: {
+          args: Prisma.BuyerDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        update: {
+          args: Prisma.BuyerUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        deleteMany: {
+          args: Prisma.BuyerDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BuyerUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BuyerUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>[]
+        }
+        upsert: {
+          args: Prisma.BuyerUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BuyerPayload>
+        }
+        aggregate: {
+          args: Prisma.BuyerAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBuyer>
+        }
+        groupBy: {
+          args: Prisma.BuyerGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BuyerGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BuyerCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BuyerCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -984,6 +1059,7 @@ export const PuppyScalarFieldEnum = {
   microchipDate: 'microchipDate',
   status: 'status',
   priceP: 'priceP',
+  buyerId: 'buyerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -1004,6 +1080,23 @@ export const WeightLogScalarFieldEnum = {
 } as const
 
 export type WeightLogScalarFieldEnum = (typeof WeightLogScalarFieldEnum)[keyof typeof WeightLogScalarFieldEnum]
+
+
+export const BuyerScalarFieldEnum = {
+  id: 'id',
+  breederId: 'breederId',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  address: 'address',
+  notes: 'notes',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type BuyerScalarFieldEnum = (typeof BuyerScalarFieldEnum)[keyof typeof BuyerScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1184,6 +1277,20 @@ export type ListEnumPuppyStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$
 
 
 /**
+ * Reference to a field of type 'BuyerStatus'
+ */
+export type EnumBuyerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BuyerStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'BuyerStatus[]'
+ */
+export type ListEnumBuyerStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BuyerStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1312,6 +1419,7 @@ export type GlobalOmitConfig = {
   litter?: Prisma.LitterOmit
   puppy?: Prisma.PuppyOmit
   weightLog?: Prisma.WeightLogOmit
+  buyer?: Prisma.BuyerOmit
 }
 
 /* Types for Logging */

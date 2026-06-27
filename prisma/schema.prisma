@@ -52,6 +52,7 @@ model Breeder {
   // Relations
   dogs    Dog[]
   litters Litter[]
+  buyers  Buyer[]
 
   // Sync housekeeping
   createdAt DateTime  @default(now())
@@ -194,6 +195,10 @@ model Puppy {
   status PuppyStatus @default(available)
   priceP Int?         // price in pence; integer money avoids float drift
 
+  // Buyer — linked when reserved or sold.
+  buyer   Buyer?  @relation(fields: [buyerId], references: [id])
+  buyerId String?
+
   // WeightLogs hang off the Dog record (dogId), not here, so a kept
   // puppy keeps one continuous weight history for life.
 
@@ -223,6 +228,34 @@ model WeightLog {
 
   @@index([dogId])
   @@index([dogId, date])
+}
+
+// ------------------------------------------------------------
+//  7. Buyer — CRM: tracks a potential or confirmed puppy buyer.
+//     A buyer belongs to a breeder and can be linked to one or
+//     more puppies (reserved/sold). Status tracks the journey
+//     from first enquiry through to collection.
+// ------------------------------------------------------------
+model Buyer {
+  id        String  @id @default(uuid())
+  breeder   Breeder @relation(fields: [breederId], references: [id])
+  breederId String
+
+  name      String
+  email     String?
+  phone     String?
+  address   String?
+  notes     String?
+
+  status    BuyerStatus @default(enquiry)
+
+  puppies   Puppy[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([breederId])
 }
 
 // ============================================================
@@ -265,6 +298,13 @@ enum LitterStatus {
   weaning
   ready
   all_homed
+}
+
+enum BuyerStatus {
+  enquiry
+  waitlist
+  deposit_paid
+  collected
 }
 
 enum PuppyStatus {
