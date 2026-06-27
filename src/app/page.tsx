@@ -22,7 +22,7 @@ export default async function HomePage() {
     orderBy: { callName: "asc" },
   });
 
-  const activeLitter = await prisma.litter.findFirst({
+  const activeLitters = await prisma.litter.findMany({
     where: {
       deletedAt: null,
       breederId: breeder.id,
@@ -34,7 +34,10 @@ export default async function HomePage() {
 
   // Stats
   const totalDogs = dogs.length;
-  const totalPuppies = activeLitter?.puppies.length ?? 0;
+  const totalPuppies = activeLitters.reduce(
+    (sum, l) => sum + l.puppies.length,
+    0,
+  );
 
   return (
     <div className="mx-auto max-w-md p-4">
@@ -67,18 +70,20 @@ export default async function HomePage() {
         </div>
         <div className="rounded-xl border border-neutral-200 bg-white p-3 text-center dark:border-neutral-800 dark:bg-neutral-900">
           <div className="text-2xl font-bold text-amber-600 dark:text-amber-400">
-            {activeLitter ? 1 : 0}
+            {activeLitters.length}
           </div>
-          <div className="text-xs text-neutral-500">Active litter</div>
+          <div className="text-xs text-neutral-500">
+            Active litter{activeLitters.length !== 1 ? "s" : ""}
+          </div>
         </div>
       </div>
 
-      {/* Active litter card */}
-      {activeLitter && (
+      {/* Active litters */}
+      {activeLitters.length > 0 && (
         <section className="mb-5">
           <p className="mb-1 flex items-center justify-between px-1">
             <span className="text-xs font-medium text-neutral-400">
-              Active litter
+              Active litter{activeLitters.length !== 1 ? "s" : ""}
             </span>
             <Link
               href="/litters/new"
@@ -87,43 +92,50 @@ export default async function HomePage() {
               + New litter
             </Link>
           </p>
-          <div className="rounded-xl border border-blue-500/30 bg-white p-4 shadow-sm dark:bg-neutral-900">
-            <div className="mb-3 flex items-center justify-between">
-              <Link
-                href={`/litters/${activeLitter.id}`}
-                className="font-medium hover:text-blue-600"
+          <div className="space-y-3">
+            {activeLitters.map((litter) => (
+              <div
+                key={litter.id}
+                className="rounded-xl border border-blue-500/30 bg-white p-4 shadow-sm dark:bg-neutral-900"
               >
-                {activeLitter.name}
-              </Link>
-              <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-200">
-                Day {dayOfLitter(activeLitter.whelpDate)}
-              </span>
-            </div>
-            <div className="flex gap-3">
-              <div className="flex-1 rounded-lg bg-neutral-50 p-2.5 dark:bg-neutral-800">
-                <div className="text-xs text-neutral-400">Puppies</div>
-                <div className="text-xl font-bold">
-                  {activeLitter.puppies.length}
+                <div className="mb-3 flex items-center justify-between">
+                  <Link
+                    href={`/litters/${litter.id}`}
+                    className="font-medium hover:text-blue-600"
+                  >
+                    {litter.name ?? "Litter"}
+                  </Link>
+                  <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-950 dark:text-blue-200">
+                    Day {dayOfLitter(litter.whelpDate)}
+                  </span>
                 </div>
-              </div>
-              <div className="flex-1 rounded-lg bg-neutral-50 p-2.5 dark:bg-neutral-800">
-                <div className="text-xs text-neutral-400">Born alive</div>
-                <div className="text-xl font-bold">
-                  {activeLitter.bornAlive ?? "—"}
+                <div className="flex gap-3">
+                  <div className="flex-1 rounded-lg bg-neutral-50 p-2.5 dark:bg-neutral-800">
+                    <div className="text-xs text-neutral-400">Puppies</div>
+                    <div className="text-xl font-bold">
+                      {litter.puppies.length}
+                    </div>
+                  </div>
+                  <div className="flex-1 rounded-lg bg-neutral-50 p-2.5 dark:bg-neutral-800">
+                    <div className="text-xs text-neutral-400">Born alive</div>
+                    <div className="text-xl font-bold">
+                      {litter.bornAlive ?? "—"}
+                    </div>
+                  </div>
                 </div>
+                <Link
+                  href={`/litters/${litter.id}`}
+                  className="mt-3 block rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
+                >
+                  View litter
+                </Link>
               </div>
-            </div>
-            <Link
-              href="/weigh-in"
-              className="mt-3 block rounded-lg bg-blue-600 px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
-            >
-              Start weigh-in round
-            </Link>
+            ))}
           </div>
         </section>
       )}
 
-      {!activeLitter && (
+      {activeLitters.length === 0 && (
         <section className="mb-5">
           <Link
             href="/litters/new"
