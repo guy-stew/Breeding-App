@@ -4,9 +4,10 @@ A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 27 June 2026 — app is now usable for a real breeding cycle:
-add dogs, record matings + litters, add puppies, track weights, view growth
-charts, and generate contracts + info packs. Login required.*
+*Last updated: 27 June 2026 — app now covers the full breeding cycle plus
+buyer management: add dogs, record matings + litters, add puppies, track
+weights, view growth charts, generate contracts + info packs, and manage
+buyers with assignment to puppies. Login required.*
 
 ---
 
@@ -78,9 +79,18 @@ once, and re-arrange/print it differently** for each feature.
       "+ Record a new litter" when no active litter, or "+ New litter" link
       when one exists. Litter detail page has Edit and + Add puppy buttons.
 
-**The app now supports a complete breeding cycle: add dogs → record a mating
-and litter → add puppies → track daily weights → view growth charts → generate
-contracts and info packs for buyers.**
+- [x] **Buyer CRM** — Buyer model with status tracking (enquiry → waitlist →
+      deposit paid → collected). Full CRUD: buyers list (`/buyers`), add buyer
+      (`/buyers/new`), buyer profile (`/buyers/[id]`), edit buyer
+      (`/buyers/[id]/edit`). Assign a buyer to any puppy via a dropdown on the
+      litter detail page. Contract page pre-fills buyer details when a buyer is
+      linked. "Buyers" quick link on home screen. Generate contract shortcut on
+      buyer profile page.
+
+**The app now supports a complete breeding cycle plus buyer management: add
+dogs → record a mating and litter → add puppies → track daily weights → view
+growth charts → manage buyers → assign buyers to puppies → generate pre-filled
+contracts and info packs.**
 
 ---
 
@@ -101,7 +111,8 @@ breeding-app/
 │   ├── app/
 │   │   ├── page.tsx         ← the HOME SCREEN (reads dogs + active litter)
 │   │   ├── actions.ts       ← SERVER ACTIONS (logWeight, addDog, updateDog,
-│   │   │                       createLitter, updateLitter, addPuppy)
+│   │   │                       createLitter, updateLitter, addPuppy,
+│   │   │                       createBuyer, updateBuyer, assignBuyer)
 │   │   ├── SignOutButton.tsx ← sign-out link (client component)
 │   │   ├── login/
 │   │   │   ├── page.tsx     ← the LOGIN PAGE
@@ -127,6 +138,15 @@ breeding-app/
 │   │   │       └── info-pack/
 │   │   │           ├── page.tsx      ← INFO PACK (printable)
 │   │   │           └── PrintButton.tsx ← print trigger (client component)
+│   │   ├── buyers/
+│   │   │   ├── page.tsx        ← BUYERS LIST (all buyers with status badges)
+│   │   │   ├── BuyerForm.tsx   ← shared create/edit form (client component)
+│   │   │   ├── new/
+│   │   │   │   └── page.tsx    ← ADD BUYER screen
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx    ← BUYER PROFILE (details, linked puppies)
+│   │   │       └── edit/
+│   │   │           └── page.tsx ← EDIT BUYER screen
 │   │   └── litters/
 │   │       ├── new/
 │   │       │   ├── page.tsx      ← NEW LITTER (pick parents, enter details)
@@ -134,6 +154,7 @@ breeding-app/
 │   │       └── [id]/
 │   │           ├── page.tsx      ← LITTER DETAIL (summary, puppies, chart)
 │   │           ├── GrowthChart.tsx ← Recharts line chart (client component)
+│   │           ├── AssignBuyer.tsx ← buyer dropdown per puppy (client component)
 │   │           ├── edit/
 │   │           │   ├── page.tsx      ← EDIT LITTER screen
 │   │           │   └── EditLitterForm.tsx ← edit form (client component)
@@ -287,16 +308,12 @@ npx prisma studio
 
 ## Next steps (roughly in order of value)
 
-1. **Buyer CRM** — a Buyer model and screens to track enquiries, waitlists,
-   and collections. Link a buyer to a puppy when reserved/sold. The contract
-   page could then pre-fill buyer details from the database instead of typing
-   them each time.
-2. **Health records** — vaccinations, worming, flea treatments, hip/elbow
+1. **Health records** — vaccinations, worming, flea treatments, hip/elbow
    scores, DNA tests. Replace the blank healthcare table in the info pack
    with real data.
-3. **Heat cycle tracking** — season dates, progesterone readings, predicted
+2. **Heat cycle tracking** — season dates, progesterone readings, predicted
    whelp dates. The schema has a stub for this (`HeatCycle`).
-4. **Public marketplace** — a Pets4Homes-style listing page for available
+3. **Public marketplace** — a Pets4Homes-style listing page for available
    puppies, built from the existing data. The "Listing" model stub is
    reserved in the schema.
 
@@ -316,6 +333,7 @@ data model. Worked examples exist for every pattern:
 - **PRINTABLE DOC:** `src/app/dogs/[id]/info-pack/` — server-rendered, print CSS hides chrome.
 - **CHART:** `src/app/litters/[id]/GrowthChart.tsx` — Recharts client component fed from server data.
 - **MULTI-CREATE:** `src/app/litters/new/` — creates two linked records (Mating + Litter) in one action.
+- **CRM / ASSIGN:** `src/app/buyers/` + `AssignBuyer.tsx` — CRUD pages, dropdown assigns buyer to puppy, contract pre-fills.
 
 Any new page starts with `const breeder = await getBreeder()` and follows one
 of those patterns.
