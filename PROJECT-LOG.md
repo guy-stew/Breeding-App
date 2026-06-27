@@ -4,8 +4,8 @@ A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 27 June 2026 — two WRITE features live (weigh-in round + add a
-dog), and GitHub → Vercel auto-deploy confirmed working.*
+*Last updated: 27 June 2026 — login system added (Supabase Auth), app now
+requires sign-in. Three WRITE features live (weigh-in, add dog, sign up).*
 
 ---
 
@@ -25,13 +25,13 @@ once, and re-arrange/print it differently** for each feature.
 - **Tailwind** — the styling shortcuts (the `className="..."` bits).
 - **Prisma** — the translator between the app and the database. We describe
   tables in plain text (`schema.prisma`) and Prisma handles the SQL.
-- **Supabase** — the actual database, living in the cloud (Postgres).
+- **Supabase** — the actual database (Postgres) AND the login system (Auth).
 - **GitHub** — the backup + history of all the code.
 - **Vercel** — hosts the live public website. Now auto-deploys on every push.
 
 ---
 
-## Current status — ✅ App can READ and WRITE; live site auto-updates
+## Current status — ✅ Login working; app requires sign-in
 
 - [x] Local dev environment set up (Node, VS Code, Git)
 - [x] Next.js project created
@@ -48,10 +48,13 @@ once, and re-arrange/print it differently** for each feature.
       Dog record; on save it redirects home where the dog appears in "My dogs".
 - [x] **GitHub → Vercel auto-deploy confirmed** — every `git push` to `main`
       rebuilds the live site automatically (~1 minute). No more manual deploys.
+- [x] **Login (Supabase Auth)** — email/password sign-in and sign-up. Middleware
+      redirects unauthenticated users to `/login`. Every page now shows the
+      logged-in breeder's data, not the first breeder's. Sign-out button on
+      home screen.
 
-**The app can now READ and WRITE data, and the live site stays in sync with
-GitHub by itself.** Next: login (so it's not always the first breeder), then
-more screens.
+**The app now requires login and shows each breeder their own data.** Next:
+more screens (litter detail, puppy growth chart, dog profile).
 
 ---
 
@@ -61,16 +64,24 @@ Everything sits inside the `breeding-app` folder. The important pieces:
 
 ```
 breeding-app/
-├── .env                     ← DATABASE secrets. NEVER goes to GitHub. (gitignored)
+├── .env                     ← DATABASE + AUTH secrets. NEVER goes to GitHub. (gitignored)
 ├── prisma.config.ts         ← Prisma 7 settings (points CLI at DIRECT_URL)
 ├── prisma/
 │   ├── schema.prisma        ← the data model: every table + field, in plain text
 │   ├── seed.ts              ← fills the DB with sample data (Maple, Rufus, 7 pups)
 │   └── migrations/          ← auto-generated record of every DB change
 ├── src/
+│   ├── middleware.ts        ← AUTH GATE — refreshes session, redirects to /login if not signed in
 │   ├── app/
 │   │   ├── page.tsx         ← the HOME SCREEN (reads dogs + active litter)
 │   │   ├── actions.ts       ← SERVER ACTIONS (logWeight + addDog live here)
+│   │   ├── SignOutButton.tsx ← sign-out link (client component)
+│   │   ├── login/
+│   │   │   ├── page.tsx     ← the LOGIN PAGE
+│   │   │   └── LoginForm.tsx ← sign-in / sign-up form (client component)
+│   │   ├── auth/
+│   │   │   └── callback/
+│   │   │       └── route.ts ← handles email-confirmation redirects
 │   │   ├── weigh-in/
 │   │   │   ├── page.tsx     ← the WEIGH-IN ROUND screen (lists pups in order)
 │   │   │   └── WeighInRow.tsx ← one puppy's input row (client component)
@@ -79,7 +90,11 @@ breeding-app/
 │   │           ├── page.tsx      ← the ADD-A-DOG screen
 │   │           └── AddDogForm.tsx ← the dog form (client component)
 │   ├── lib/
-│   │   └── prisma.ts        ← the shared database connection helper
+│   │   ├── prisma.ts        ← the shared database connection helper
+│   │   ├── breeder.ts       ← getBreeder() — finds the Breeder for the logged-in user
+│   │   └── supabase/
+│   │       ├── server.ts    ← Supabase client for server-side code (reads cookies)
+│   │       └── client.ts    ← Supabase client for browser-side code
 │   └── generated/prisma/    ← auto-built by `npx prisma generate` (don't hand-edit)
 └── PROJECT-LOG.md           ← this file
 ```
@@ -89,7 +104,10 @@ breeding-app/
 - **Hand-built (the real work):** `schema.prisma`, `seed.ts`, `page.tsx`,
   `actions.ts`, `weigh-in/page.tsx`, `weigh-in/WeighInRow.tsx`,
   `dogs/new/page.tsx`, `dogs/new/AddDogForm.tsx`, `prisma.ts`,
-  `prisma.config.ts`. These are the files that define the app.
+  `prisma.config.ts`, `middleware.ts`, `breeder.ts`, `supabase/server.ts`,
+  `supabase/client.ts`, `login/page.tsx`, `login/LoginForm.tsx`,
+  `SignOutButton.tsx`, `auth/callback/route.ts`. These are the files that
+  define the app.
 - **Auto-generated (don't edit by hand):** everything in `migrations/` and
   `src/generated/`. These are created by Prisma commands and rebuild themselves.
 
@@ -110,6 +128,26 @@ The weigh-in round is the worked example of writing to the database. Three parts
 
 Any future "add / edit" feature follows this same shape: form (client) → server
 action → Prisma write → revalidate.
+
+---
+
+## How login works (the pattern for "who is this user?")
+
+Three layers make login work:
+
+1. **Middleware** (`src/middleware.ts`) — runs on EVERY page request. It refreshes
+   the Supabase session cookie and, if the user isn't logged in, redirects them
+   to `/login`. The login page itself is excluded so you don't get stuck in a loop.
+2. **`getBreeder()`** (`src/lib/breeder.ts`) — the one function every page calls
+   instead of the old `findFirst`. It reads the Supabase session to find out who's
+   logged in, then looks up their Breeder record. On first login it auto-links by
+   email, or creates a fresh Breeder if no match exists.
+3. **Login form** (`src/app/login/LoginForm.tsx`) — a client component that calls
+   Supabase Auth's `signInWithPassword` or `signUp`. On success it redirects to
+   the home screen.
+
+Any new page that needs to know the breeder just calls `const breeder = await
+getBreeder()` at the top. If it returns null, redirect to `/login`.
 
 ---
 
@@ -191,19 +229,22 @@ npx prisma studio
   `page.tsx` filename.
 - **Prisma 7 is very new** — most online tutorials show v6. Trust our setup over
   older guides for anything about the database connection.
+- **Vercel needs ALL four env vars.** After adding auth, the live site needs
+  `DATABASE_URL`, `DIRECT_URL`, `NEXT_PUBLIC_SUPABASE_URL`, and
+  `NEXT_PUBLIC_SUPABASE_ANON_KEY` — all with actual values (not empty). If any
+  are missing or blank, the middleware crashes with `MIDDLEWARE_INVOCATION_FAILED`.
+- **Restart `npm run dev` after `prisma generate`.** The dev server caches the
+  Prisma client in memory. If you add a new field and run `prisma generate`, the
+  dev server won't see it until you stop (Ctrl+C) and restart `npm run dev`.
 
 ---
 
 ## Next steps (roughly in order of value)
 
-1. **Add login (Supabase Auth)** — so the app knows which breeder is signed in,
-   instead of always grabbing the first one (`findFirst`). Once this is in,
-   every "first breeder" shortcut becomes "the logged-in breeder". (This shows
-   up in two places now: the home screen and the addDog action.)
-2. **Build out more screens** — a litter detail page, a puppy growth chart (the
+1. **Build out more screens** — a litter detail page, a puppy growth chart (the
    weigh-in data is already being collected for exactly this), a dog profile
    page (and an "edit dog" form for the fields the quick add-form leaves out).
-3. **The paperwork engine** — auto-filled puppy contracts and info packs
+2. **The paperwork engine** — auto-filled puppy contracts and info packs
    (the first real "wow"). Use lawyer-reviewed templates, not free-form AI.
 
 ---
@@ -212,6 +253,11 @@ npx prisma studio
 
 When starting a fresh session, share this file first — it gives the full picture
 in one go. The schema in `prisma/schema.prisma` is the source of truth for the
-data model. Two worked examples now exist to copy from: `src/app/page.tsx` shows
-how to READ data and render it; `src/app/actions.ts` + `src/app/weigh-in/`
-shows how to WRITE data. Anything new tends to follow one of those two patterns.
+data model. Three worked examples now exist to copy from:
+
+- **READ:** `src/app/page.tsx` — fetch the breeder's data and render it.
+- **WRITE:** `src/app/actions.ts` + `src/app/weigh-in/` — form → server action → Prisma → revalidate.
+- **AUTH:** `src/lib/breeder.ts` + `src/middleware.ts` — how the app knows who's logged in.
+
+Any new page starts with `const breeder = await getBreeder()` and follows one
+of those patterns.
