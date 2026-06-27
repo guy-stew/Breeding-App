@@ -4,8 +4,9 @@ A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 27 June 2026 — login system added (Supabase Auth), app now
-requires sign-in. Three WRITE features live (weigh-in, add dog, sign up).*
+*Last updated: 27 June 2026 — all three original milestones complete: login,
+full screen set (profile, edit, litter detail, growth chart), and paperwork
+engine (contracts + info packs).*
 
 ---
 
@@ -26,12 +27,13 @@ once, and re-arrange/print it differently** for each feature.
 - **Prisma** — the translator between the app and the database. We describe
   tables in plain text (`schema.prisma`) and Prisma handles the SQL.
 - **Supabase** — the actual database (Postgres) AND the login system (Auth).
+- **Recharts** — the charting library (puppy growth chart on the litter page).
 - **GitHub** — the backup + history of all the code.
 - **Vercel** — hosts the live public website. Now auto-deploys on every push.
 
 ---
 
-## Current status — ✅ Login working; app requires sign-in
+## Current status — ✅ All three original milestones complete
 
 - [x] Local dev environment set up (Node, VS Code, Git)
 - [x] Next.js project created
@@ -52,9 +54,26 @@ once, and re-arrange/print it differently** for each feature.
       redirects unauthenticated users to `/login`. Every page now shows the
       logged-in breeder's data, not the first breeder's. Sign-out button on
       home screen.
+- [x] **Dog profile page** (`/dogs/[id]`) — full details, parents, weight
+      history, paperwork links. Dogs on the home screen are now clickable.
+- [x] **Edit dog** (`/dogs/[id]/edit`) — all fields including registered name,
+      markings, KC registration number. Saves via `updateDog` server action.
+- [x] **Litter detail page** (`/litters/[id]`) — summary card (whelp date,
+      status, parents), weigh-in shortcut, and all puppies with latest weights.
+      Litter name on home screen links here.
+- [x] **Puppy growth chart** — Recharts line chart on the litter detail page.
+      One line per puppy, colour-coded by collar colour, with tooltips. Shows
+      weight trends and dips at a glance.
+- [x] **Puppy contract** (`/dogs/[id]/contract`) — enter buyer details, preview
+      a filled sale contract (parties, puppy description, parentage, breeder
+      declarations, buyer responsibilities, return policy, signatures), then
+      print or save as PDF.
+- [x] **Puppy info pack** (`/dogs/[id]/info-pack`) — auto-filled printable
+      document: puppy details, parentage, full weight record, feeding guide,
+      healthcare record table, microchip info, breeder contact.
 
-**The app now requires login and shows each breeder their own data.** Next:
-more screens (litter detail, puppy growth chart, dog profile).
+**The app now covers the full whelping workflow: record dogs and litters, track
+weights with a growth chart, and generate the paperwork a buyer takes home.**
 
 ---
 
@@ -74,7 +93,7 @@ breeding-app/
 │   ├── middleware.ts        ← AUTH GATE — refreshes session, redirects to /login if not signed in
 │   ├── app/
 │   │   ├── page.tsx         ← the HOME SCREEN (reads dogs + active litter)
-│   │   ├── actions.ts       ← SERVER ACTIONS (logWeight + addDog live here)
+│   │   ├── actions.ts       ← SERVER ACTIONS (logWeight, addDog, updateDog)
 │   │   ├── SignOutButton.tsx ← sign-out link (client component)
 │   │   ├── login/
 │   │   │   ├── page.tsx     ← the LOGIN PAGE
@@ -85,10 +104,25 @@ breeding-app/
 │   │   ├── weigh-in/
 │   │   │   ├── page.tsx     ← the WEIGH-IN ROUND screen (lists pups in order)
 │   │   │   └── WeighInRow.tsx ← one puppy's input row (client component)
-│   │   └── dogs/
-│   │       └── new/
-│   │           ├── page.tsx      ← the ADD-A-DOG screen
-│   │           └── AddDogForm.tsx ← the dog form (client component)
+│   │   ├── dogs/
+│   │   │   ├── new/
+│   │   │   │   ├── page.tsx      ← the ADD-A-DOG screen
+│   │   │   │   └── AddDogForm.tsx ← the dog form (client component)
+│   │   │   └── [id]/
+│   │   │       ├── page.tsx      ← DOG PROFILE (details, parents, weights)
+│   │   │       ├── edit/
+│   │   │       │   ├── page.tsx      ← EDIT DOG screen
+│   │   │       │   └── EditDogForm.tsx ← edit form (client component)
+│   │   │       ├── contract/
+│   │   │       │   ├── page.tsx      ← CONTRACT GENERATOR
+│   │   │       │   └── ContractView.tsx ← buyer form + contract preview (client)
+│   │   │       └── info-pack/
+│   │   │           ├── page.tsx      ← INFO PACK (printable)
+│   │   │           └── PrintButton.tsx ← print trigger (client component)
+│   │   └── litters/
+│   │       └── [id]/
+│   │           ├── page.tsx      ← LITTER DETAIL (summary, puppies, chart)
+│   │           └── GrowthChart.tsx ← Recharts line chart (client component)
 │   ├── lib/
 │   │   ├── prisma.ts        ← the shared database connection helper
 │   │   ├── breeder.ts       ← getBreeder() — finds the Breeder for the logged-in user
@@ -101,13 +135,8 @@ breeding-app/
 
 ### Which files were hand-built vs auto-generated
 
-- **Hand-built (the real work):** `schema.prisma`, `seed.ts`, `page.tsx`,
-  `actions.ts`, `weigh-in/page.tsx`, `weigh-in/WeighInRow.tsx`,
-  `dogs/new/page.tsx`, `dogs/new/AddDogForm.tsx`, `prisma.ts`,
-  `prisma.config.ts`, `middleware.ts`, `breeder.ts`, `supabase/server.ts`,
-  `supabase/client.ts`, `login/page.tsx`, `login/LoginForm.tsx`,
-  `SignOutButton.tsx`, `auth/callback/route.ts`. These are the files that
-  define the app.
+- **Hand-built (the real work):** everything listed in the file map above
+  except the `generated/` folder. These are the files that define the app.
 - **Auto-generated (don't edit by hand):** everything in `migrations/` and
   `src/generated/`. These are created by Prisma commands and rebuild themselves.
 
@@ -241,11 +270,20 @@ npx prisma studio
 
 ## Next steps (roughly in order of value)
 
-1. **Build out more screens** — a litter detail page, a puppy growth chart (the
-   weigh-in data is already being collected for exactly this), a dog profile
-   page (and an "edit dog" form for the fields the quick add-form leaves out).
-2. **The paperwork engine** — auto-filled puppy contracts and info packs
-   (the first real "wow"). Use lawyer-reviewed templates, not free-form AI.
+1. **Buyer CRM** — a Buyer model and screens to track enquiries, waitlists,
+   and collections. Link a buyer to a puppy when reserved/sold. The contract
+   page could then pre-fill buyer details from the database instead of typing
+   them each time.
+2. **Health records** — vaccinations, worming, flea treatments, hip/elbow
+   scores, DNA tests. Replace the blank healthcare table in the info pack
+   with real data.
+3. **Heat cycle tracking** — season dates, progesterone readings, predicted
+   whelp dates. The schema has a stub for this (`HeatCycle`).
+4. **Litter management** — add/edit litter, record a new mating, add puppies
+   to a litter. Currently litters only come from the seed data.
+5. **Public marketplace** — a Pets4Homes-style listing page for available
+   puppies, built from the existing data. The "Listing" model stub is
+   reserved in the schema.
 
 ---
 
@@ -253,11 +291,15 @@ npx prisma studio
 
 When starting a fresh session, share this file first — it gives the full picture
 in one go. The schema in `prisma/schema.prisma` is the source of truth for the
-data model. Three worked examples now exist to copy from:
+data model. Worked examples exist for every pattern:
 
 - **READ:** `src/app/page.tsx` — fetch the breeder's data and render it.
 - **WRITE:** `src/app/actions.ts` + `src/app/weigh-in/` — form → server action → Prisma → revalidate.
 - **AUTH:** `src/lib/breeder.ts` + `src/middleware.ts` — how the app knows who's logged in.
+- **DETAIL PAGE:** `src/app/dogs/[id]/page.tsx` — dynamic route with Prisma includes.
+- **EDIT FORM:** `src/app/dogs/[id]/edit/` — pre-filled form → updateDog action → redirect.
+- **PRINTABLE DOC:** `src/app/dogs/[id]/info-pack/` — server-rendered, print CSS hides chrome.
+- **CHART:** `src/app/litters/[id]/GrowthChart.tsx` — Recharts client component fed from server data.
 
 Any new page starts with `const breeder = await getBreeder()` and follows one
 of those patterns.
