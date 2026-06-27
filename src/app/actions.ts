@@ -15,6 +15,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { getBreeder } from "@/lib/breeder";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -122,11 +123,7 @@ type AddDogInput = {
 
 export async function addDog(input: AddDogInput): Promise<AddDogResult> {
   // --- Find the breeder this dog belongs to. ---
-  // For now we use the first breeder, same as the home screen does.
-  // Once login is added, this becomes "the logged-in breeder".
-  const breeder = await prisma.breeder.findFirst({
-    where: { deletedAt: null },
-  });
+  const breeder = await getBreeder();
 
   if (!breeder) {
     return { ok: false, error: "No breeder found to attach the dog to." };

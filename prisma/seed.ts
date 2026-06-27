@@ -38,9 +38,9 @@ async function main() {
   // ----------------------------------------------------------
   const breeder = await prisma.breeder.create({
     data: {
-      name: "Sarah Hughes",
+      name: "Guy Stewart",
       kennelName: "Willowbrook",
-      email: "sarah@willowbrook.example",
+      email: "guy_stew@hotmail.com",
       phone: "07700 900123",
       ukNation: "england",
       isLicensed: true,

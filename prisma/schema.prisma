@@ -35,8 +35,9 @@ model Breeder {
   id          String  @id @default(uuid())
   name        String
   kennelName  String?
-  email       String? @unique
-  phone       String?
+  email          String? @unique
+  phone          String?
+  supabaseUserId String? @unique
 
   // UK nation drives which compliance rules apply — see schema doc.
   // Stored now even though the rules engine is a later build.

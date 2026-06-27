@@ -13,12 +13,13 @@
 
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getBreeder } from "@/lib/breeder";
+import { redirect } from "next/navigation";
 import WeighInRow from "./WeighInRow";
 
 export default async function WeighInPage() {
-  const breeder = await prisma.breeder.findFirst({
-    where: { deletedAt: null },
-  });
+  const breeder = await getBreeder();
+  if (!breeder) redirect("/login");
 
   // The active litter, with its puppies AND each puppy's Dog record.
   // We need the Dog record because (a) weights hang off dogId, and

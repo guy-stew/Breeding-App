@@ -898,6 +898,7 @@ export const BreederScalarFieldEnum = {
   kennelName: 'kennelName',
   email: 'email',
   phone: 'phone',
+  supabaseUserId: 'supabaseUserId',
   ukNation: 'ukNation',
   isLicensed: 'isLicensed',
   licenceNumber: 'licenceNumber',

@@ -1,51 +1,31 @@
-// ============================================================
-//  src/app/page.tsx — the home screen.
-//
-//  This is a "server component": the code here runs on the
-//  server, BEFORE the page is sent to the browser. That means
-//  we can ask the database for data right here, and the page
-//  arrives already filled in. No loading spinners, no extra
-//  round-trips.
-//
-//  What it shows (matching the mockup):
-//   - the active litter as a card at the top, if there is one
-//   - the breeder's dogs as a list below
-// ============================================================
-
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { getBreeder } from "@/lib/breeder";
+import { redirect } from "next/navigation";
+import SignOutButton from "./SignOutButton";
 
-// Small helper: turn a whelp date into "Day N" of the litter.
 function dayOfLitter(whelpDate: Date): number {
   const ms = Date.now() - whelpDate.getTime();
   return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
 }
 
 export default async function HomePage() {
-  // ----------------------------------------------------------
-  // Fetch the breeder, their dogs, and any active litter.
-  // We grab the first breeder for now — once login is added,
-  // this becomes "the logged-in breeder".
-  // ----------------------------------------------------------
-  const breeder = await prisma.breeder.findFirst({
-    where: { deletedAt: null },
-  });
+  const breeder = await getBreeder();
+  if (!breeder) redirect("/login");
 
-  // The adult dogs (not the puppies — puppies have a litter link).
   const dogs = await prisma.dog.findMany({
     where: {
       deletedAt: null,
-      breederId: breeder?.id,
-      puppyRecord: null, // exclude dogs that are puppies in a litter
+      breederId: breeder.id,
+      puppyRecord: null,
     },
     orderBy: { callName: "asc" },
   });
 
-  // The most recent litter that isn't fully homed yet.
   const activeLitter = await prisma.litter.findFirst({
     where: {
       deletedAt: null,
-      breederId: breeder?.id,
+      breederId: breeder.id,
       status: { not: "all_homed" },
     },
     orderBy: { whelpDate: "desc" },
@@ -54,14 +34,13 @@ export default async function HomePage() {
 
   return (
     <main className="mx-auto max-w-md p-4">
-      {/* Kennel header */}
       <header className="mb-4 flex items-center justify-between px-1">
         <h1 className="text-lg font-medium">
-          {breeder?.kennelName ?? "My kennel"}
+          {breeder.kennelName ?? "My kennel"}
         </h1>
+        <SignOutButton />
       </header>
 
-      {/* Active litter card */}
       {activeLitter && (
         <section className="mb-5">
           <p className="mb-1 px-1 text-xs text-neutral-400">Happening now</p>
@@ -87,8 +66,6 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Through to the weigh-in round — the daily job during
-                the early weeks. */}
             <Link
               href="/weigh-in"
               className="mt-3 block rounded-lg bg-blue-600 px-4 py-2 text-center text-sm font-medium text-white"
@@ -99,7 +76,6 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Dogs list */}
       <section>
         <div className="mb-2 flex items-center justify-between px-1">
           <p className="text-xs text-neutral-400">My dogs</p>

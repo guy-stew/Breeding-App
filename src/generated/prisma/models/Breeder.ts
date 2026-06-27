@@ -30,6 +30,7 @@ export type BreederMinAggregateOutputType = {
   kennelName: string | null
   email: string | null
   phone: string | null
+  supabaseUserId: string | null
   ukNation: $Enums.UkNation | null
   isLicensed: boolean | null
   licenceNumber: string | null
@@ -46,6 +47,7 @@ export type BreederMaxAggregateOutputType = {
   kennelName: string | null
   email: string | null
   phone: string | null
+  supabaseUserId: string | null
   ukNation: $Enums.UkNation | null
   isLicensed: boolean | null
   licenceNumber: string | null
@@ -62,6 +64,7 @@ export type BreederCountAggregateOutputType = {
   kennelName: number
   email: number
   phone: number
+  supabaseUserId: number
   ukNation: number
   isLicensed: number
   licenceNumber: number
@@ -80,6 +83,7 @@ export type BreederMinAggregateInputType = {
   kennelName?: true
   email?: true
   phone?: true
+  supabaseUserId?: true
   ukNation?: true
   isLicensed?: true
   licenceNumber?: true
@@ -96,6 +100,7 @@ export type BreederMaxAggregateInputType = {
   kennelName?: true
   email?: true
   phone?: true
+  supabaseUserId?: true
   ukNation?: true
   isLicensed?: true
   licenceNumber?: true
@@ -112,6 +117,7 @@ export type BreederCountAggregateInputType = {
   kennelName?: true
   email?: true
   phone?: true
+  supabaseUserId?: true
   ukNation?: true
   isLicensed?: true
   licenceNumber?: true
@@ -201,6 +207,7 @@ export type BreederGroupByOutputType = {
   kennelName: string | null
   email: string | null
   phone: string | null
+  supabaseUserId: string | null
   ukNation: $Enums.UkNation
   isLicensed: boolean
   licenceNumber: string | null
@@ -238,6 +245,7 @@ export type BreederWhereInput = {
   kennelName?: Prisma.StringNullableFilter<"Breeder"> | string | null
   email?: Prisma.StringNullableFilter<"Breeder"> | string | null
   phone?: Prisma.StringNullableFilter<"Breeder"> | string | null
+  supabaseUserId?: Prisma.StringNullableFilter<"Breeder"> | string | null
   ukNation?: Prisma.EnumUkNationFilter<"Breeder"> | $Enums.UkNation
   isLicensed?: Prisma.BoolFilter<"Breeder"> | boolean
   licenceNumber?: Prisma.StringNullableFilter<"Breeder"> | string | null
@@ -256,6 +264,7 @@ export type BreederOrderByWithRelationInput = {
   kennelName?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  supabaseUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   ukNation?: Prisma.SortOrder
   isLicensed?: Prisma.SortOrder
   licenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -271,6 +280,7 @@ export type BreederOrderByWithRelationInput = {
 export type BreederWhereUniqueInput = Prisma.AtLeast<{
   id?: string
   email?: string
+  supabaseUserId?: string
   AND?: Prisma.BreederWhereInput | Prisma.BreederWhereInput[]
   OR?: Prisma.BreederWhereInput[]
   NOT?: Prisma.BreederWhereInput | Prisma.BreederWhereInput[]
@@ -287,7 +297,7 @@ export type BreederWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"Breeder"> | Date | string | null
   dogs?: Prisma.DogListRelationFilter
   litters?: Prisma.LitterListRelationFilter
-}, "id" | "email">
+}, "id" | "email" | "supabaseUserId">
 
 export type BreederOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -295,6 +305,7 @@ export type BreederOrderByWithAggregationInput = {
   kennelName?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  supabaseUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   ukNation?: Prisma.SortOrder
   isLicensed?: Prisma.SortOrder
   licenceNumber?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -317,6 +328,7 @@ export type BreederScalarWhereWithAggregatesInput = {
   kennelName?: Prisma.StringNullableWithAggregatesFilter<"Breeder"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"Breeder"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Breeder"> | string | null
+  supabaseUserId?: Prisma.StringNullableWithAggregatesFilter<"Breeder"> | string | null
   ukNation?: Prisma.EnumUkNationWithAggregatesFilter<"Breeder"> | $Enums.UkNation
   isLicensed?: Prisma.BoolWithAggregatesFilter<"Breeder"> | boolean
   licenceNumber?: Prisma.StringNullableWithAggregatesFilter<"Breeder"> | string | null
@@ -333,6 +345,7 @@ export type BreederCreateInput = {
   kennelName?: string | null
   email?: string | null
   phone?: string | null
+  supabaseUserId?: string | null
   ukNation?: $Enums.UkNation
   isLicensed?: boolean
   licenceNumber?: string | null
@@ -351,6 +364,7 @@ export type BreederUncheckedCreateInput = {
   kennelName?: string | null
   email?: string | null
   phone?: string | null
+  supabaseUserId?: string | null
   ukNation?: $Enums.UkNation
   isLicensed?: boolean
   licenceNumber?: string | null
@@ -369,6 +383,7 @@ export type BreederUpdateInput = {
   kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
   isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -387,6 +402,7 @@ export type BreederUncheckedUpdateInput = {
   kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
   isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -405,6 +421,7 @@ export type BreederCreateManyInput = {
   kennelName?: string | null
   email?: string | null
   phone?: string | null
+  supabaseUserId?: string | null
   ukNation?: $Enums.UkNation
   isLicensed?: boolean
   licenceNumber?: string | null
@@ -421,6 +438,7 @@ export type BreederUpdateManyMutationInput = {
   kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
   isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -437,6 +455,7 @@ export type BreederUncheckedUpdateManyInput = {
   kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
   isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -453,6 +472,7 @@ export type BreederCountOrderByAggregateInput = {
   kennelName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  supabaseUserId?: Prisma.SortOrder
   ukNation?: Prisma.SortOrder
   isLicensed?: Prisma.SortOrder
   licenceNumber?: Prisma.SortOrder
@@ -469,6 +489,7 @@ export type BreederMaxOrderByAggregateInput = {
   kennelName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  supabaseUserId?: Prisma.SortOrder
   ukNation?: Prisma.SortOrder
   isLicensed?: Prisma.SortOrder
   licenceNumber?: Prisma.SortOrder
@@ -485,6 +506,7 @@ export type BreederMinOrderByAggregateInput = {
   kennelName?: Prisma.SortOrder
   email?: Prisma.SortOrder
   phone?: Prisma.SortOrder
+  supabaseUserId?: Prisma.SortOrder
   ukNation?: Prisma.SortOrder
   isLicensed?: Prisma.SortOrder
   licenceNumber?: Prisma.SortOrder
@@ -558,6 +580,7 @@ export type BreederCreateWithoutDogsInput = {
   kennelName?: string | null
   email?: string | null
   phone?: string | null
+  supabaseUserId?: string | null
   ukNation?: $Enums.UkNation
   isLicensed?: boolean
   licenceNumber?: string | null
@@ -575,6 +598,7 @@ export type BreederUncheckedCreateWithoutDogsInput = {
   kennelName?: string | null
   email?: string | null
   phone?: string | null
+  supabaseUserId?: string | null
   ukNation?: $Enums.UkNation
   isLicensed?: boolean
   licenceNumber?: string | null
@@ -608,6 +632,7 @@ export type BreederUpdateWithoutDogsInput = {
   kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
   isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -625,6 +650,7 @@ export type BreederUncheckedUpdateWithoutDogsInput = {
   kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
   isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -642,6 +668,7 @@ export type BreederCreateWithoutLittersInput = {
   kennelName?: string | null
   email?: string | null
   phone?: string | null
+  supabaseUserId?: string | null
   ukNation?: $Enums.UkNation
   isLicensed?: boolean
   licenceNumber?: string | null
@@ -659,6 +686,7 @@ export type BreederUncheckedCreateWithoutLittersInput = {
   kennelName?: string | null
   email?: string | null
   phone?: string | null
+  supabaseUserId?: string | null
   ukNation?: $Enums.UkNation
   isLicensed?: boolean
   licenceNumber?: string | null
@@ -692,6 +720,7 @@ export type BreederUpdateWithoutLittersInput = {
   kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
   isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -709,6 +738,7 @@ export type BreederUncheckedUpdateWithoutLittersInput = {
   kennelName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  supabaseUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ukNation?: Prisma.EnumUkNationFieldUpdateOperationsInput | $Enums.UkNation
   isLicensed?: Prisma.BoolFieldUpdateOperationsInput | boolean
   licenceNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -766,6 +796,7 @@ export type BreederSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   kennelName?: boolean
   email?: boolean
   phone?: boolean
+  supabaseUserId?: boolean
   ukNation?: boolean
   isLicensed?: boolean
   licenceNumber?: boolean
@@ -785,6 +816,7 @@ export type BreederSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   kennelName?: boolean
   email?: boolean
   phone?: boolean
+  supabaseUserId?: boolean
   ukNation?: boolean
   isLicensed?: boolean
   licenceNumber?: boolean
@@ -801,6 +833,7 @@ export type BreederSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   kennelName?: boolean
   email?: boolean
   phone?: boolean
+  supabaseUserId?: boolean
   ukNation?: boolean
   isLicensed?: boolean
   licenceNumber?: boolean
@@ -817,6 +850,7 @@ export type BreederSelectScalar = {
   kennelName?: boolean
   email?: boolean
   phone?: boolean
+  supabaseUserId?: boolean
   ukNation?: boolean
   isLicensed?: boolean
   licenceNumber?: boolean
@@ -827,7 +861,7 @@ export type BreederSelectScalar = {
   deletedAt?: boolean
 }
 
-export type BreederOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "kennelName" | "email" | "phone" | "ukNation" | "isLicensed" | "licenceNumber" | "licenceAuthority" | "licenceExpiry" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["breeder"]>
+export type BreederOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "kennelName" | "email" | "phone" | "supabaseUserId" | "ukNation" | "isLicensed" | "licenceNumber" | "licenceAuthority" | "licenceExpiry" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["breeder"]>
 export type BreederInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dogs?: boolean | Prisma.Breeder$dogsArgs<ExtArgs>
   litters?: boolean | Prisma.Breeder$littersArgs<ExtArgs>
@@ -848,6 +882,7 @@ export type $BreederPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     kennelName: string | null
     email: string | null
     phone: string | null
+    supabaseUserId: string | null
     ukNation: $Enums.UkNation
     isLicensed: boolean
     licenceNumber: string | null
@@ -1286,6 +1321,7 @@ export interface BreederFieldRefs {
   readonly kennelName: Prisma.FieldRef<"Breeder", 'String'>
   readonly email: Prisma.FieldRef<"Breeder", 'String'>
   readonly phone: Prisma.FieldRef<"Breeder", 'String'>
+  readonly supabaseUserId: Prisma.FieldRef<"Breeder", 'String'>
   readonly ukNation: Prisma.FieldRef<"Breeder", 'UkNation'>
   readonly isLicensed: Prisma.FieldRef<"Breeder", 'Boolean'>
   readonly licenceNumber: Prisma.FieldRef<"Breeder", 'String'>
