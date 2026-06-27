@@ -5,9 +5,9 @@ what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
 *Last updated: 27 June 2026 — app now covers the full breeding cycle plus
-buyer management: add dogs, record matings + litters, add puppies, track
-weights, view growth charts, generate contracts + info packs, and manage
-buyers with assignment to puppies. Login required.*
+buyer management and health records: add dogs, record matings + litters, add
+puppies, track weights, view growth charts, generate contracts + info packs,
+manage buyers, and log vaccinations/worming/tests/scores. Login required.*
 
 ---
 
@@ -87,10 +87,17 @@ once, and re-arrange/print it differently** for each feature.
       linked. "Buyers" quick link on home screen. Generate contract shortcut on
       buyer profile page.
 
-**The app now supports a complete breeding cycle plus buyer management: add
-dogs → record a mating and litter → add puppies → track daily weights → view
-growth charts → manage buyers → assign buyers to puppies → generate pre-filled
-contracts and info packs.**
+- [x] **Health records** — HealthRecord model with 9 types (vaccination,
+      worming, flea treatment, vet check, DNA test, hip score, elbow score,
+      eye test, other). Add record form at `/dogs/[id]/health/new` with
+      contextual placeholders. Dog profile shows full health history with
+      next-due dates. Info pack healthcare table auto-fills from real records
+      (falls back to blank rows when empty).
+
+**The app now supports a complete breeding cycle plus buyer management and
+health records: add dogs → record a mating and litter → add puppies → track
+daily weights → view growth charts → log health records → manage buyers →
+assign buyers to puppies → generate pre-filled contracts and info packs.**
 
 ---
 
@@ -112,7 +119,8 @@ breeding-app/
 │   │   ├── page.tsx         ← the HOME SCREEN (reads dogs + active litter)
 │   │   ├── actions.ts       ← SERVER ACTIONS (logWeight, addDog, updateDog,
 │   │   │                       createLitter, updateLitter, addPuppy,
-│   │   │                       createBuyer, updateBuyer, assignBuyer)
+│   │   │                       createBuyer, updateBuyer, assignBuyer,
+│   │   │                       addHealthRecord, deleteHealthRecord)
 │   │   ├── SignOutButton.tsx ← sign-out link (client component)
 │   │   ├── login/
 │   │   │   ├── page.tsx     ← the LOGIN PAGE
@@ -132,6 +140,10 @@ breeding-app/
 │   │   │       ├── edit/
 │   │   │       │   ├── page.tsx      ← EDIT DOG screen
 │   │   │       │   └── EditDogForm.tsx ← edit form (client component)
+│   │   │       ├── health/
+│   │   │       │   └── new/
+│   │   │       │       ├── page.tsx      ← ADD HEALTH RECORD
+│   │   │       │       └── AddHealthRecordForm.tsx ← form (client component)
 │   │   │       ├── contract/
 │   │   │       │   ├── page.tsx      ← CONTRACT GENERATOR
 │   │   │       │   └── ContractView.tsx ← buyer form + contract preview (client)
@@ -308,12 +320,9 @@ npx prisma studio
 
 ## Next steps (roughly in order of value)
 
-1. **Health records** — vaccinations, worming, flea treatments, hip/elbow
-   scores, DNA tests. Replace the blank healthcare table in the info pack
-   with real data.
-2. **Heat cycle tracking** — season dates, progesterone readings, predicted
+1. **Heat cycle tracking** — season dates, progesterone readings, predicted
    whelp dates. The schema has a stub for this (`HeatCycle`).
-3. **Public marketplace** — a Pets4Homes-style listing page for available
+2. **Public marketplace** — a Pets4Homes-style listing page for available
    puppies, built from the existing data. The "Listing" model stub is
    reserved in the schema.
 
@@ -334,6 +343,7 @@ data model. Worked examples exist for every pattern:
 - **CHART:** `src/app/litters/[id]/GrowthChart.tsx` — Recharts client component fed from server data.
 - **MULTI-CREATE:** `src/app/litters/new/` — creates two linked records (Mating + Litter) in one action.
 - **CRM / ASSIGN:** `src/app/buyers/` + `AssignBuyer.tsx` — CRUD pages, dropdown assigns buyer to puppy, contract pre-fills.
+- **HEALTH:** `src/app/dogs/[id]/health/new/` — typed record form, info pack auto-fills from real data.
 
 Any new page starts with `const breeder = await getBreeder()` and follows one
 of those patterns.
