@@ -140,6 +140,13 @@ once, and re-arrange/print it differently** for each feature.
       `updatePuppyCollar` server action. Home page now shows all active
       litters (previously only showed the first one).
 
+- [x] **Inbreeding Coefficient (COI)** — `coiPercent` and `breedAvgCoi` fields
+      on the Mating model. Entered when creating or editing a litter (looked
+      up from KC Mate Select). Litter detail page shows a colour-coded COI
+      card: green (below 80% of breed avg), amber (80–100%), red (above avg),
+      grey (no breed average set). Helps breeders make responsible pairing
+      decisions at a glance.
+
 **All planned milestones complete.** The app now supports the full workflow:
 add dogs → record matings and litters → add puppies → track daily weights →
 view growth charts → log health records → track heat cycles with progesterone
@@ -174,6 +181,7 @@ breeding-app/
 │   │   │                       savePhoto, deletePhoto,
 │   │   │                       createWelfareCheck, deleteWelfareCheck,
 │   │   │                       updatePuppyCollar)
+│   │   │                       (COI data saved via createLitter/updateLitter)
 │   │   ├── DashboardLitters.tsx ← litter switcher + growth chart (client component)
 │   │   ├── ThemeProvider.tsx ← class-based dark mode (localStorage + system pref)
 │   │   ├── AppShell.tsx     ← app shell: top header + bottom nav (client component)
@@ -437,6 +445,7 @@ data model. Worked examples exist for every pattern:
 - **MARKETPLACE:** `src/app/marketplace/` — public pages (no auth), `src/app/listings/` — breeder management.
 - **PHOTO UPLOAD:** `src/app/dogs/[id]/PhotoUpload.tsx` — client-side Supabase Storage upload → server action saves URL.
 - **WELFARE CHECK:** `src/app/litters/[id]/welfare/new/` — timestamped litter welfare visits with concerns tracking.
+- **COI:** `coiPercent` + `breedAvgCoi` on Mating model — entered in litter create/edit forms, colour-coded display on litter detail.
 - **APP SHELL:** `src/app/AppShell.tsx` + `AppShellWrapper.tsx` — persistent bottom nav + top header, excluded from public/print pages.
 - **DARK MODE:** `src/app/ThemeProvider.tsx` — class-based toggle with localStorage, `@custom-variant dark` in globals.css.
 
