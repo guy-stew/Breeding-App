@@ -132,6 +132,14 @@ once, and re-arrange/print it differently** for each feature.
       polished dog list with gradient avatars. App shell excluded from login,
       marketplace, contract, and info-pack pages.
 
+- [x] **Dashboard improvements** — Growth chart on the home dashboard showing
+      puppy weights for the selected litter. Litter switcher tabs when multiple
+      active litters exist. Removed "My dogs" and "Marketplace" sections
+      (redundant with bottom nav). Collar colour editor on litter detail page
+      — pencil button opens a colour picker with 10 options. New
+      `updatePuppyCollar` server action. Home page now shows all active
+      litters (previously only showed the first one).
+
 **All planned milestones complete.** The app now supports the full workflow:
 add dogs → record matings and litters → add puppies → track daily weights →
 view growth charts → log health records → track heat cycles with progesterone
@@ -164,7 +172,9 @@ breeding-app/
 │   │   │                       createHeatCycle, addProgesteroneTest,
 │   │   │                       createListing, updateListingStatus,
 │   │   │                       savePhoto, deletePhoto,
-│   │   │                       createWelfareCheck, deleteWelfareCheck)
+│   │   │                       createWelfareCheck, deleteWelfareCheck,
+│   │   │                       updatePuppyCollar)
+│   │   ├── DashboardLitters.tsx ← litter switcher + growth chart (client component)
 │   │   ├── ThemeProvider.tsx ← class-based dark mode (localStorage + system pref)
 │   │   ├── AppShell.tsx     ← app shell: top header + bottom nav (client component)
 │   │   ├── AppShellWrapper.tsx ← server component loading kennel name for AppShell
@@ -232,6 +242,7 @@ breeding-app/
 │   │       │   └── NewLitterForm.tsx ← litter form (client component)
 │   │       └── [id]/
 │   │           ├── page.tsx      ← LITTER DETAIL (summary, welfare, puppies, chart)
+│   │           ├── CollarColourPicker.tsx ← change puppy collar colour (client)
 │   │           ├── welfare/
 │   │           │   ├── DeleteWelfareCheckButton.tsx ← delete button (client)
 │   │           │   └── new/
