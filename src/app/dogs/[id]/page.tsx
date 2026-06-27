@@ -53,6 +53,17 @@ export default async function DogProfilePage({
         where: { deletedAt: null },
         orderBy: { date: "desc" },
       },
+      heatCycles: {
+        where: { deletedAt: null },
+        orderBy: { startDate: "desc" },
+        include: {
+          progesteroneTests: {
+            where: { deletedAt: null },
+            orderBy: { date: "asc" },
+            take: 1,
+          },
+        },
+      },
       puppyRecord: {
         select: {
           collarColour: true,
@@ -240,6 +251,58 @@ export default async function DogProfilePage({
           </ul>
         )}
       </section>
+
+      {/* Heat cycles (bitches only) */}
+      {dog.sex === "bitch" && (
+        <section className="mb-5">
+          <div className="mb-2 flex items-center justify-between px-1">
+            <p className="text-xs text-neutral-400">
+              Heat cycles · {dog.heatCycles.length}
+            </p>
+            <Link
+              href={`/dogs/${dog.id}/heat-cycles/new`}
+              className="text-xs font-medium text-pink-600 dark:text-pink-400"
+            >
+              + Record cycle
+            </Link>
+          </div>
+          {dog.heatCycles.length === 0 ? (
+            <p className="rounded-xl border border-neutral-200 bg-white p-4 text-center text-sm text-neutral-400 dark:border-neutral-800 dark:bg-neutral-900">
+              No heat cycles recorded yet.
+            </p>
+          ) : (
+            <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
+              {dog.heatCycles.map((cycle) => (
+                <li key={cycle.id}>
+                  <Link
+                    href={`/dogs/${dog.id}/heat-cycles/${cycle.id}`}
+                    className="flex items-center justify-between px-4 py-2.5 hover:bg-neutral-50 dark:hover:bg-neutral-800"
+                  >
+                    <div>
+                      <div className="text-sm font-medium">
+                        {formatDate(cycle.startDate)}
+                      </div>
+                      <div className="text-xs text-neutral-500">
+                        {cycle.progesteroneTests.length > 0
+                          ? `${cycle.progesteroneTests.length}+ test${cycle.progesteroneTests.length > 1 ? "s" : ""}`
+                          : "No tests"}
+                        {cycle.endDate
+                          ? ` · ${Math.floor((cycle.endDate.getTime() - cycle.startDate.getTime()) / (1000 * 60 * 60 * 24))} days`
+                          : " · Ongoing"}
+                      </div>
+                    </div>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-xs ${!cycle.endDate ? "bg-pink-50 text-pink-700 dark:bg-pink-950 dark:text-pink-300" : "bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400"}`}
+                    >
+                      {!cycle.endDate ? "Active" : "Ended"}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
 
       {/* Recent weights */}
       <section>

@@ -58,7 +58,9 @@ export const ModelName = {
   Puppy: 'Puppy',
   WeightLog: 'WeightLog',
   Buyer: 'Buyer',
-  HealthRecord: 'HealthRecord'
+  HealthRecord: 'HealthRecord',
+  HeatCycle: 'HeatCycle',
+  ProgesteroneTest: 'ProgesteroneTest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -225,6 +227,34 @@ export const HealthRecordScalarFieldEnum = {
 } as const
 
 export type HealthRecordScalarFieldEnum = (typeof HealthRecordScalarFieldEnum)[keyof typeof HealthRecordScalarFieldEnum]
+
+
+export const HeatCycleScalarFieldEnum = {
+  id: 'id',
+  dogId: 'dogId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HeatCycleScalarFieldEnum = (typeof HeatCycleScalarFieldEnum)[keyof typeof HeatCycleScalarFieldEnum]
+
+
+export const ProgesteroneTestScalarFieldEnum = {
+  id: 'id',
+  heatCycleId: 'heatCycleId',
+  date: 'date',
+  levelNgMl: 'levelNgMl',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ProgesteroneTestScalarFieldEnum = (typeof ProgesteroneTestScalarFieldEnum)[keyof typeof ProgesteroneTestScalarFieldEnum]
 
 
 export const SortOrder = {

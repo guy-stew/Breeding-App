@@ -57,3 +57,13 @@ export type Buyer = Prisma.BuyerModel
  * 
  */
 export type HealthRecord = Prisma.HealthRecordModel
+/**
+ * Model HeatCycle
+ * 
+ */
+export type HeatCycle = Prisma.HeatCycleModel
+/**
+ * Model ProgesteroneTest
+ * 
+ */
+export type ProgesteroneTest = Prisma.ProgesteroneTestModel

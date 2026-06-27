@@ -704,3 +704,86 @@ export async function deleteHealthRecord(
   revalidatePath(`/dogs/${dogId}`);
   return { ok: true };
 }
+
+// ============================================================
+//  12. createHeatCycle — record a new heat/season for a bitch.
+// ============================================================
+type CreateHeatCycleInput = {
+  dogId: string;
+  startDate: string;
+  endDate: string;
+  notes: string;
+};
+
+export async function createHeatCycle(
+  input: CreateHeatCycleInput,
+): Promise<{ ok: true; cycleId: string } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const { dogId, startDate, endDate, notes } = input;
+  if (!dogId || !startDate) {
+    return { ok: false, error: "Start date is required." };
+  }
+
+  const dog = await prisma.dog.findFirst({
+    where: { id: dogId, breederId: breeder.id, deletedAt: null },
+  });
+  if (!dog) return { ok: false, error: "Dog not found." };
+
+  const cycle = await prisma.heatCycle.create({
+    data: {
+      dogId,
+      startDate: new Date(startDate),
+      endDate: endDate ? new Date(endDate) : null,
+      notes: notes || null,
+    },
+  });
+
+  revalidatePath(`/dogs/${dogId}`);
+  redirect(`/dogs/${dogId}/heat-cycles/${cycle.id}`);
+}
+
+// ============================================================
+//  13. addProgesteroneTest — log a blood test result.
+// ============================================================
+type AddProgTestInput = {
+  cycleId: string;
+  dogId: string;
+  date: string;
+  levelNgMl: number;
+  notes: string;
+};
+
+export async function addProgesteroneTest(
+  input: AddProgTestInput,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const { cycleId, dogId, date, levelNgMl, notes } = input;
+  if (!cycleId || !date || levelNgMl < 0) {
+    return { ok: false, error: "Date and level are required." };
+  }
+
+  // Verify ownership via the cycle's dog.
+  const cycle = await prisma.heatCycle.findFirst({
+    where: { id: cycleId, deletedAt: null },
+    include: { dog: { select: { breederId: true } } },
+  });
+  if (!cycle || cycle.dog.breederId !== breeder.id) {
+    return { ok: false, error: "Cycle not found." };
+  }
+
+  await prisma.progesteroneTest.create({
+    data: {
+      heatCycleId: cycleId,
+      date: new Date(date),
+      levelNgMl,
+      notes: notes || null,
+    },
+  });
+
+  revalidatePath(`/dogs/${dogId}/heat-cycles/${cycleId}`);
+  return { ok: true };
+}

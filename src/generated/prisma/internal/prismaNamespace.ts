@@ -391,7 +391,9 @@ export const ModelName = {
   Puppy: 'Puppy',
   WeightLog: 'WeightLog',
   Buyer: 'Buyer',
-  HealthRecord: 'HealthRecord'
+  HealthRecord: 'HealthRecord',
+  HeatCycle: 'HeatCycle',
+  ProgesteroneTest: 'ProgesteroneTest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -407,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord"
+    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "progesteroneTest"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1003,6 +1005,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HeatCycle: {
+      payload: Prisma.$HeatCyclePayload<ExtArgs>
+      fields: Prisma.HeatCycleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HeatCycleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HeatCycleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>
+        }
+        findFirst: {
+          args: Prisma.HeatCycleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HeatCycleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>
+        }
+        findMany: {
+          args: Prisma.HeatCycleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>[]
+        }
+        create: {
+          args: Prisma.HeatCycleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>
+        }
+        createMany: {
+          args: Prisma.HeatCycleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HeatCycleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>[]
+        }
+        delete: {
+          args: Prisma.HeatCycleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>
+        }
+        update: {
+          args: Prisma.HeatCycleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>
+        }
+        deleteMany: {
+          args: Prisma.HeatCycleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HeatCycleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HeatCycleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>[]
+        }
+        upsert: {
+          args: Prisma.HeatCycleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatCyclePayload>
+        }
+        aggregate: {
+          args: Prisma.HeatCycleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHeatCycle>
+        }
+        groupBy: {
+          args: Prisma.HeatCycleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HeatCycleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HeatCycleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HeatCycleCountAggregateOutputType> | number
+        }
+      }
+    }
+    ProgesteroneTest: {
+      payload: Prisma.$ProgesteroneTestPayload<ExtArgs>
+      fields: Prisma.ProgesteroneTestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ProgesteroneTestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ProgesteroneTestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>
+        }
+        findFirst: {
+          args: Prisma.ProgesteroneTestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ProgesteroneTestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>
+        }
+        findMany: {
+          args: Prisma.ProgesteroneTestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>[]
+        }
+        create: {
+          args: Prisma.ProgesteroneTestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>
+        }
+        createMany: {
+          args: Prisma.ProgesteroneTestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ProgesteroneTestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>[]
+        }
+        delete: {
+          args: Prisma.ProgesteroneTestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>
+        }
+        update: {
+          args: Prisma.ProgesteroneTestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>
+        }
+        deleteMany: {
+          args: Prisma.ProgesteroneTestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ProgesteroneTestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ProgesteroneTestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>[]
+        }
+        upsert: {
+          args: Prisma.ProgesteroneTestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ProgesteroneTestPayload>
+        }
+        aggregate: {
+          args: Prisma.ProgesteroneTestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateProgesteroneTest>
+        }
+        groupBy: {
+          args: Prisma.ProgesteroneTestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgesteroneTestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ProgesteroneTestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ProgesteroneTestCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1190,6 +1340,34 @@ export const HealthRecordScalarFieldEnum = {
 } as const
 
 export type HealthRecordScalarFieldEnum = (typeof HealthRecordScalarFieldEnum)[keyof typeof HealthRecordScalarFieldEnum]
+
+
+export const HeatCycleScalarFieldEnum = {
+  id: 'id',
+  dogId: 'dogId',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HeatCycleScalarFieldEnum = (typeof HeatCycleScalarFieldEnum)[keyof typeof HeatCycleScalarFieldEnum]
+
+
+export const ProgesteroneTestScalarFieldEnum = {
+  id: 'id',
+  heatCycleId: 'heatCycleId',
+  date: 'date',
+  levelNgMl: 'levelNgMl',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type ProgesteroneTestScalarFieldEnum = (typeof ProgesteroneTestScalarFieldEnum)[keyof typeof ProgesteroneTestScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1528,6 +1706,8 @@ export type GlobalOmitConfig = {
   weightLog?: Prisma.WeightLogOmit
   buyer?: Prisma.BuyerOmit
   healthRecord?: Prisma.HealthRecordOmit
+  heatCycle?: Prisma.HeatCycleOmit
+  progesteroneTest?: Prisma.ProgesteroneTestOmit
 }
 
 /* Types for Logging */

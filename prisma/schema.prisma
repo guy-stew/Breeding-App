@@ -100,6 +100,7 @@ model Dog {
   matingsAsSire  Mating[] @relation("MatingSire")
   weightLogs     WeightLog[]
   healthRecords  HealthRecord[]
+  heatCycles     HeatCycle[]
   // If this Dog record IS a puppy in a litter, this links to that role.
   puppyRecord    Puppy?
 
@@ -354,12 +355,54 @@ model HealthRecord {
   @@index([dogId, date])
 }
 
+// ------------------------------------------------------------
+//  9. HeatCycle — a bitch's season. Tracks start/end dates and
+//     links to progesterone tests for timing matings.
+// ------------------------------------------------------------
+model HeatCycle {
+  id    String @id @default(uuid())
+  dog   Dog    @relation(fields: [dogId], references: [id])
+  dogId String
+
+  startDate DateTime
+  endDate   DateTime?
+  notes     String?
+
+  progesteroneTests ProgesteroneTest[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([dogId])
+}
+
+// ------------------------------------------------------------
+//  10. ProgesteroneTest — blood test result during a heat cycle.
+//      Level in ng/ml drives mating timing decisions.
+//      Key thresholds: <1 baseline, ~2 LH surge, ~5 ovulation.
+// ------------------------------------------------------------
+model ProgesteroneTest {
+  id          String    @id @default(uuid())
+  heatCycle   HeatCycle @relation(fields: [heatCycleId], references: [id])
+  heatCycleId String
+
+  date      DateTime
+  levelNgMl Float     // ng/ml
+  notes     String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([heatCycleId])
+}
+
 // ============================================================
 //  Reserved for later builds — shape noted, not yet modelled.
 //  Uncomment and flesh out when each phase arrives.
 // ============================================================
 //
-//  model HeatCycle    { ... }   // seasons + progesterone readings
 //  model WelfareCheck { ... }   // timestamped in-person litter checks
 //  model Document     { ... }   // generated contracts / packs
 //  model Listing      { ... }   // marketplace view onto records
