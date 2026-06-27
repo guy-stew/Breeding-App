@@ -41,9 +41,25 @@ export default async function HomePage() {
         <SignOutButton />
       </header>
 
+      {!activeLitter && (
+        <section className="mb-5">
+          <Link
+            href="/litters/new"
+            className="block rounded-xl border-2 border-dashed border-neutral-300 p-4 text-center text-sm text-neutral-500 hover:border-blue-400 hover:text-blue-600 dark:border-neutral-700 dark:hover:border-blue-500"
+          >
+            + Record a new litter
+          </Link>
+        </section>
+      )}
+
       {activeLitter && (
         <section className="mb-5">
-          <p className="mb-1 px-1 text-xs text-neutral-400">Happening now</p>
+          <p className="mb-1 flex items-center justify-between px-1">
+            <span className="text-xs text-neutral-400">Happening now</span>
+            <Link href="/litters/new" className="text-xs font-medium text-blue-600 dark:text-blue-400">
+              + New litter
+            </Link>
+          </p>
           <div className="rounded-xl border border-blue-500/40 bg-white p-4 dark:bg-neutral-900">
             <div className="mb-3 flex items-center justify-between">
               <Link href={`/litters/${activeLitter.id}`} className="font-medium hover:text-blue-600">

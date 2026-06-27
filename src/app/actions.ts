@@ -197,6 +197,237 @@ export async function updateDog(
   redirect(`/dogs/${input.id}`);
 }
 
+// ============================================================
+//  createLitter — record a new mating + litter in one step.
+//
+//  The breeder picks a dam and sire from their dogs, enters the
+//  mating and whelp dates, and the action creates both the Mating
+//  and the Litter records. Puppies are added separately afterwards.
+// ============================================================
+
+type CreateLitterInput = {
+  damId: string;
+  sireId: string;
+  matingDate?: string;
+  method?: string;
+  name?: string;
+  whelpDate: string;
+  totalBorn?: string;
+  bornAlive?: string;
+  notes?: string;
+};
+
+export async function createLitter(
+  input: CreateLitterInput,
+): Promise<{ ok: true; litterId: string } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not logged in." };
+
+  if (!input.damId) return { ok: false, error: "Please select a dam." };
+  if (!input.sireId) return { ok: false, error: "Please select a sire." };
+
+  const whelpDate = new Date(input.whelpDate);
+  if (Number.isNaN(whelpDate.getTime())) {
+    return { ok: false, error: "Please enter a valid whelp date." };
+  }
+
+  const matingDate = input.matingDate ? new Date(input.matingDate) : undefined;
+  if (matingDate && Number.isNaN(matingDate.getTime())) {
+    return { ok: false, error: "That mating date isn't valid." };
+  }
+
+  const validMethods = ["natural", "ai_fresh", "ai_chilled", "ai_frozen"];
+  const method = validMethods.includes(input.method ?? "")
+    ? (input.method as "natural" | "ai_fresh" | "ai_chilled" | "ai_frozen")
+    : "natural";
+
+  const totalBorn = input.totalBorn ? parseInt(input.totalBorn, 10) : undefined;
+  const bornAlive = input.bornAlive ? parseInt(input.bornAlive, 10) : undefined;
+
+  try {
+    const mating = await prisma.mating.create({
+      data: {
+        damId: input.damId,
+        sireId: input.sireId,
+        ...(matingDate ? { matingDate } : {}),
+        method,
+      },
+    });
+
+    const litter = await prisma.litter.create({
+      data: {
+        breederId: breeder.id,
+        matingId: mating.id,
+        name: input.name?.trim() || null,
+        whelpDate,
+        ...(totalBorn !== undefined && !Number.isNaN(totalBorn)
+          ? { totalBorn }
+          : {}),
+        ...(bornAlive !== undefined && !Number.isNaN(bornAlive)
+          ? { bornAlive }
+          : {}),
+        notes: input.notes?.trim() || null,
+        status: "whelped",
+      },
+    });
+
+    revalidatePath("/");
+    return { ok: true, litterId: litter.id };
+  } catch {
+    return { ok: false, error: "Could not save the litter — please try again." };
+  }
+}
+
+// ============================================================
+//  updateLitter — edit an existing litter's details.
+// ============================================================
+
+type UpdateLitterInput = {
+  id: string;
+  name?: string;
+  whelpDate: string;
+  totalBorn?: string;
+  bornAlive?: string;
+  notes?: string;
+  status?: string;
+};
+
+export async function updateLitter(
+  input: UpdateLitterInput,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not logged in." };
+
+  const existing = await prisma.litter.findFirst({
+    where: { id: input.id, breederId: breeder.id, deletedAt: null },
+  });
+  if (!existing) return { ok: false, error: "Litter not found." };
+
+  const whelpDate = new Date(input.whelpDate);
+  if (Number.isNaN(whelpDate.getTime())) {
+    return { ok: false, error: "Please enter a valid whelp date." };
+  }
+
+  const validStatuses = ["expecting", "whelped", "weaning", "ready", "all_homed"];
+  const status = validStatuses.includes(input.status ?? "")
+    ? (input.status as "expecting" | "whelped" | "weaning" | "ready" | "all_homed")
+    : undefined;
+
+  const totalBorn = input.totalBorn ? parseInt(input.totalBorn, 10) : undefined;
+  const bornAlive = input.bornAlive ? parseInt(input.bornAlive, 10) : undefined;
+
+  try {
+    await prisma.litter.update({
+      where: { id: input.id },
+      data: {
+        name: input.name?.trim() || null,
+        whelpDate,
+        ...(totalBorn !== undefined && !Number.isNaN(totalBorn)
+          ? { totalBorn }
+          : {}),
+        ...(bornAlive !== undefined && !Number.isNaN(bornAlive)
+          ? { bornAlive }
+          : {}),
+        notes: input.notes?.trim() || null,
+        ...(status ? { status } : {}),
+      },
+    });
+  } catch {
+    return { ok: false, error: "Could not save — please try again." };
+  }
+
+  revalidatePath(`/litters/${input.id}`);
+  revalidatePath("/");
+  redirect(`/litters/${input.id}`);
+}
+
+// ============================================================
+//  addPuppy — add a puppy to an existing litter.
+//
+//  Creates a Dog record (breed/sex/DOB from parents + litter)
+//  AND a Puppy record linked to it, in one step.
+// ============================================================
+
+type AddPuppyInput = {
+  litterId: string;
+  sex: string;
+  collarColour?: string;
+  birthOrder?: string;
+  birthWeightG?: string;
+};
+
+export async function addPuppy(
+  input: AddPuppyInput,
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not logged in." };
+
+  const litter = await prisma.litter.findFirst({
+    where: { id: input.litterId, breederId: breeder.id, deletedAt: null },
+    include: {
+      mating: {
+        include: {
+          dam: { select: { id: true, breed: true } },
+          sire: { select: { id: true } },
+        },
+      },
+    },
+  });
+  if (!litter) return { ok: false, error: "Litter not found." };
+
+  if (input.sex !== "dog" && input.sex !== "bitch") {
+    return { ok: false, error: "Please choose dog or bitch." };
+  }
+
+  const birthOrder = input.birthOrder ? parseInt(input.birthOrder, 10) : undefined;
+  const birthWeightG = input.birthWeightG
+    ? Math.round(parseFloat(input.birthWeightG))
+    : undefined;
+
+  const breed = litter.mating?.dam?.breed ?? "Unknown";
+
+  try {
+    // Create the Dog record first.
+    const pupDog = await prisma.dog.create({
+      data: {
+        breederId: breeder.id,
+        callName: input.collarColour
+          ? `${input.collarColour.trim()} pup`
+          : null,
+        breed,
+        sex: input.sex,
+        dateOfBirth: litter.whelpDate,
+        sireId: litter.mating?.sire?.id ?? undefined,
+        damId: litter.mating?.dam?.id ?? undefined,
+        status: "active",
+      },
+    });
+
+    // Then the Puppy record pointing at it.
+    await prisma.puppy.create({
+      data: {
+        litterId: litter.id,
+        dogId: pupDog.id,
+        sex: input.sex,
+        collarColour: input.collarColour?.trim() || null,
+        ...(birthOrder !== undefined && !Number.isNaN(birthOrder)
+          ? { birthOrder }
+          : {}),
+        ...(birthWeightG !== undefined && !Number.isNaN(birthWeightG)
+          ? { birthWeightG }
+          : {}),
+        status: "available",
+      },
+    });
+  } catch {
+    return { ok: false, error: "Could not save the puppy — please try again." };
+  }
+
+  revalidatePath(`/litters/${input.litterId}`);
+  revalidatePath("/");
+  redirect(`/litters/${input.litterId}`);
+}
+
 export async function addDog(input: AddDogInput): Promise<AddDogResult> {
   // --- Find the breeder this dog belongs to. ---
   const breeder = await getBreeder();

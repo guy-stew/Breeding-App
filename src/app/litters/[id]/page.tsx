@@ -79,9 +79,17 @@ export default async function LitterDetailPage({
           <h1 className="text-lg font-medium">
             {litter.name ?? "Litter"}
           </h1>
-          <span className="rounded-full bg-blue-50 px-3 py-1 text-xs text-blue-800 dark:bg-blue-950 dark:text-blue-200">
-            Day {day}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-blue-50 px-3 py-1 text-xs text-blue-800 dark:bg-blue-950 dark:text-blue-200">
+              Day {day}
+            </span>
+            <Link
+              href={`/litters/${litter.id}/edit`}
+              className="text-xs font-medium text-blue-600 dark:text-blue-400"
+            >
+              Edit
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -165,9 +173,17 @@ export default async function LitterDetailPage({
 
       {/* Puppies */}
       <section>
-        <p className="mb-2 px-1 text-xs text-neutral-400">
-          Puppies · {litter.puppies.length}
-        </p>
+        <div className="mb-2 flex items-center justify-between px-1">
+          <p className="text-xs text-neutral-400">
+            Puppies · {litter.puppies.length}
+          </p>
+          <Link
+            href={`/litters/${litter.id}/add-puppy`}
+            className="text-xs font-medium text-blue-600 dark:text-blue-400"
+          >
+            + Add puppy
+          </Link>
+        </div>
         {litter.puppies.length === 0 ? (
           <p className="rounded-xl border border-neutral-200 bg-white p-4 text-center text-sm text-neutral-400 dark:border-neutral-800 dark:bg-neutral-900">
             No puppies recorded yet.
