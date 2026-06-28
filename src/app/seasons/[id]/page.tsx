@@ -4,13 +4,15 @@ import { prisma } from "@/lib/prisma";
 import { getBreeder } from "@/lib/breeder";
 import {
   derivePhase, deriveConfidence, fertileWindow, predictedWhelp, daysStanding,
-  estimateOvulationDay, daysBetween,
+  estimateOvulationDay, daysBetween, gestation, GESTATION_DAYS, OVULATION_NG_ML,
   type CycleInput, type CycleOutcome, type HeatSignKind, type Phase, type Confidence,
 } from "@/lib/cycle";
 import CycleTimeline, { type TimelineMarker } from "./CycleTimeline";
 import SignLogger from "./SignLogger";
 import AddReadingForm from "./AddReadingForm";
 import SeasonProgesteroneChart from "./SeasonProgesteroneChart";
+import MatingLogger from "./MatingLogger";
+import ScanLogger from "./ScanLogger";
 import { initial } from "../../avatar";
 
 function fmt(d: Date) {
@@ -36,6 +38,7 @@ const SIGN_COLOR: Record<string, string> = {
   standing: "#16a34a", tail_flagging: "#f59e0b", refusing: "#9ca3af",
 };
 const PINK = "#F4C0D1", ESTRUS = "#9FE1CB", DIESTRUS = "#B5D4F4", GREEN = "#16a34a";
+const MS_ICON: Record<string, string> = { scan: "🩻", diet: "🍚", box: "🏠", due: "🐾" };
 
 function MetricCard({ label, value, hint, tint, valueColor }: { label: string; value: React.ReactNode; hint?: string; tint?: string; valueColor?: string }) {
   return (
@@ -99,6 +102,29 @@ export default async function SeasonDetailPage({ params }: { params: Promise<{ i
   const name = cycle.dog.callName ?? "Dog";
   const accent = ACCENT[phase];
 
+  // Pregnant-state data.
+  const g = gestation(input, today);
+  const ovulationTest = cycle.progesteroneTests.find((t) => t.levelNgMl >= OVULATION_NG_ML);
+  const firstStanding = cycle.signs.find((s) => s.type === "standing");
+  const matingDates = cycle.matings
+    .map((m) => m.matingDate)
+    .filter((d): d is Date => !!d)
+    .sort((a, b) => a.getTime() - b.getTime());
+  const sire = cycle.matings[0]?.sire;
+
+  // Sires for the "log mating" picker (male, non-dam, owned-or-external).
+  const sireRows = await prisma.dog.findMany({
+    where: { breederId: breeder.id, deletedAt: null, puppyRecord: null, sex: "dog", id: { not: cycle.dogId } },
+    select: { id: true, callName: true },
+    orderBy: { callName: "asc" },
+  });
+  const sireOptions = sireRows.map((s) => ({ id: s.id, name: s.callName ?? "Unnamed" }));
+
+  const subLine =
+    phase === "pregnant" && g
+      ? `${cycle.dog.breed} · mated ${matingDates.length ? matingDates.map(fmt).join(" + ") : "—"} · day ${g.day}`
+      : `${cycle.dog.breed} · ${ordinal(seasonNo)} season · day ${dayOfSeason}`;
+
   const signMarkers: TimelineMarker[] = cycle.signs.map((s) => {
     const day = daysBetween(cycle.startDate, s.date);
     return { day, label: SIGN_LABEL[s.type] ?? s.type, sub: `day ${day}`, color: SIGN_COLOR[s.type] ?? "#3b82f6" };
@@ -123,9 +149,7 @@ export default async function SeasonDetailPage({ params }: { params: Promise<{ i
             <h1 className="text-2xl font-bold tracking-tight">{name}</h1>
             <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${accent.status}`}>{accent.statusLabel}</span>
           </div>
-          <p className="text-sm text-neutral-500">
-            {cycle.dog.breed} · {ordinal(seasonNo)} season · day {dayOfSeason}
-          </p>
+          <p className="text-sm text-neutral-500">{subLine}</p>
         </div>
         <Link href={`/dogs/${cycle.dog.id}`} className="shrink-0 text-sm font-medium text-blue-600 dark:text-blue-400">
           Profile →
@@ -253,23 +277,114 @@ export default async function SeasonDetailPage({ params }: { params: Promise<{ i
               <AddReadingForm cycleId={cycle.id} />
             </div>
           </div>
+
+          <SectionLabel title="Record the mating" />
+          <MatingLogger cycleId={cycle.id} sires={sireOptions} />
         </>
       )}
 
-      {/* ============ PREGNANT / ENDED — interim (full views next stage) ============ */}
-      {(phase === "pregnant" || phase === "ended") && (
+      {/* ============ PREGNANT ============ */}
+      {phase === "pregnant" && g && (
+        <>
+          {cycle.outcome === "pregnant" ? (
+            <Banner tone="green" icon="✓" title="Confirmed in whelp." body={cycle.scanLitterCount ? `Scan showed ${cycle.scanLitterCount} puppies. On track for whelping.` : "Pregnancy confirmed by scan. On track for whelping."} />
+          ) : (
+            <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 dark:border-amber-500/30 dark:bg-amber-500/10">
+              <span className="text-lg leading-none">🔔</span>
+              <p className="flex-1 text-sm text-amber-900 dark:text-amber-200"><b>Scan due {g.day >= 28 ? "now" : `~day 28`}.</b> Pregnancy is most reliably confirmed by ultrasound around day 28–30.</p>
+              <ScanLogger cycleId={cycle.id} />
+            </div>
+          )}
+
+          <SectionLabel title="Gestation" hint={`${g.percent}% · day ${g.day} of ~${g.total}`} />
+          <div className="rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
+            <CycleTimeline
+              minDay={0}
+              maxDay={GESTATION_DAYS}
+              bands={[
+                { label: "1st", fromDay: 0, toDay: 21, color: "#EDE9FE" },
+                { label: "2nd", fromDay: 21, toDay: 42, color: "#EDE9FE" },
+                { label: "3rd", fromDay: 42, toDay: 63, color: "#EDE9FE" },
+              ]}
+              window={{ fromDay: 0, toDay: g.day, estimated: false }}
+              windowColor="#7c3aed"
+              todayDay={g.day}
+              todayLabel={`Day ${g.day}`}
+              startLabel={fmt(g.dayZero)}
+              endLabel={`~${fmt(g.whelpDate)}`}
+              endLabelAccent
+            />
+            <TimelineNote
+              tone="blue"
+              body={
+                g.trimester === 1
+                  ? "Early days — her appetite may dip briefly, then climb. The bump won't really show yet."
+                  : g.trimester === 2
+                    ? "Midway — appetite is climbing; start easing her toward puppy food over the coming weeks."
+                    : "Final stretch — set up the whelping box and start temperature checks as the due date nears."
+              }
+            />
+          </div>
+
+          <div className="mt-3 grid grid-cols-3 gap-3">
+            <MetricCard
+              label="Whelping countdown"
+              tint="border-purple-200 bg-purple-50 dark:border-purple-500/30 dark:bg-purple-500/10"
+              valueColor="text-purple-700 dark:text-purple-300"
+              value={<><span className="font-serif text-3xl">{g.countdownDays}</span> <span className="text-sm">days</span></>}
+              hint={`around ${fmt(g.whelpDate)}`}
+            />
+            <MetricCard label="Normal range" value={`${fmt(g.rangeStart)}–${fmt(g.rangeEnd)}`} hint="56–66 days" />
+            <MetricCard label="Litter so far" value={cycle.scanLitterCount ? `${cycle.scanLitterCount} seen` : "Not scanned"} hint={cycle.scanLitterCount ? "from scan" : "count after scan"} />
+          </div>
+
+          <SectionLabel title="What's coming up" hint={`${g.milestones.length} milestones`} />
+          <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+            {g.milestones.map(({ milestone, daysAway }) => {
+              const imminent = milestone.key === "scan";
+              const due = milestone.key === "due";
+              return (
+                <div key={milestone.key} className="flex items-center gap-3 border-b border-neutral-100 px-4 py-3 last:border-0 dark:border-neutral-800">
+                  <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base ${imminent ? "bg-amber-100 dark:bg-amber-500/15" : due ? "bg-purple-100 dark:bg-purple-500/15" : "bg-neutral-100 dark:bg-neutral-800"}`}>
+                    {MS_ICON[milestone.key] ?? "•"}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium">{milestone.label}</p>
+                    <p className="text-xs text-neutral-500">{milestone.detail}</p>
+                  </div>
+                  <span className={`shrink-0 text-sm ${imminent ? "text-amber-600 dark:text-amber-400" : due ? "text-purple-600 dark:text-purple-400" : "text-neutral-400"}`}>
+                    {daysAway <= 0 ? "now" : `~${daysAway} days`}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+          <SectionLabel title="This breeding" />
+          <div className="rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
+            <div className="mb-4 flex items-center gap-2 text-sm text-neutral-600 dark:text-neutral-300">
+              <span className="text-green-600 dark:text-green-400">✓</span>
+              {ovulationTest && firstStanding ? "Ovulation, standing, and the mating all line up — the timing was on point." : "Recorded for this season."}
+            </div>
+            <div className="grid grid-cols-2 gap-px overflow-hidden rounded-lg bg-neutral-200 dark:bg-neutral-800">
+              <RecordCell label="Sire" value={sire?.callName ?? "—"} sub={sire ? (sire.ownership === "external" ? "external stud" : "your stud") : undefined} />
+              <RecordCell label="Matings" value={matingDates.length ? matingDates.map(fmt).join(" + ") : "—"} sub={matingDates.length > 1 ? "covering dates" : undefined} />
+              <RecordCell label="Ovulation" value={ovulationTest ? fmt(ovulationTest.date) : "Not pinned"} sub={ovulationTest ? `${ovulationTest.levelNgMl.toFixed(1)} ng/ml` : undefined} />
+              <RecordCell label="First stood" value={firstStanding ? fmt(firstStanding.date) : "—"} sub={firstStanding ? "behavioural" : undefined} />
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ============ ENDED — interim (full summary next stage) ============ */}
+      {phase === "ended" && (
         <div className="mt-5 rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
-          <p className="font-semibold">
-            {phase === "pregnant" ? "Mated — gestation tracking" : "Season ended"}
-          </p>
+          <p className="font-semibold">Season ended</p>
           <p className="mt-1 text-sm text-neutral-500">
-            {phase === "pregnant"
-              ? whelp.date
-                ? `Predicted whelp around ${fmt(whelp.date)} (${whelp.rangeStart && whelp.rangeEnd ? `${fmt(whelp.rangeStart)}–${fmt(whelp.rangeEnd)}` : "56–66 days"}).`
-                : "A mating is logged for this season."
-              : `This season ran ${cycle.endDate ? daysBetween(cycle.startDate, cycle.endDate) : dayOfSeason} days.`}
+            This season ran {cycle.endDate ? daysBetween(cycle.startDate, cycle.endDate) : dayOfSeason} days
+            {cycle.outcome === "not_pregnant" ? " · scan showed not in whelp" : cycle.outcome === "not_mated" ? " · not mated" : ""}.
           </p>
-          <p className="mt-3 text-xs text-neutral-400">The full {phase === "pregnant" ? "gestation planner (countdown, milestones, breeding record)" : "ended-season summary"} lands in the next update.</p>
+          <p className="mt-3 text-xs text-neutral-400">The full ended-season summary + next-season estimate land in the next update.</p>
           {cycle.progesteroneTests.length > 0 && (
             <div className="mt-4">
               <SeasonProgesteroneChart tests={cycle.progesteroneTests.map((t) => ({ date: t.date.toISOString(), levelNgMl: t.levelNgMl }))} />
@@ -311,6 +426,16 @@ function TimelineNote({ tone, body }: { tone: "blue" | "green"; body: string }) 
     <div className="mt-5 flex items-start gap-2.5 border-t border-neutral-100 pt-4 dark:border-neutral-800">
       <span className={`shrink-0 ${colour}`}>ⓘ</span>
       <p className="text-sm text-neutral-600 dark:text-neutral-300">{body}</p>
+    </div>
+  );
+}
+
+function RecordCell({ label, value, sub }: { label: string; value: string; sub?: string }) {
+  return (
+    <div className="bg-white p-3 dark:bg-neutral-900">
+      <p className="text-xs text-neutral-500">{label}</p>
+      <p className="mt-0.5 text-sm font-semibold">{value}</p>
+      {sub && <p className="text-[11px] text-neutral-400">{sub}</p>}
     </div>
   );
 }

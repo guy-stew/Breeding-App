@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { getBreeder } from "@/lib/breeder";
 import { revalidatePath } from "next/cache";
-import type { HeatSignKind } from "@/lib/cycle";
+import { addDays, GESTATION_DAYS, type HeatSignKind } from "@/lib/cycle";
 
 const SIGN_TYPES: HeatSignKind[] = [
   "discharge_start", "swelling", "discharge_change", "tail_flagging", "standing", "refusing",
@@ -52,6 +52,65 @@ export async function logProgesterone(
 
   await prisma.progesteroneTest.create({
     data: { heatCycleId: cycleId, date: d, levelNgMl },
+  });
+  revalidatePath(`/seasons/${cycleId}`);
+  return { ok: true };
+}
+
+/** Log a mating for this season → flips the page to the pregnant/gestation view. */
+export async function logMating(
+  cycleId: string,
+  sireId: string,
+  date: string,
+): Promise<Result> {
+  const breeder = await getBreeder();
+  if (!breeder) return { ok: false, error: "Not signed in." };
+
+  const cycle = await prisma.heatCycle.findFirst({
+    where: { id: cycleId, deletedAt: null, dog: { breederId: breeder.id } },
+    select: { id: true, dogId: true },
+  });
+  if (!cycle) return { ok: false, error: "Season not found." };
+
+  const sire = await prisma.dog.findFirst({
+    where: { id: sireId, breederId: breeder.id, deletedAt: null },
+    select: { id: true },
+  });
+  if (!sire) return { ok: false, error: "Please choose a sire." };
+
+  const matingDate = new Date(date);
+  if (Number.isNaN(matingDate.getTime())) return { ok: false, error: "Please enter a valid mating date." };
+
+  await prisma.mating.create({
+    data: {
+      damId: cycle.dogId,
+      sireId,
+      heatCycleId: cycleId,
+      matingDate,
+      predictedWhelpDate: addDays(matingDate, GESTATION_DAYS),
+    },
+  });
+  await prisma.heatCycle.update({ where: { id: cycleId }, data: { outcome: "mated" } });
+
+  revalidatePath(`/seasons/${cycleId}`);
+  return { ok: true };
+}
+
+/** Record the outcome of a confirmation scan from the scan-due banner. */
+export async function recordScanOutcome(
+  cycleId: string,
+  pregnant: boolean,
+  count?: number,
+): Promise<Result> {
+  const cycle = await ownedCycle(cycleId);
+  if (!cycle) return { ok: false, error: "Season not found." };
+
+  await prisma.heatCycle.update({
+    where: { id: cycleId },
+    data: {
+      outcome: pregnant ? "pregnant" : "not_pregnant",
+      scanLitterCount: pregnant ? (count && count > 0 ? count : null) : null,
+    },
   });
   revalidatePath(`/seasons/${cycleId}`);
   return { ok: true };

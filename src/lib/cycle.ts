@@ -86,9 +86,12 @@ export function estimateOvulationDay(c: CycleInput): number {
 
 // --- Phase + confidence ----------------------------------------------------
 export function derivePhase(c: CycleInput, today: Date): Phase {
+  // A confirmed-empty or explicitly-not-mated scan ends the season even if a
+  // covering mating was logged — check these before the mated→pregnant rule.
+  if (c.outcome === "not_pregnant" || c.outcome === "not_mated") return "ended";
   if (c.outcome === "pregnant") return "pregnant";
   if (c.matings.length > 0) return "pregnant";
-  if (c.outcome === "not_mated" || c.outcome === "not_pregnant" || c.endDate) return "ended";
+  if (c.endDate) return "ended";
 
   const day = daysBetween(c.startDate, today);
   const ov = estimateOvulationDay(c);
