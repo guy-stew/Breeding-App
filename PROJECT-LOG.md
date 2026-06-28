@@ -6,10 +6,13 @@ A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 28 June 2026 — rebranded to **WhelpWise** (logo + favicons +
-app name wired in), on top of a full responsive UI overhaul (desktop sidebar
-shell + redesigned dashboard, dogs list, litter detail, puppy record, and
-detailed add-dog screens). The app covers the full breeding cycle, buyer
+*Last updated: 28 June 2026 — **launched on the custom domain
+[www.whelpwise.dog](https://www.whelpwise.dog)**. Today's work: rebranded to
+**WhelpWise** (logo + favicons + app name), a full responsive UI overhaul
+(desktop sidebar shell + redesigned dashboard, dogs list, litter detail, puppy
+record, and detailed add-dog screens), built out the Seasons / Matings /
+Growth / Contracts pages, and renamed the GitHub repo, Vercel project, and
+Supabase project to `whelpwise`. The app covers the full breeding cycle, buyer
 management, health records, heat cycle tracking, public marketplace, photo
 uploads, welfare checks, and a polished app shell with dark mode. Login
 required for breeder pages; marketplace is public.*
@@ -37,6 +40,26 @@ required for breeder pages; marketplace is public.*
   with a light/dark swap; the page `<title>` and PWA name are "WhelpWise".
 
 ---
+
+## Live domain & hosting
+
+- **Primary URL: [www.whelpwise.dog](https://www.whelpwise.dog)** — HTTPS, auto
+  SSL via Vercel.
+- **Redirects** (all 308 → `www.whelpwise.dog`): the bare apex `whelpwise.dog`,
+  plus `whelpwise.co.uk` and `www.whelpwise.co.uk`. The old
+  `whelpwise.vercel.app` still resolves too.
+- **Registrar:** both `whelpwise.dog` and `whelpwise.co.uk` are at **123-reg**.
+  DNS stays at 123-reg (not Vercel nameservers), so email/MX is untouched.
+- **DNS records** (per domain, the values Vercel issued in the dashboard):
+  - `A` `@` → `216.150.1.1` (Vercel apex anycast IP)
+  - `CNAME` `www` → a Vercel-issued target (`*.vercel-dns-016.com`)
+- **To change which domain is canonical:** Vercel → project `whelpwise` →
+  Settings → Domains → set the desired domain to "No redirect" and point the
+  others at it. (Currently `www.whelpwise.dog` is canonical, by choice.)
+- **Renames (28 June 2026):** GitHub repo, Vercel project, and Supabase project
+  were all renamed to `whelpwise`. The Supabase rename was display-name only —
+  connection strings and env vars are unchanged. The **local folder is still
+  `Breeding-app`** (not renamed).
 
 ## What this app is
 
@@ -71,7 +94,8 @@ once, and re-arrange/print it differently** for each feature.
 - [x] Sample data loaded via `npx prisma db seed`
 - [x] Home screen reads live data and renders in the browser
 - [x] Code pushed to GitHub (`guy-stew/whelpwise`, renamed from `Breeding-App` on 28 June 2026)
-- [x] Live on Vercel (breeding-app.vercel.app)
+- [x] Live on Vercel (originally `breeding-app.vercel.app`; now live at
+      **https://www.whelpwise.dog** — see "Live domain & hosting" below)
 - [x] **First WRITE feature: weigh-in round** — log each puppy's weight, saved
       to the database, screen refreshes to show it. (First genuinely useful tool.)
 - [x] **Second WRITE feature: add a dog** — a form at `/dogs/new` creates a new
