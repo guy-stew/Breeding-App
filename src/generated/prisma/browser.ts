@@ -82,3 +82,13 @@ export type Listing = Prisma.ListingModel
  * 
  */
 export type WelfareCheck = Prisma.WelfareCheckModel
+/**
+ * Model Breed
+ * 
+ */
+export type Breed = Prisma.BreedModel
+/**
+ * Model BreedDataImport
+ * 
+ */
+export type BreedDataImport = Prisma.BreedDataImportModel

@@ -1,31 +1,29 @@
 // ============================================================
-//  src/app/dogs/new/AddDogForm.tsx — the detailed add-a-dog form.
+//  src/app/dogs/new/AddDogForm.tsx — breed-aware add-a-dog form.
 //
-//  Client component. Identity is all that's needed to save (breed
-//  + sex); Health screening and DNA tests are optional and persist
-//  as HealthRecord rows via the addDog server action.
+//  Breed is a typeahead from the KC list. Picking a breed fetches
+//  that breed's recommended Good/Best Practice tests and surfaces
+//  the relevant hip/elbow/eye flags + DNA test rows. Health/DNA
+//  persist as HealthRecord rows via the addDog server action.
 // ============================================================
 
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { addDog } from "../../actions";
+import BreedCombobox from "../../BreedCombobox";
+import { getBreedTests, type BreedRecommendation } from "../../breed-actions";
+import type { BreedTest } from "@/lib/breeds/parse";
 
-const DNA_GENES = [
-  "CEA (Collie Eye Anomaly)",
-  "DM (Degenerative Myelopathy)",
-  "TNS (Trapped Neutrophil Syndrome)",
-  "CL (Ceroid Lipofuscinosis)",
-  "MDR1 (Drug Sensitivity)",
-  "Other",
-];
-const DNA_RESULTS = ["Clear", "Carrier", "Affected"];
+const DNA_RESULTS = ["Not tested", "Clear", "Carrier", "Affected"];
 const EYE_RESULTS = ["Not tested", "Clear", "Affected"];
 
-type DnaTest = { gene: string; result: string };
+function geneLabel(t: BreedTest): string {
+  return t.code ? `${t.label} (${t.code})` : t.label;
+}
 
-export default function AddDogForm() {
+export default function AddDogForm({ breeds }: { breeds: string[] }) {
   const router = useRouter();
 
   // Identity
@@ -44,20 +42,45 @@ export default function AddDogForm() {
   const [eyeTest, setEyeTest] = useState("Not tested");
   const [testDate, setTestDate] = useState("");
 
-  // DNA
-  const [dnaTests, setDnaTests] = useState<DnaTest[]>([]);
+  // Breed recommendations + DNA capture
+  const [rec, setRec] = useState<BreedRecommendation | null>(null);
+  const [recDna, setRecDna] = useState<Record<string, string>>({});
+  const [extraDna, setExtraDna] = useState<{ gene: string; result: string }[]>([]);
+  const lastFetched = useRef<string | null>(null);
 
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
+  async function fetchRec(name: string) {
+    if (lastFetched.current === name) return;
+    lastFetched.current = name;
+    const r = await getBreedTests(name);
+    setRec(r);
+    if (r) {
+      const init: Record<string, string> = {};
+      [...r.goodPractice, ...r.bestPractice]
+        .filter((t) => t.category === "dna")
+        .forEach((t) => (init[geneLabel(t)] = "Not tested"));
+      setRecDna(init);
+    } else {
+      setRecDna({});
+    }
+  }
+
+  function handleBreedChange(v: string) {
+    setBreed(v);
+    const exact = breeds.find((b) => b.toLowerCase() === v.trim().toLowerCase());
+    if (exact) {
+      fetchRec(exact);
+    } else {
+      lastFetched.current = null;
+      setRec(null);
+      setRecDna({});
+    }
+  }
+
   function addDna() {
-    setDnaTests((t) => [...t, { gene: DNA_GENES[0], result: DNA_RESULTS[0] }]);
-  }
-  function updateDna(i: number, patch: Partial<DnaTest>) {
-    setDnaTests((t) => t.map((d, idx) => (idx === i ? { ...d, ...patch } : d)));
-  }
-  function removeDna(i: number) {
-    setDnaTests((t) => t.filter((_, idx) => idx !== i));
+    setExtraDna((t) => [...t, { gene: "", result: "Clear" }]);
   }
 
   function handleSave() {
@@ -65,12 +88,18 @@ export default function AddDogForm() {
     if (!breed.trim()) return setError("Please enter a breed.");
     if (sex !== "dog" && sex !== "bitch") return setError("Please choose bitch or dog.");
 
+    const dnaTests = [
+      ...Object.entries(recDna)
+        .filter(([, r]) => r && r !== "Not tested")
+        .map(([gene, result]) => ({ gene, result })),
+      ...extraDna.filter((d) => d.gene.trim()),
+    ];
+
     startTransition(async () => {
       try {
         const result = await addDog({
           callName, breed, sex, colour, dateOfBirth, microchip,
-          kcRegNumber, external, hipScore, elbowScore, eyeTest, testDate,
-          dnaTests: dnaTests.filter((d) => d.gene.trim()),
+          kcRegNumber, external, hipScore, elbowScore, eyeTest, testDate, dnaTests,
         });
         if (result && !result.ok) setError(result.error);
       } catch (e) {
@@ -86,11 +115,41 @@ export default function AddDogForm() {
     });
   }
 
+  // Derived from the selected breed.
+  const allRec = rec ? [...rec.goodPractice, ...rec.bestPractice] : [];
+  const recHip = allRec.some((t) => t.category === "hip");
+  const recElbow = allRec.some((t) => t.category === "elbow");
+  const recEye = allRec.some((t) => t.category === "eye");
+  const screenings = allRec.filter((t) => t.category === "screening");
+  const goodDna = rec?.goodPractice.filter((t) => t.category === "dna") ?? [];
+  const bestDna = rec?.bestPractice.filter((t) => t.category === "dna") ?? [];
+
   const input =
     "w-full rounded-lg border border-neutral-300 bg-white px-3.5 py-2.5 text-sm outline-none transition placeholder:text-neutral-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-neutral-700 dark:bg-neutral-950";
   const label = "mb-1.5 block text-sm font-medium text-neutral-700 dark:text-neutral-300";
   const cardClass = "rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6 dark:border-neutral-800 dark:bg-neutral-900";
   const cardTitle = "mb-4 flex items-center gap-2 text-base font-semibold";
+  const recBadge = "ml-2 rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-blue-700 dark:bg-blue-500/15 dark:text-blue-300";
+
+  function DnaRow({ gene, tier }: { gene: string; tier: "Min" | "Best" }) {
+    return (
+      <div className="flex items-center gap-2">
+        <span className="flex-1 truncate text-sm">
+          {gene}
+          <span className={`ml-2 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${tier === "Min" ? "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300" : "bg-neutral-200 text-neutral-600 dark:bg-neutral-700 dark:text-neutral-300"}`}>
+            {tier === "Min" ? "Good practice" : "Best practice"}
+          </span>
+        </span>
+        <select
+          value={recDna[gene] ?? "Not tested"}
+          onChange={(e) => setRecDna((m) => ({ ...m, [gene]: e.target.value }))}
+          className={input + " w-36"}
+        >
+          {DNA_RESULTS.map((r) => <option key={r} value={r}>{r}</option>)}
+        </select>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -106,7 +165,7 @@ export default function AddDogForm() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className={label} htmlFor="breed">Breed <span className="text-red-500">*</span></label>
-              <input id="breed" value={breed} onChange={(e) => setBreed(e.target.value)} placeholder="Border Collie" className={input} />
+              <BreedCombobox id="breed" breeds={breeds} value={breed} onChange={handleBreedChange} onSelect={fetchRec} placeholder="Start typing… e.g. Border Collie" />
             </div>
             <div>
               <label className={label} htmlFor="callName">Call name</label>
@@ -164,6 +223,23 @@ export default function AddDogForm() {
         </div>
       </div>
 
+      {/* Breed recommendation banner */}
+      {rec && (
+        <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-4 dark:border-blue-500/30 dark:bg-blue-500/5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-semibold text-blue-900 dark:text-blue-200">KC health guidance for {rec.name}</span>
+            {rec.top10 && <Flag>Top-10 breed</Flag>}
+            {rec.geneticDiversityPriority && <Flag>Genetic diversity priority</Flag>}
+            {rec.breedClubScheme && <Flag>Breed-club scheme</Flag>}
+            {rec.breedWatch && <Flag>Breed Watch</Flag>}
+          </div>
+          <p className="mt-1 text-sm text-blue-800/80 dark:text-blue-200/80">
+            {rec.goodPractice.length} good-practice (minimum) · {rec.bestPractice.length} best-practice test{rec.bestPractice.length === 1 ? "" : "s"} recommended.
+            Guidance only — informational, not a hard requirement.
+          </p>
+        </div>
+      )}
+
       {/* Health screening */}
       <div className={cardClass}>
         <h2 className={cardTitle}>
@@ -175,17 +251,17 @@ export default function AddDogForm() {
         <p className="-mt-2 mb-4 text-sm text-neutral-500">Used to check breeding eligibility. A failing result blocks matings.</p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className={label} htmlFor="hip">Hip score</label>
+            <label className={label} htmlFor="hip">Hip score {recHip && <span className={recBadge}>Recommended</span>}</label>
             <input id="hip" value={hipScore} onChange={(e) => setHipScore(e.target.value)} placeholder="e.g. 4:3" className={input} />
-            <p className="mt-1 text-xs text-neutral-400">Lower is better · breed median shown on save</p>
+            <p className="mt-1 text-xs text-neutral-400">Lower is better · once per lifetime</p>
           </div>
           <div>
-            <label className={label} htmlFor="elbow">Elbow score</label>
+            <label className={label} htmlFor="elbow">Elbow score {recElbow && <span className={recBadge}>Recommended</span>}</label>
             <input id="elbow" value={elbowScore} onChange={(e) => setElbowScore(e.target.value)} placeholder="e.g. 0" className={input} />
             <p className="mt-1 text-xs text-neutral-400">0 is ideal · 0–3 scale</p>
           </div>
           <div>
-            <label className={label} htmlFor="eye">Eye test result</label>
+            <label className={label} htmlFor="eye">Eye test result {recEye && <span className={recBadge}>Recommended</span>}</label>
             <select id="eye" value={eyeTest} onChange={(e) => setEyeTest(e.target.value)} className={input}>
               {EYE_RESULTS.map((r) => <option key={r} value={r}>{r}</option>)}
             </select>
@@ -195,6 +271,15 @@ export default function AddDogForm() {
             <input id="testDate" type="date" value={testDate} onChange={(e) => setTestDate(e.target.value)} className={input} />
           </div>
         </div>
+
+        {screenings.length > 0 && (
+          <div className="mt-4 rounded-lg bg-neutral-100 p-3 text-sm dark:bg-neutral-800/50">
+            <p className="font-medium text-neutral-700 dark:text-neutral-300">Also recommended for {rec?.name}:</p>
+            <p className="mt-1 text-neutral-500">
+              {screenings.map((s) => s.label).join(" · ")}. Record these from the dog&apos;s health log after saving.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* DNA tests */}
@@ -205,17 +290,37 @@ export default function AddDogForm() {
           </svg>
           DNA tests
         </h2>
-        <p className="-mt-2 mb-4 text-sm text-neutral-500">Add as many as you have. Each shows clear, carrier, or affected.</p>
+        <p className="-mt-2 mb-4 text-sm text-neutral-500">
+          {rec && (goodDna.length || bestDna.length)
+            ? `Recommended for ${rec.name} — set a result for any you've done (leave as "Not tested" to skip).`
+            : "Add any DNA tests you have. Each shows clear, carrier, or affected."}
+        </p>
+
+        {(goodDna.length > 0 || bestDna.length > 0) && (
+          <div className="mb-4 space-y-2.5">
+            {goodDna.map((t) => <DnaRow key={geneLabel(t)} gene={geneLabel(t)} tier="Min" />)}
+            {bestDna.map((t) => <DnaRow key={geneLabel(t)} gene={geneLabel(t)} tier="Best" />)}
+          </div>
+        )}
+
+        {/* Manual additions */}
         <div className="space-y-2.5">
-          {dnaTests.map((d, i) => (
+          {extraDna.map((d, i) => (
             <div key={i} className="flex items-center gap-2">
-              <select value={d.gene} onChange={(e) => updateDna(i, { gene: e.target.value })} className={input + " flex-1"}>
-                {DNA_GENES.map((g) => <option key={g} value={g}>{g}</option>)}
+              <input
+                value={d.gene}
+                onChange={(e) => setExtraDna((t) => t.map((x, idx) => (idx === i ? { ...x, gene: e.target.value } : x)))}
+                placeholder="Test name (e.g. PRA)"
+                className={input + " flex-1"}
+              />
+              <select
+                value={d.result}
+                onChange={(e) => setExtraDna((t) => t.map((x, idx) => (idx === i ? { ...x, result: e.target.value } : x)))}
+                className={input + " w-36"}
+              >
+                {DNA_RESULTS.filter((r) => r !== "Not tested").map((r) => <option key={r} value={r}>{r}</option>)}
               </select>
-              <select value={d.result} onChange={(e) => updateDna(i, { result: e.target.value })} className={input + " w-36"}>
-                {DNA_RESULTS.map((r) => <option key={r} value={r}>{r}</option>)}
-              </select>
-              <button type="button" onClick={() => removeDna(i)} aria-label="Remove DNA test" className="rounded-lg p-2 text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800">
+              <button type="button" onClick={() => setExtraDna((t) => t.filter((_, idx) => idx !== i))} aria-label="Remove DNA test" className="rounded-lg p-2 text-neutral-400 transition hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -226,7 +331,7 @@ export default function AddDogForm() {
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            Add DNA test
+            Add another DNA test
           </button>
         </div>
       </div>
@@ -234,22 +339,21 @@ export default function AddDogForm() {
       {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
 
       <div className="flex gap-3">
-        <button
-          type="button"
-          onClick={handleSave}
-          disabled={isPending}
-          className="flex-1 rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
-        >
+        <button type="button" onClick={handleSave} disabled={isPending} className="flex-1 rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50">
           {isPending ? "Saving…" : "Save dog"}
         </button>
-        <button
-          type="button"
-          onClick={() => router.push("/dogs")}
-          className="rounded-lg border border-neutral-300 px-6 py-3 text-sm font-medium text-neutral-700 transition hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
-        >
+        <button type="button" onClick={() => router.push("/dogs")} className="rounded-lg border border-neutral-300 px-6 py-3 text-sm font-medium text-neutral-700 transition hover:bg-neutral-50 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800">
           Cancel
         </button>
       </div>
     </div>
+  );
+}
+
+function Flag({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-blue-700 dark:bg-blue-500/15 dark:text-blue-300">
+      {children}
+    </span>
   );
 }

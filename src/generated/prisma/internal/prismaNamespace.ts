@@ -396,7 +396,9 @@ export const ModelName = {
   ProgesteroneTest: 'ProgesteroneTest',
   Photo: 'Photo',
   Listing: 'Listing',
-  WelfareCheck: 'WelfareCheck'
+  WelfareCheck: 'WelfareCheck',
+  Breed: 'Breed',
+  BreedDataImport: 'BreedDataImport'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -412,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "progesteroneTest" | "photo" | "listing" | "welfareCheck"
+    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "progesteroneTest" | "photo" | "listing" | "welfareCheck" | "breed" | "breedDataImport"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1378,6 +1380,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Breed: {
+      payload: Prisma.$BreedPayload<ExtArgs>
+      fields: Prisma.BreedFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BreedFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BreedFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        findFirst: {
+          args: Prisma.BreedFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BreedFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        findMany: {
+          args: Prisma.BreedFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>[]
+        }
+        create: {
+          args: Prisma.BreedCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        createMany: {
+          args: Prisma.BreedCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BreedCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>[]
+        }
+        delete: {
+          args: Prisma.BreedDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        update: {
+          args: Prisma.BreedUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        deleteMany: {
+          args: Prisma.BreedDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BreedUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BreedUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>[]
+        }
+        upsert: {
+          args: Prisma.BreedUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedPayload>
+        }
+        aggregate: {
+          args: Prisma.BreedAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBreed>
+        }
+        groupBy: {
+          args: Prisma.BreedGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BreedGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BreedCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BreedCountAggregateOutputType> | number
+        }
+      }
+    }
+    BreedDataImport: {
+      payload: Prisma.$BreedDataImportPayload<ExtArgs>
+      fields: Prisma.BreedDataImportFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BreedDataImportFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BreedDataImportFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>
+        }
+        findFirst: {
+          args: Prisma.BreedDataImportFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BreedDataImportFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>
+        }
+        findMany: {
+          args: Prisma.BreedDataImportFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>[]
+        }
+        create: {
+          args: Prisma.BreedDataImportCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>
+        }
+        createMany: {
+          args: Prisma.BreedDataImportCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BreedDataImportCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>[]
+        }
+        delete: {
+          args: Prisma.BreedDataImportDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>
+        }
+        update: {
+          args: Prisma.BreedDataImportUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>
+        }
+        deleteMany: {
+          args: Prisma.BreedDataImportDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BreedDataImportUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BreedDataImportUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>[]
+        }
+        upsert: {
+          args: Prisma.BreedDataImportUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BreedDataImportPayload>
+        }
+        aggregate: {
+          args: Prisma.BreedDataImportAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBreedDataImport>
+        }
+        groupBy: {
+          args: Prisma.BreedDataImportGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BreedDataImportGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BreedDataImportCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BreedDataImportCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1642,12 +1792,47 @@ export const WelfareCheckScalarFieldEnum = {
 export type WelfareCheckScalarFieldEnum = (typeof WelfareCheckScalarFieldEnum)[keyof typeof WelfareCheckScalarFieldEnum]
 
 
+export const BreedScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  top10: 'top10',
+  geneticDiversityPriority: 'geneticDiversityPriority',
+  breedClubScheme: 'breedClubScheme',
+  breedWatch: 'breedWatch',
+  goodPractice: 'goodPractice',
+  bestPractice: 'bestPractice',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type BreedScalarFieldEnum = (typeof BreedScalarFieldEnum)[keyof typeof BreedScalarFieldEnum]
+
+
+export const BreedDataImportScalarFieldEnum = {
+  id: 'id',
+  importedAt: 'importedAt',
+  breedCount: 'breedCount',
+  source: 'source',
+  notes: 'notes'
+} as const
+
+export type BreedDataImportScalarFieldEnum = (typeof BreedDataImportScalarFieldEnum)[keyof typeof BreedDataImportScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1664,6 +1849,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1874,6 +2068,20 @@ export type EnumListingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$Pr
 export type ListEnumListingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingStatus[]'>
     
 
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -1997,6 +2205,8 @@ export type GlobalOmitConfig = {
   photo?: Prisma.PhotoOmit
   listing?: Prisma.ListingOmit
   welfareCheck?: Prisma.WelfareCheckOmit
+  breed?: Prisma.BreedOmit
+  breedDataImport?: Prisma.BreedDataImportOmit
 }
 
 /* Types for Logging */

@@ -63,7 +63,9 @@ export const ModelName = {
   ProgesteroneTest: 'ProgesteroneTest',
   Photo: 'Photo',
   Listing: 'Listing',
-  WelfareCheck: 'WelfareCheck'
+  WelfareCheck: 'WelfareCheck',
+  Breed: 'Breed',
+  BreedDataImport: 'BreedDataImport'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -307,12 +309,47 @@ export const WelfareCheckScalarFieldEnum = {
 export type WelfareCheckScalarFieldEnum = (typeof WelfareCheckScalarFieldEnum)[keyof typeof WelfareCheckScalarFieldEnum]
 
 
+export const BreedScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  top10: 'top10',
+  geneticDiversityPriority: 'geneticDiversityPriority',
+  breedClubScheme: 'breedClubScheme',
+  breedWatch: 'breedWatch',
+  goodPractice: 'goodPractice',
+  bestPractice: 'bestPractice',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type BreedScalarFieldEnum = (typeof BreedScalarFieldEnum)[keyof typeof BreedScalarFieldEnum]
+
+
+export const BreedDataImportScalarFieldEnum = {
+  id: 'id',
+  importedAt: 'importedAt',
+  breedCount: 'breedCount',
+  source: 'source',
+  notes: 'notes'
+} as const
+
+export type BreedDataImportScalarFieldEnum = (typeof BreedDataImportScalarFieldEnum)[keyof typeof BreedDataImportScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -329,4 +366,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

@@ -4,9 +4,16 @@
 // ============================================================
 
 import Link from "next/link";
+import { prisma } from "@/lib/prisma";
 import AddDogForm from "./AddDogForm";
 
-export default function NewDogPage() {
+export default async function NewDogPage() {
+  const breeds = await prisma.breed.findMany({
+    where: { deletedAt: null },
+    select: { name: true },
+    orderBy: { name: "asc" },
+  });
+
   return (
     <div className="mx-auto max-w-2xl p-4 sm:p-6">
       <header className="mb-5">
@@ -25,7 +32,7 @@ export default function NewDogPage() {
         </p>
       </header>
 
-      <AddDogForm />
+      <AddDogForm breeds={breeds.map((b) => b.name)} />
     </div>
   );
 }

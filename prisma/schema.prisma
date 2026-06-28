@@ -476,6 +476,45 @@ model WelfareCheck {
   @@index([litterId, date])
 }
 
+// ------------------------------------------------------------
+//  14. Breed — KC breed reference data: per-breed recommended
+//      health tests (Good Practice = minimum, Best Practice =
+//      additional) plus KC flags. Global reference data (not
+//      per-breeder). Refreshed in-app from the KC sheet (~twice
+//      a year) via CSV import on /settings/breeds.
+// ------------------------------------------------------------
+model Breed {
+  id   String @id @default(uuid())
+  name String @unique
+
+  top10                    Boolean @default(false)
+  geneticDiversityPriority Boolean @default(false)
+  breedClubScheme          Boolean @default(false)
+  breedWatch               Boolean @default(false)
+
+  // Structured test arrays: [{ category, label, code?, raw, importedOnly? }]
+  goodPractice Json
+  bestPractice Json
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([name])
+}
+
+// ------------------------------------------------------------
+//  15. BreedDataImport — provenance for each breed-data refresh,
+//      so the admin screen can show "last updated / how many".
+// ------------------------------------------------------------
+model BreedDataImport {
+  id         String   @id @default(uuid())
+  importedAt DateTime @default(now())
+  breedCount Int
+  source     String?
+  notes      String?
+}
+
 // ============================================================
 //  Reserved for later builds — shape noted, not yet modelled.
 // ============================================================

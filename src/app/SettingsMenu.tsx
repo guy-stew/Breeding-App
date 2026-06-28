@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { useClickAway } from "./useClickAway";
 
@@ -36,6 +37,15 @@ export default function SettingsMenu() {
           <p className="px-4 py-2 text-xs font-semibold uppercase tracking-wider text-neutral-400">
             Settings
           </p>
+          <Link
+            href="/settings/breeds"
+            onClick={() => setOpen(false)}
+            className="flex w-full items-center justify-between gap-3 px-4 py-2 text-left text-sm text-neutral-700 transition hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
+          >
+            <span>Breed data</span>
+            <span className="text-xs text-neutral-400">KC tests</span>
+          </Link>
+          <div className="my-1 border-t border-neutral-100 dark:border-neutral-800" />
           {SETTINGS.map((s) => (
             <button
               key={s.label}

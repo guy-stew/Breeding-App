@@ -682,8 +682,9 @@ export async function addDog(input: AddDogInput): Promise<AddDogResult> {
       records.push({ dogId: dog.id, type: "eye_test", date: screeningDate, result: input.eyeTest.trim(), description: null });
     }
     for (const dna of input.dnaTests ?? []) {
-      if (dna.gene?.trim()) {
-        records.push({ dogId: dog.id, type: "dna_test", date: screeningDate, result: dna.result?.trim() || null, description: dna.gene.trim() });
+      const result = dna.result?.trim();
+      if (dna.gene?.trim() && result && result.toLowerCase() !== "not tested") {
+        records.push({ dogId: dog.id, type: "dna_test", date: screeningDate, result, description: dna.gene.trim() });
       }
     }
 
