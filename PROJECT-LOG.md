@@ -70,7 +70,7 @@ once, and re-arrange/print it differently** for each feature.
 - [x] Database tables created via `npx prisma migrate dev`
 - [x] Sample data loaded via `npx prisma db seed`
 - [x] Home screen reads live data and renders in the browser
-- [x] Code pushed to GitHub (`guy-stew/Breeding-App`)
+- [x] Code pushed to GitHub (`guy-stew/whelpwise`, renamed from `Breeding-App` on 28 June 2026)
 - [x] Live on Vercel (breeding-app.vercel.app)
 - [x] **First WRITE feature: weigh-in round** — log each puppy's weight, saved
       to the database, screen refreshes to show it. (First genuinely useful tool.)
@@ -416,7 +416,8 @@ npx prisma studio
 - **GitHub no longer accepts your password** for pushes. The sign-in window
   ("Sign in with your browser") handles it once, then remembers you.
 - **GitHub repo names are case-sensitive** — the remote URL must match exactly
-  (ours is `Breeding-App` with capitals).
+  (renamed to lowercase `whelpwise` on 28 June 2026; GitHub auto-redirects the
+  old `Breeding-App` URLs, but the local remote was repointed to be explicit).
 - **A folder's name IS the URL (and 404s when it's wrong).** In Next.js, the URL
   `/dogs/new` must map to a file at exactly `src/app/dogs/new/page.tsx`. The
   folder names are the route. A misnamed folder (e.g. `dog` instead of `dogs`)
