@@ -96,6 +96,22 @@ export async function logMating(
   return { ok: true };
 }
 
+/** Close a season — sets endDate (and marks not_mated if nothing else happened). */
+export async function closeSeason(cycleId: string): Promise<Result> {
+  const cycle = await ownedCycle(cycleId);
+  if (!cycle) return { ok: false, error: "Season not found." };
+
+  await prisma.heatCycle.update({
+    where: { id: cycleId },
+    data: {
+      endDate: cycle.endDate ?? new Date(),
+      ...(cycle.outcome === "in_progress" ? { outcome: "not_mated" as const } : {}),
+    },
+  });
+  revalidatePath(`/seasons/${cycleId}`);
+  return { ok: true };
+}
+
 /** Record the outcome of a confirmation scan from the scan-due banner. */
 export async function recordScanOutcome(
   cycleId: string,

@@ -4,8 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { getBreeder } from "@/lib/breeder";
 import {
   derivePhase, deriveConfidence, fertileWindow, predictedWhelp, daysStanding,
-  estimateOvulationDay, daysBetween, gestation, GESTATION_DAYS, OVULATION_NG_ML,
-  type CycleInput, type CycleOutcome, type HeatSignKind, type Phase, type Confidence,
+  estimateOvulationDay, daysBetween, gestation, nextSeasonEstimate, GESTATION_DAYS, OVULATION_NG_ML,
+  type CycleInput, type CycleOutcome, type HeatSignKind, type Phase, type Confidence, type NextSeason,
 } from "@/lib/cycle";
 import CycleTimeline, { type TimelineMarker } from "./CycleTimeline";
 import SignLogger from "./SignLogger";
@@ -13,6 +13,7 @@ import AddReadingForm from "./AddReadingForm";
 import SeasonProgesteroneChart from "./SeasonProgesteroneChart";
 import MatingLogger from "./MatingLogger";
 import ScanLogger from "./ScanLogger";
+import CloseSeasonButton from "./CloseSeasonButton";
 import { initial } from "../../avatar";
 
 function fmt(d: Date) {
@@ -39,6 +40,7 @@ const SIGN_COLOR: Record<string, string> = {
 };
 const PINK = "#F4C0D1", ESTRUS = "#9FE1CB", DIESTRUS = "#B5D4F4", GREEN = "#16a34a";
 const MS_ICON: Record<string, string> = { scan: "🩻", diet: "🍚", box: "🏠", due: "🐾" };
+const ENDED_LABEL: Record<string, string> = { not_mated: "Not mated", not_pregnant: "Scanned — not in whelp" };
 
 function MetricCard({ label, value, hint, tint, valueColor }: { label: string; value: React.ReactNode; hint?: string; tint?: string; valueColor?: string }) {
   return (
@@ -120,10 +122,21 @@ export default async function SeasonDetailPage({ params }: { params: Promise<{ i
   });
   const sireOptions = sireRows.map((s) => ({ id: s.id, name: s.callName ?? "Unnamed" }));
 
+  // Next-season estimate from this dam's recorded seasons.
+  const damCycles = await prisma.heatCycle.findMany({
+    where: { dogId: cycle.dogId, deletedAt: null },
+    select: { startDate: true },
+  });
+  const next = nextSeasonEstimate(damCycles.map((c) => c.startDate));
+
   const subLine =
     phase === "pregnant" && g
       ? `${cycle.dog.breed} · mated ${matingDates.length ? matingDates.map(fmt).join(" + ") : "—"} · day ${g.day}`
       : `${cycle.dog.breed} · ${ordinal(seasonNo)} season · day ${dayOfSeason}`;
+
+  const peak = cycle.progesteroneTests.length ? Math.max(...cycle.progesteroneTests.map((t) => t.levelNgMl)) : null;
+  const duration = cycle.endDate ? daysBetween(cycle.startDate, cycle.endDate) : dayOfSeason;
+  const endedLabel = ENDED_LABEL[cycle.outcome] ?? "Ended";
 
   const signMarkers: TimelineMarker[] = cycle.signs.map((s) => {
     const day = daysBetween(cycle.startDate, s.date);
@@ -196,6 +209,10 @@ export default async function SeasonDetailPage({ params }: { params: Promise<{ i
 
           <SectionLabel title="Log a sign seen today" />
           <SignLogger cycleId={cycle.id} />
+
+          <div className="mt-6 text-right">
+            <CloseSeasonButton cycleId={cycle.id} />
+          </div>
         </>
       )}
 
@@ -280,6 +297,10 @@ export default async function SeasonDetailPage({ params }: { params: Promise<{ i
 
           <SectionLabel title="Record the mating" />
           <MatingLogger cycleId={cycle.id} sires={sireOptions} />
+
+          <div className="mt-6 text-right">
+            <CloseSeasonButton cycleId={cycle.id} />
+          </div>
         </>
       )}
 
@@ -376,21 +397,47 @@ export default async function SeasonDetailPage({ params }: { params: Promise<{ i
         </>
       )}
 
-      {/* ============ ENDED — interim (full summary next stage) ============ */}
+      {/* ============ ENDED ============ */}
       {phase === "ended" && (
-        <div className="mt-5 rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
-          <p className="font-semibold">Season ended</p>
-          <p className="mt-1 text-sm text-neutral-500">
-            This season ran {cycle.endDate ? daysBetween(cycle.startDate, cycle.endDate) : dayOfSeason} days
-            {cycle.outcome === "not_pregnant" ? " · scan showed not in whelp" : cycle.outcome === "not_mated" ? " · not mated" : ""}.
-          </p>
-          <p className="mt-3 text-xs text-neutral-400">The full ended-season summary + next-season estimate land in the next update.</p>
+        <>
+          <SectionLabel title="Season summary" hint={endedLabel} />
+          <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+            {([
+              ["Started", fmt(cycle.startDate)],
+              ["Ended", cycle.endDate ? fmt(cycle.endDate) : "—"],
+              ["Duration", `${duration} days`],
+              ["Outcome", endedLabel],
+              ["Signs logged", String(cycle.signs.length)],
+              ["Peak progesterone", peak != null ? `${peak.toFixed(1)} ng/ml` : "—"],
+              ["Ovulation pinned", ovulationTest ? fmt(ovulationTest.date) : "—"],
+            ] as [string, string][]).map(([label, value]) => (
+              <div key={label} className="flex justify-between border-b border-neutral-100 px-4 py-2.5 last:border-0 dark:border-neutral-800">
+                <span className="text-sm text-neutral-500">{label}</span>
+                <span className="text-sm font-medium">{value}</span>
+              </div>
+            ))}
+          </div>
+
           {cycle.progesteroneTests.length > 0 && (
-            <div className="mt-4">
-              <SeasonProgesteroneChart tests={cycle.progesteroneTests.map((t) => ({ date: t.date.toISOString(), levelNgMl: t.levelNgMl }))} />
-            </div>
+            <>
+              <SectionLabel title="Progesterone" />
+              <div className="rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900">
+                <SeasonProgesteroneChart tests={cycle.progesteroneTests.map((t) => ({ date: t.date.toISOString(), levelNgMl: t.levelNgMl }))} />
+              </div>
+            </>
           )}
-        </div>
+
+          <SectionLabel title="Next season" />
+          <NextSeasonCard next={next} today={today} />
+        </>
+      )}
+
+      {/* Next-season estimate also surfaces on active states as a footer. */}
+      {phase !== "ended" && next.known && (
+        <>
+          <SectionLabel title="Next season after this one" />
+          <NextSeasonCard next={next} today={today} />
+        </>
       )}
     </div>
   );
@@ -436,6 +483,36 @@ function RecordCell({ label, value, sub }: { label: string; value: string; sub?:
       <p className="text-xs text-neutral-500">{label}</p>
       <p className="mt-0.5 text-sm font-semibold">{value}</p>
       {sub && <p className="text-[11px] text-neutral-400">{sub}</p>}
+    </div>
+  );
+}
+
+function NextSeasonCard({ next, today }: { next: NextSeason; today: Date }) {
+  if (!next.known) {
+    return (
+      <div className="rounded-xl border border-dashed border-neutral-300 bg-white p-5 text-center dark:border-neutral-700 dark:bg-neutral-900">
+        <p className="text-sm text-neutral-500">Not enough history yet to predict her next season.</p>
+        <p className="mt-1 text-xs text-neutral-400">Log one more season and we&apos;ll estimate the interval from her own pattern.</p>
+      </div>
+    );
+  }
+  const months = Math.round(next.avgGapDays / 30.44);
+  const daysUntil = daysBetween(today, next.nextDate);
+  const elapsed = Math.max(0, next.avgGapDays - daysUntil);
+  const pct = Math.min(100, Math.round((elapsed / next.avgGapDays) * 100));
+  return (
+    <div className="rounded-xl border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="flex items-end justify-between">
+        <div>
+          <p className="text-sm text-neutral-500">Estimated next season</p>
+          <p className="mt-1 text-xl font-bold tracking-tight">{fmt(next.nextDate)}</p>
+        </div>
+        <p className="text-sm text-neutral-500">{daysUntil > 0 ? `in ~${daysUntil} days` : "due around now"}</p>
+      </div>
+      <div className="my-3 h-1.5 overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">
+        <div className="h-full rounded-full bg-blue-500" style={{ width: `${pct}%` }} />
+      </div>
+      <p className="text-xs text-neutral-400">Based on her average interval of ~{months} month{months === 1 ? "" : "s"} ({next.avgGapDays} days) between seasons.</p>
     </div>
   );
 }
