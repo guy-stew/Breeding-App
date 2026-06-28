@@ -1,14 +1,40 @@
-# Breeding App — Project Log
+# WhelpWise — Project Log
+
+*(formerly "Breeding App" — rebranded to **WhelpWise** on 28 June 2026.)*
 
 A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 27 June 2026 — all planned milestones complete plus photo
-uploads, UI overhaul, and welfare checks. The app covers the full breeding
-cycle, buyer management, health records, heat cycle tracking, public
-marketplace, photo uploads, welfare checks, and a polished app shell with
-dark mode. Login required for breeder pages; marketplace is public.*
+*Last updated: 28 June 2026 — rebranded to **WhelpWise** (logo + favicons +
+app name wired in), on top of a full responsive UI overhaul (desktop sidebar
+shell + redesigned dashboard, dogs list, litter detail, puppy record, and
+detailed add-dog screens). The app covers the full breeding cycle, buyer
+management, health records, heat cycle tracking, public marketplace, photo
+uploads, welfare checks, and a polished app shell with dark mode. Login
+required for breeder pages; marketplace is public.*
+
+---
+
+## Brand & identity — WhelpWise
+
+- **Name:** WhelpWise · **Strapline:** "breeding records, kept right"
+- **Brand colour:** emerald `#15a34a` on light backgrounds, brighter `#4ade80`
+  on dark backgrounds (matches the app's existing "success" green).
+- **Mark:** a collar-ring symbol (open ring + tag dot) beside the `whelpwise`
+  wordmark, with `wise` set in brand green.
+- **Where the assets live:**
+  - `src/app/BrandLogo.tsx` — inlined SVG components (`Wordmark`, `FullLogo`,
+    `FullLogoDark`). Inlined rather than `<Image>` so SVGs render crisply and
+    skip the Next image optimizer (which blocks SVGs by default).
+  - `public/whelpwise-*.svg` — original logo/wordmark files from the brand kit.
+  - `src/app/icon.svg` — browser-tab favicon (auto-swaps colour in dark mode).
+  - `src/app/apple-icon.png` — iOS home-screen icon.
+  - `public/favicon-{16,32,192,512}.png` — fallback + install icons.
+  - `src/app/manifest.ts` — web manifest (name, theme colour, install icons).
+- **Where it shows:** the navy app header uses the `Wordmark` (always-dark
+  surface → white text + bright green); the login screen uses the full logo
+  with a light/dark swap; the page `<title>` and PWA name are "WhelpWise".
 
 ---
 

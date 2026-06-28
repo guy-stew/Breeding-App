@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Breeding App",
-  description: "Dog breeder records, litters, and marketplace",
+  title: "WhelpWise",
+  description: "WhelpWise — breeding records, kept right.",
+  applicationName: "WhelpWise",
 };
 
 export default function RootLayout({

@@ -7,13 +7,11 @@ import BottomNav from "./BottomNav";
 
 export default function AppShell({
   children,
-  kennelName,
   initials,
   name,
   email,
 }: {
   children: React.ReactNode;
-  kennelName?: string | null;
   initials: string;
   name?: string | null;
   email?: string | null;
@@ -31,12 +29,7 @@ export default function AppShell({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header
-        kennelName={kennelName}
-        initials={initials}
-        name={name}
-        email={email}
-      />
+      <Header initials={initials} name={name} email={email} />
 
       <div className="flex flex-1">
         <Sidebar />

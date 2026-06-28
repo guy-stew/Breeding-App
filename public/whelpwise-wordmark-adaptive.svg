@@ -1,0 +1,8 @@
+<svg width="300" height="80" viewBox="0 0 300 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Whelpwise">
+  <title>Whelpwise</title>
+  <g transform="translate(40,40)">
+    <circle cx="0" cy="0" r="20" fill="none" stroke="#15a34a" stroke-width="4.5"/>
+    <circle cx="0" cy="20" r="4" fill="#15a34a"/>
+  </g>
+  <text x="76" y="52" font-family="inherit, 'Helvetica Neue', Arial, sans-serif" font-size="30" font-weight="500" fill="currentColor">whelp<tspan fill="#15a34a">wise</tspan></text>
+</svg>

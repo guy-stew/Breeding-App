@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Wordmark } from "./BrandLogo";
 import SettingsMenu from "./SettingsMenu";
 import ThemeToggle from "./ThemeToggle";
 import UserMenu from "./UserMenu";
@@ -21,12 +22,10 @@ function pageTitle(pathname: string): string {
 }
 
 export default function Header({
-  kennelName,
   initials,
   name,
   email,
 }: {
-  kennelName?: string | null;
   initials: string;
   name?: string | null;
   email?: string | null;
@@ -37,16 +36,9 @@ export default function Header({
   return (
     <header className="no-print sticky top-0 z-40 h-14 border-b border-slate-800 bg-slate-900 text-white">
       <div className="flex h-full items-center justify-between gap-3 px-3 sm:px-5">
-        {/* Logo + kennel name + page title */}
+        {/* WhelpWise wordmark + page title */}
         <Link href="/" className="flex min-w-0 items-center gap-2.5">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white">
-            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M5.5 11a2 2 0 100-4 2 2 0 000 4zm13 0a2 2 0 100-4 2 2 0 000 4zM9 7.5a2 2 0 100-4 2 2 0 000 4zm6 0a2 2 0 100-4 2 2 0 000 4zm-3 2.5c-2.4 0-4.5 2.2-4.9 4.2-.3 1.6 1 2.8 2.6 2.8.9 0 1.6-.4 2.3-.4s1.4.4 2.3.4c1.6 0 2.9-1.2 2.6-2.8C16.5 12.2 14.4 10 12 10z" />
-            </svg>
-          </span>
-          <span className="truncate text-base font-semibold tracking-tight">
-            {kennelName || "Breeding App"}
-          </span>
+          <Wordmark className="h-8 w-auto shrink-0" />
           {title && (
             <>
               <span className="hidden text-slate-600 sm:inline">/</span>

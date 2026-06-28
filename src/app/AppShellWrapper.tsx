@@ -44,12 +44,7 @@ export default async function AppShellWrapper({
 }) {
   const data = await getShellData();
   return (
-    <AppShell
-      kennelName={data?.kennelName}
-      name={data?.name}
-      email={data?.email}
-      initials={data?.initials ?? "?"}
-    >
+    <AppShell name={data?.name} email={data?.email} initials={data?.initials ?? "?"}>
       {children}
     </AppShell>
   );
