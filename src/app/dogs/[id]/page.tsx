@@ -413,7 +413,7 @@ export default async function DogProfilePage({
             <ul className="divide-y divide-neutral-200 overflow-hidden rounded-xl border border-neutral-200 bg-white dark:divide-neutral-800 dark:border-neutral-800 dark:bg-neutral-900">
               {dog.heatCycles.map((cycle) => (
                 <li key={cycle.id}>
-                  <Link href={`/dogs/${dog.id}/heat-cycles/${cycle.id}`} className="flex items-center justify-between px-4 py-2.5 hover:bg-neutral-50 dark:hover:bg-neutral-800">
+                  <Link href={`/seasons/${cycle.id}`} className="flex items-center justify-between px-4 py-2.5 hover:bg-neutral-50 dark:hover:bg-neutral-800">
                     <div>
                       <div className="text-sm font-medium">{formatDate(cycle.startDate)}</div>
                       <div className="text-xs text-neutral-500">

@@ -395,6 +395,40 @@ export type EnumHealthRecordTypeWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel>
 }
 
+export type EnumHeatOutcomeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HeatOutcome | Prisma.EnumHeatOutcomeFieldRefInput<$PrismaModel>
+  in?: $Enums.HeatOutcome[] | Prisma.ListEnumHeatOutcomeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HeatOutcome[] | Prisma.ListEnumHeatOutcomeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHeatOutcomeFilter<$PrismaModel> | $Enums.HeatOutcome
+}
+
+export type EnumHeatOutcomeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HeatOutcome | Prisma.EnumHeatOutcomeFieldRefInput<$PrismaModel>
+  in?: $Enums.HeatOutcome[] | Prisma.ListEnumHeatOutcomeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HeatOutcome[] | Prisma.ListEnumHeatOutcomeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHeatOutcomeWithAggregatesFilter<$PrismaModel> | $Enums.HeatOutcome
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHeatOutcomeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHeatOutcomeFilter<$PrismaModel>
+}
+
+export type EnumHeatSignTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HeatSignType | Prisma.EnumHeatSignTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HeatSignType[] | Prisma.ListEnumHeatSignTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HeatSignType[] | Prisma.ListEnumHeatSignTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHeatSignTypeFilter<$PrismaModel> | $Enums.HeatSignType
+}
+
+export type EnumHeatSignTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HeatSignType | Prisma.EnumHeatSignTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HeatSignType[] | Prisma.ListEnumHeatSignTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HeatSignType[] | Prisma.ListEnumHeatSignTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHeatSignTypeWithAggregatesFilter<$PrismaModel> | $Enums.HeatSignType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHeatSignTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHeatSignTypeFilter<$PrismaModel>
+}
+
 export type FloatFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel>
@@ -871,6 +905,40 @@ export type NestedEnumHealthRecordTypeWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel>
   _max?: Prisma.NestedEnumHealthRecordTypeFilter<$PrismaModel>
+}
+
+export type NestedEnumHeatOutcomeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HeatOutcome | Prisma.EnumHeatOutcomeFieldRefInput<$PrismaModel>
+  in?: $Enums.HeatOutcome[] | Prisma.ListEnumHeatOutcomeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HeatOutcome[] | Prisma.ListEnumHeatOutcomeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHeatOutcomeFilter<$PrismaModel> | $Enums.HeatOutcome
+}
+
+export type NestedEnumHeatOutcomeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HeatOutcome | Prisma.EnumHeatOutcomeFieldRefInput<$PrismaModel>
+  in?: $Enums.HeatOutcome[] | Prisma.ListEnumHeatOutcomeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HeatOutcome[] | Prisma.ListEnumHeatOutcomeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHeatOutcomeWithAggregatesFilter<$PrismaModel> | $Enums.HeatOutcome
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHeatOutcomeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHeatOutcomeFilter<$PrismaModel>
+}
+
+export type NestedEnumHeatSignTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.HeatSignType | Prisma.EnumHeatSignTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HeatSignType[] | Prisma.ListEnumHeatSignTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HeatSignType[] | Prisma.ListEnumHeatSignTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHeatSignTypeFilter<$PrismaModel> | $Enums.HeatSignType
+}
+
+export type NestedEnumHeatSignTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.HeatSignType | Prisma.EnumHeatSignTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.HeatSignType[] | Prisma.ListEnumHeatSignTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.HeatSignType[] | Prisma.ListEnumHeatSignTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumHeatSignTypeWithAggregatesFilter<$PrismaModel> | $Enums.HeatSignType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumHeatSignTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumHeatSignTypeFilter<$PrismaModel>
 }
 
 export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {

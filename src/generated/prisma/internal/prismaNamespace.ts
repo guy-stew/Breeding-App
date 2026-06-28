@@ -393,6 +393,7 @@ export const ModelName = {
   Buyer: 'Buyer',
   HealthRecord: 'HealthRecord',
   HeatCycle: 'HeatCycle',
+  HeatSign: 'HeatSign',
   ProgesteroneTest: 'ProgesteroneTest',
   Photo: 'Photo',
   Listing: 'Listing',
@@ -414,7 +415,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "progesteroneTest" | "photo" | "listing" | "welfareCheck" | "breed" | "breedDataImport"
+    modelProps: "breeder" | "dog" | "mating" | "litter" | "puppy" | "weightLog" | "buyer" | "healthRecord" | "heatCycle" | "heatSign" | "progesteroneTest" | "photo" | "listing" | "welfareCheck" | "breed" | "breedDataImport"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1084,6 +1085,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    HeatSign: {
+      payload: Prisma.$HeatSignPayload<ExtArgs>
+      fields: Prisma.HeatSignFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.HeatSignFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.HeatSignFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>
+        }
+        findFirst: {
+          args: Prisma.HeatSignFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.HeatSignFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>
+        }
+        findMany: {
+          args: Prisma.HeatSignFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>[]
+        }
+        create: {
+          args: Prisma.HeatSignCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>
+        }
+        createMany: {
+          args: Prisma.HeatSignCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.HeatSignCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>[]
+        }
+        delete: {
+          args: Prisma.HeatSignDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>
+        }
+        update: {
+          args: Prisma.HeatSignUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>
+        }
+        deleteMany: {
+          args: Prisma.HeatSignDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.HeatSignUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.HeatSignUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>[]
+        }
+        upsert: {
+          args: Prisma.HeatSignUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$HeatSignPayload>
+        }
+        aggregate: {
+          args: Prisma.HeatSignAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateHeatSign>
+        }
+        groupBy: {
+          args: Prisma.HeatSignGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HeatSignGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.HeatSignCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.HeatSignCountAggregateOutputType> | number
+        }
+      }
+    }
     ProgesteroneTest: {
       payload: Prisma.$ProgesteroneTestPayload<ExtArgs>
       fields: Prisma.ProgesteroneTestFieldRefs
@@ -1621,6 +1696,7 @@ export const MatingScalarFieldEnum = {
   predictedWhelpDate: 'predictedWhelpDate',
   coiPercent: 'coiPercent',
   breedAvgCoi: 'breedAvgCoi',
+  heatCycleId: 'heatCycleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -1725,12 +1801,28 @@ export const HeatCycleScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   notes: 'notes',
+  outcome: 'outcome',
+  scanLitterCount: 'scanLitterCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
 } as const
 
 export type HeatCycleScalarFieldEnum = (typeof HeatCycleScalarFieldEnum)[keyof typeof HeatCycleScalarFieldEnum]
+
+
+export const HeatSignScalarFieldEnum = {
+  id: 'id',
+  heatCycleId: 'heatCycleId',
+  type: 'type',
+  date: 'date',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HeatSignScalarFieldEnum = (typeof HeatSignScalarFieldEnum)[keyof typeof HeatSignScalarFieldEnum]
 
 
 export const ProgesteroneTestScalarFieldEnum = {
@@ -2056,6 +2148,34 @@ export type ListEnumHealthRecordTypeFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'HeatOutcome'
+ */
+export type EnumHeatOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HeatOutcome'>
+    
+
+
+/**
+ * Reference to a field of type 'HeatOutcome[]'
+ */
+export type ListEnumHeatOutcomeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HeatOutcome[]'>
+    
+
+
+/**
+ * Reference to a field of type 'HeatSignType'
+ */
+export type EnumHeatSignTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HeatSignType'>
+    
+
+
+/**
+ * Reference to a field of type 'HeatSignType[]'
+ */
+export type ListEnumHeatSignTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'HeatSignType[]'>
+    
+
+
+/**
  * Reference to a field of type 'ListingStatus'
  */
 export type EnumListingStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ListingStatus'>
@@ -2201,6 +2321,7 @@ export type GlobalOmitConfig = {
   buyer?: Prisma.BuyerOmit
   healthRecord?: Prisma.HealthRecordOmit
   heatCycle?: Prisma.HeatCycleOmit
+  heatSign?: Prisma.HeatSignOmit
   progesteroneTest?: Prisma.ProgesteroneTestOmit
   photo?: Prisma.PhotoOmit
   listing?: Prisma.ListingOmit

@@ -60,6 +60,7 @@ export const ModelName = {
   Buyer: 'Buyer',
   HealthRecord: 'HealthRecord',
   HeatCycle: 'HeatCycle',
+  HeatSign: 'HeatSign',
   ProgesteroneTest: 'ProgesteroneTest',
   Photo: 'Photo',
   Listing: 'Listing',
@@ -138,6 +139,7 @@ export const MatingScalarFieldEnum = {
   predictedWhelpDate: 'predictedWhelpDate',
   coiPercent: 'coiPercent',
   breedAvgCoi: 'breedAvgCoi',
+  heatCycleId: 'heatCycleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
@@ -242,12 +244,28 @@ export const HeatCycleScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   notes: 'notes',
+  outcome: 'outcome',
+  scanLitterCount: 'scanLitterCount',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt'
 } as const
 
 export type HeatCycleScalarFieldEnum = (typeof HeatCycleScalarFieldEnum)[keyof typeof HeatCycleScalarFieldEnum]
+
+
+export const HeatSignScalarFieldEnum = {
+  id: 'id',
+  heatCycleId: 'heatCycleId',
+  type: 'type',
+  date: 'date',
+  notes: 'notes',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type HeatSignScalarFieldEnum = (typeof HeatSignScalarFieldEnum)[keyof typeof HeatSignScalarFieldEnum]
 
 
 export const ProgesteroneTestScalarFieldEnum = {

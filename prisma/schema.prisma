@@ -134,6 +134,11 @@ model Mating {
   coiPercent    Float?     // COI % for this pairing (e.g. 6.25)
   breedAvgCoi   Float?     // breed average COI % to compare against
 
+  // Optional link back to the heat cycle this mating came from — drives the
+  // season detail page's "pregnant" state and breeding record.
+  heatCycle   HeatCycle? @relation(fields: [heatCycleId], references: [id])
+  heatCycleId String?
+
   litter Litter?
 
   createdAt DateTime  @default(now())
@@ -142,6 +147,7 @@ model Mating {
 
   @@index([damId])
   @@index([sireId])
+  @@index([heatCycleId])
 }
 
 // ------------------------------------------------------------
@@ -383,13 +389,59 @@ model HeatCycle {
   endDate   DateTime?
   notes     String?
 
+  // How the season resolved — drives which state the detail page shows.
+  // Phase ('early'/'fertile'/'pregnant') is DERIVED at read time, not stored.
+  outcome         HeatOutcome @default(in_progress)
+  scanLitterCount Int?        // recorded from the confirmation-scan banner
+
   progesteroneTests ProgesteroneTest[]
+  signs             HeatSign[]
+  matings           Mating[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
   @@index([dogId])
+}
+
+// ------------------------------------------------------------
+//  16. HeatSign — a dated behavioural sign during a season
+//      (tail flagging, standing, discharge change…). Structured
+//      + dated so each pins to a day on the cycle timeline and
+//      the "days standing" counter can query the earliest one.
+// ------------------------------------------------------------
+model HeatSign {
+  id          String    @id @default(uuid())
+  heatCycle   HeatCycle @relation(fields: [heatCycleId], references: [id])
+  heatCycleId String
+
+  type  HeatSignType
+  date  DateTime // the day the sign was observed
+  notes String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([heatCycleId])
+}
+
+enum HeatSignType {
+  discharge_start  // bleeding begins (often == season start)
+  swelling
+  discharge_change // colour lightens / straw-coloured
+  tail_flagging
+  standing         // stands for the male — key behavioural marker
+  refusing         // no longer stands (estrus ending)
+}
+
+enum HeatOutcome {
+  in_progress  // default
+  not_mated
+  mated        // a Mating exists for this cycle
+  not_pregnant // scanned/confirmed empty
+  pregnant     // scan-confirmed or whelped
 }
 
 // ------------------------------------------------------------

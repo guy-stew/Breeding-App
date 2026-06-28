@@ -63,6 +63,11 @@ export type HealthRecord = Prisma.HealthRecordModel
  */
 export type HeatCycle = Prisma.HeatCycleModel
 /**
+ * Model HeatSign
+ * 
+ */
+export type HeatSign = Prisma.HeatSignModel
+/**
  * Model ProgesteroneTest
  * 
  */

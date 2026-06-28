@@ -109,3 +109,26 @@ export const PuppyStatus = {
 } as const
 
 export type PuppyStatus = (typeof PuppyStatus)[keyof typeof PuppyStatus]
+
+
+export const HeatSignType = {
+  discharge_start: 'discharge_start',
+  swelling: 'swelling',
+  discharge_change: 'discharge_change',
+  tail_flagging: 'tail_flagging',
+  standing: 'standing',
+  refusing: 'refusing'
+} as const
+
+export type HeatSignType = (typeof HeatSignType)[keyof typeof HeatSignType]
+
+
+export const HeatOutcome = {
+  in_progress: 'in_progress',
+  not_mated: 'not_mated',
+  mated: 'mated',
+  not_pregnant: 'not_pregnant',
+  pregnant: 'pregnant'
+} as const
+
+export type HeatOutcome = (typeof HeatOutcome)[keyof typeof HeatOutcome]

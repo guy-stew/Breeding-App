@@ -67,7 +67,7 @@ export default async function SeasonsPage() {
               return (
                 <Link
                   key={c.id}
-                  href={`/dogs/${c.dog.id}/heat-cycles/${c.id}`}
+                  href={`/seasons/${c.id}`}
                   className="flex items-center gap-3 rounded-xl border border-pink-300 bg-pink-50 p-4 transition hover:shadow-md dark:border-pink-500/30 dark:bg-pink-500/10"
                 >
                   <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-base font-semibold ${avatarColour(name)}`}>
@@ -107,7 +107,7 @@ export default async function SeasonsPage() {
               return (
                 <Link
                   key={c.id}
-                  href={`/dogs/${c.dog.id}/heat-cycles/${c.id}`}
+                  href={`/seasons/${c.id}`}
                   className="flex items-center gap-3 border-b border-neutral-100 px-4 py-3 transition last:border-0 hover:bg-neutral-50 dark:border-neutral-800/60 dark:hover:bg-neutral-800/40"
                 >
                   <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${avatarColour(name)}`}>

@@ -20,8 +20,18 @@ export type HeatCycleModel = runtime.Types.Result.DefaultSelection<Prisma.$HeatC
 
 export type AggregateHeatCycle = {
   _count: HeatCycleCountAggregateOutputType | null
+  _avg: HeatCycleAvgAggregateOutputType | null
+  _sum: HeatCycleSumAggregateOutputType | null
   _min: HeatCycleMinAggregateOutputType | null
   _max: HeatCycleMaxAggregateOutputType | null
+}
+
+export type HeatCycleAvgAggregateOutputType = {
+  scanLitterCount: number | null
+}
+
+export type HeatCycleSumAggregateOutputType = {
+  scanLitterCount: number | null
 }
 
 export type HeatCycleMinAggregateOutputType = {
@@ -30,6 +40,8 @@ export type HeatCycleMinAggregateOutputType = {
   startDate: Date | null
   endDate: Date | null
   notes: string | null
+  outcome: $Enums.HeatOutcome | null
+  scanLitterCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -41,6 +53,8 @@ export type HeatCycleMaxAggregateOutputType = {
   startDate: Date | null
   endDate: Date | null
   notes: string | null
+  outcome: $Enums.HeatOutcome | null
+  scanLitterCount: number | null
   createdAt: Date | null
   updatedAt: Date | null
   deletedAt: Date | null
@@ -52,6 +66,8 @@ export type HeatCycleCountAggregateOutputType = {
   startDate: number
   endDate: number
   notes: number
+  outcome: number
+  scanLitterCount: number
   createdAt: number
   updatedAt: number
   deletedAt: number
@@ -59,12 +75,22 @@ export type HeatCycleCountAggregateOutputType = {
 }
 
 
+export type HeatCycleAvgAggregateInputType = {
+  scanLitterCount?: true
+}
+
+export type HeatCycleSumAggregateInputType = {
+  scanLitterCount?: true
+}
+
 export type HeatCycleMinAggregateInputType = {
   id?: true
   dogId?: true
   startDate?: true
   endDate?: true
   notes?: true
+  outcome?: true
+  scanLitterCount?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -76,6 +102,8 @@ export type HeatCycleMaxAggregateInputType = {
   startDate?: true
   endDate?: true
   notes?: true
+  outcome?: true
+  scanLitterCount?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -87,6 +115,8 @@ export type HeatCycleCountAggregateInputType = {
   startDate?: true
   endDate?: true
   notes?: true
+  outcome?: true
+  scanLitterCount?: true
   createdAt?: true
   updatedAt?: true
   deletedAt?: true
@@ -131,6 +161,18 @@ export type HeatCycleAggregateArgs<ExtArgs extends runtime.Types.Extensions.Inte
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: HeatCycleAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: HeatCycleSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: HeatCycleMinAggregateInputType
@@ -161,6 +203,8 @@ export type HeatCycleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   _count?: HeatCycleCountAggregateInputType | true
+  _avg?: HeatCycleAvgAggregateInputType
+  _sum?: HeatCycleSumAggregateInputType
   _min?: HeatCycleMinAggregateInputType
   _max?: HeatCycleMaxAggregateInputType
 }
@@ -171,10 +215,14 @@ export type HeatCycleGroupByOutputType = {
   startDate: Date
   endDate: Date | null
   notes: string | null
+  outcome: $Enums.HeatOutcome
+  scanLitterCount: number | null
   createdAt: Date
   updatedAt: Date
   deletedAt: Date | null
   _count: HeatCycleCountAggregateOutputType | null
+  _avg: HeatCycleAvgAggregateOutputType | null
+  _sum: HeatCycleSumAggregateOutputType | null
   _min: HeatCycleMinAggregateOutputType | null
   _max: HeatCycleMaxAggregateOutputType | null
 }
@@ -203,11 +251,15 @@ export type HeatCycleWhereInput = {
   startDate?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"HeatCycle"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"HeatCycle"> | string | null
+  outcome?: Prisma.EnumHeatOutcomeFilter<"HeatCycle"> | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.IntNullableFilter<"HeatCycle"> | number | null
   createdAt?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"HeatCycle"> | Date | string | null
   dog?: Prisma.XOR<Prisma.DogScalarRelationFilter, Prisma.DogWhereInput>
   progesteroneTests?: Prisma.ProgesteroneTestListRelationFilter
+  signs?: Prisma.HeatSignListRelationFilter
+  matings?: Prisma.MatingListRelationFilter
 }
 
 export type HeatCycleOrderByWithRelationInput = {
@@ -216,11 +268,15 @@ export type HeatCycleOrderByWithRelationInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  outcome?: Prisma.SortOrder
+  scanLitterCount?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   dog?: Prisma.DogOrderByWithRelationInput
   progesteroneTests?: Prisma.ProgesteroneTestOrderByRelationAggregateInput
+  signs?: Prisma.HeatSignOrderByRelationAggregateInput
+  matings?: Prisma.MatingOrderByRelationAggregateInput
 }
 
 export type HeatCycleWhereUniqueInput = Prisma.AtLeast<{
@@ -232,11 +288,15 @@ export type HeatCycleWhereUniqueInput = Prisma.AtLeast<{
   startDate?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"HeatCycle"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"HeatCycle"> | string | null
+  outcome?: Prisma.EnumHeatOutcomeFilter<"HeatCycle"> | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.IntNullableFilter<"HeatCycle"> | number | null
   createdAt?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"HeatCycle"> | Date | string | null
   dog?: Prisma.XOR<Prisma.DogScalarRelationFilter, Prisma.DogWhereInput>
   progesteroneTests?: Prisma.ProgesteroneTestListRelationFilter
+  signs?: Prisma.HeatSignListRelationFilter
+  matings?: Prisma.MatingListRelationFilter
 }, "id">
 
 export type HeatCycleOrderByWithAggregationInput = {
@@ -245,12 +305,16 @@ export type HeatCycleOrderByWithAggregationInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
+  outcome?: Prisma.SortOrder
+  scanLitterCount?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.HeatCycleCountOrderByAggregateInput
+  _avg?: Prisma.HeatCycleAvgOrderByAggregateInput
   _max?: Prisma.HeatCycleMaxOrderByAggregateInput
   _min?: Prisma.HeatCycleMinOrderByAggregateInput
+  _sum?: Prisma.HeatCycleSumOrderByAggregateInput
 }
 
 export type HeatCycleScalarWhereWithAggregatesInput = {
@@ -262,6 +326,8 @@ export type HeatCycleScalarWhereWithAggregatesInput = {
   startDate?: Prisma.DateTimeWithAggregatesFilter<"HeatCycle"> | Date | string
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"HeatCycle"> | Date | string | null
   notes?: Prisma.StringNullableWithAggregatesFilter<"HeatCycle"> | string | null
+  outcome?: Prisma.EnumHeatOutcomeWithAggregatesFilter<"HeatCycle"> | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.IntNullableWithAggregatesFilter<"HeatCycle"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"HeatCycle"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"HeatCycle"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"HeatCycle"> | Date | string | null
@@ -272,11 +338,15 @@ export type HeatCycleCreateInput = {
   startDate: Date | string
   endDate?: Date | string | null
   notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   dog: Prisma.DogCreateNestedOneWithoutHeatCyclesInput
   progesteroneTests?: Prisma.ProgesteroneTestCreateNestedManyWithoutHeatCycleInput
+  signs?: Prisma.HeatSignCreateNestedManyWithoutHeatCycleInput
+  matings?: Prisma.MatingCreateNestedManyWithoutHeatCycleInput
 }
 
 export type HeatCycleUncheckedCreateInput = {
@@ -285,10 +355,14 @@ export type HeatCycleUncheckedCreateInput = {
   startDate: Date | string
   endDate?: Date | string | null
   notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   progesteroneTests?: Prisma.ProgesteroneTestUncheckedCreateNestedManyWithoutHeatCycleInput
+  signs?: Prisma.HeatSignUncheckedCreateNestedManyWithoutHeatCycleInput
+  matings?: Prisma.MatingUncheckedCreateNestedManyWithoutHeatCycleInput
 }
 
 export type HeatCycleUpdateInput = {
@@ -296,11 +370,15 @@ export type HeatCycleUpdateInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dog?: Prisma.DogUpdateOneRequiredWithoutHeatCyclesNestedInput
   progesteroneTests?: Prisma.ProgesteroneTestUpdateManyWithoutHeatCycleNestedInput
+  signs?: Prisma.HeatSignUpdateManyWithoutHeatCycleNestedInput
+  matings?: Prisma.MatingUpdateManyWithoutHeatCycleNestedInput
 }
 
 export type HeatCycleUncheckedUpdateInput = {
@@ -309,10 +387,14 @@ export type HeatCycleUncheckedUpdateInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   progesteroneTests?: Prisma.ProgesteroneTestUncheckedUpdateManyWithoutHeatCycleNestedInput
+  signs?: Prisma.HeatSignUncheckedUpdateManyWithoutHeatCycleNestedInput
+  matings?: Prisma.MatingUncheckedUpdateManyWithoutHeatCycleNestedInput
 }
 
 export type HeatCycleCreateManyInput = {
@@ -321,6 +403,8 @@ export type HeatCycleCreateManyInput = {
   startDate: Date | string
   endDate?: Date | string | null
   notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -331,6 +415,8 @@ export type HeatCycleUpdateManyMutationInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -342,6 +428,8 @@ export type HeatCycleUncheckedUpdateManyInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -357,15 +445,26 @@ export type HeatCycleOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type HeatCycleNullableScalarRelationFilter = {
+  is?: Prisma.HeatCycleWhereInput | null
+  isNot?: Prisma.HeatCycleWhereInput | null
+}
+
 export type HeatCycleCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   dogId?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  outcome?: Prisma.SortOrder
+  scanLitterCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type HeatCycleAvgOrderByAggregateInput = {
+  scanLitterCount?: Prisma.SortOrder
 }
 
 export type HeatCycleMaxOrderByAggregateInput = {
@@ -374,6 +473,8 @@ export type HeatCycleMaxOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  outcome?: Prisma.SortOrder
+  scanLitterCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
@@ -385,9 +486,15 @@ export type HeatCycleMinOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   notes?: Prisma.SortOrder
+  outcome?: Prisma.SortOrder
+  scanLitterCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
+}
+
+export type HeatCycleSumOrderByAggregateInput = {
+  scanLitterCount?: Prisma.SortOrder
 }
 
 export type HeatCycleScalarRelationFilter = {
@@ -437,6 +544,40 @@ export type HeatCycleUncheckedUpdateManyWithoutDogNestedInput = {
   deleteMany?: Prisma.HeatCycleScalarWhereInput | Prisma.HeatCycleScalarWhereInput[]
 }
 
+export type HeatCycleCreateNestedOneWithoutMatingsInput = {
+  create?: Prisma.XOR<Prisma.HeatCycleCreateWithoutMatingsInput, Prisma.HeatCycleUncheckedCreateWithoutMatingsInput>
+  connectOrCreate?: Prisma.HeatCycleCreateOrConnectWithoutMatingsInput
+  connect?: Prisma.HeatCycleWhereUniqueInput
+}
+
+export type HeatCycleUpdateOneWithoutMatingsNestedInput = {
+  create?: Prisma.XOR<Prisma.HeatCycleCreateWithoutMatingsInput, Prisma.HeatCycleUncheckedCreateWithoutMatingsInput>
+  connectOrCreate?: Prisma.HeatCycleCreateOrConnectWithoutMatingsInput
+  upsert?: Prisma.HeatCycleUpsertWithoutMatingsInput
+  disconnect?: Prisma.HeatCycleWhereInput | boolean
+  delete?: Prisma.HeatCycleWhereInput | boolean
+  connect?: Prisma.HeatCycleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HeatCycleUpdateToOneWithWhereWithoutMatingsInput, Prisma.HeatCycleUpdateWithoutMatingsInput>, Prisma.HeatCycleUncheckedUpdateWithoutMatingsInput>
+}
+
+export type EnumHeatOutcomeFieldUpdateOperationsInput = {
+  set?: $Enums.HeatOutcome
+}
+
+export type HeatCycleCreateNestedOneWithoutSignsInput = {
+  create?: Prisma.XOR<Prisma.HeatCycleCreateWithoutSignsInput, Prisma.HeatCycleUncheckedCreateWithoutSignsInput>
+  connectOrCreate?: Prisma.HeatCycleCreateOrConnectWithoutSignsInput
+  connect?: Prisma.HeatCycleWhereUniqueInput
+}
+
+export type HeatCycleUpdateOneRequiredWithoutSignsNestedInput = {
+  create?: Prisma.XOR<Prisma.HeatCycleCreateWithoutSignsInput, Prisma.HeatCycleUncheckedCreateWithoutSignsInput>
+  connectOrCreate?: Prisma.HeatCycleCreateOrConnectWithoutSignsInput
+  upsert?: Prisma.HeatCycleUpsertWithoutSignsInput
+  connect?: Prisma.HeatCycleWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.HeatCycleUpdateToOneWithWhereWithoutSignsInput, Prisma.HeatCycleUpdateWithoutSignsInput>, Prisma.HeatCycleUncheckedUpdateWithoutSignsInput>
+}
+
 export type HeatCycleCreateNestedOneWithoutProgesteroneTestsInput = {
   create?: Prisma.XOR<Prisma.HeatCycleCreateWithoutProgesteroneTestsInput, Prisma.HeatCycleUncheckedCreateWithoutProgesteroneTestsInput>
   connectOrCreate?: Prisma.HeatCycleCreateOrConnectWithoutProgesteroneTestsInput
@@ -456,10 +597,14 @@ export type HeatCycleCreateWithoutDogInput = {
   startDate: Date | string
   endDate?: Date | string | null
   notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   progesteroneTests?: Prisma.ProgesteroneTestCreateNestedManyWithoutHeatCycleInput
+  signs?: Prisma.HeatSignCreateNestedManyWithoutHeatCycleInput
+  matings?: Prisma.MatingCreateNestedManyWithoutHeatCycleInput
 }
 
 export type HeatCycleUncheckedCreateWithoutDogInput = {
@@ -467,10 +612,14 @@ export type HeatCycleUncheckedCreateWithoutDogInput = {
   startDate: Date | string
   endDate?: Date | string | null
   notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   progesteroneTests?: Prisma.ProgesteroneTestUncheckedCreateNestedManyWithoutHeatCycleInput
+  signs?: Prisma.HeatSignUncheckedCreateNestedManyWithoutHeatCycleInput
+  matings?: Prisma.MatingUncheckedCreateNestedManyWithoutHeatCycleInput
 }
 
 export type HeatCycleCreateOrConnectWithoutDogInput = {
@@ -508,9 +657,163 @@ export type HeatCycleScalarWhereInput = {
   startDate?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   endDate?: Prisma.DateTimeNullableFilter<"HeatCycle"> | Date | string | null
   notes?: Prisma.StringNullableFilter<"HeatCycle"> | string | null
+  outcome?: Prisma.EnumHeatOutcomeFilter<"HeatCycle"> | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.IntNullableFilter<"HeatCycle"> | number | null
   createdAt?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"HeatCycle"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"HeatCycle"> | Date | string | null
+}
+
+export type HeatCycleCreateWithoutMatingsInput = {
+  id?: string
+  startDate: Date | string
+  endDate?: Date | string | null
+  notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  dog: Prisma.DogCreateNestedOneWithoutHeatCyclesInput
+  progesteroneTests?: Prisma.ProgesteroneTestCreateNestedManyWithoutHeatCycleInput
+  signs?: Prisma.HeatSignCreateNestedManyWithoutHeatCycleInput
+}
+
+export type HeatCycleUncheckedCreateWithoutMatingsInput = {
+  id?: string
+  dogId: string
+  startDate: Date | string
+  endDate?: Date | string | null
+  notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  progesteroneTests?: Prisma.ProgesteroneTestUncheckedCreateNestedManyWithoutHeatCycleInput
+  signs?: Prisma.HeatSignUncheckedCreateNestedManyWithoutHeatCycleInput
+}
+
+export type HeatCycleCreateOrConnectWithoutMatingsInput = {
+  where: Prisma.HeatCycleWhereUniqueInput
+  create: Prisma.XOR<Prisma.HeatCycleCreateWithoutMatingsInput, Prisma.HeatCycleUncheckedCreateWithoutMatingsInput>
+}
+
+export type HeatCycleUpsertWithoutMatingsInput = {
+  update: Prisma.XOR<Prisma.HeatCycleUpdateWithoutMatingsInput, Prisma.HeatCycleUncheckedUpdateWithoutMatingsInput>
+  create: Prisma.XOR<Prisma.HeatCycleCreateWithoutMatingsInput, Prisma.HeatCycleUncheckedCreateWithoutMatingsInput>
+  where?: Prisma.HeatCycleWhereInput
+}
+
+export type HeatCycleUpdateToOneWithWhereWithoutMatingsInput = {
+  where?: Prisma.HeatCycleWhereInput
+  data: Prisma.XOR<Prisma.HeatCycleUpdateWithoutMatingsInput, Prisma.HeatCycleUncheckedUpdateWithoutMatingsInput>
+}
+
+export type HeatCycleUpdateWithoutMatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dog?: Prisma.DogUpdateOneRequiredWithoutHeatCyclesNestedInput
+  progesteroneTests?: Prisma.ProgesteroneTestUpdateManyWithoutHeatCycleNestedInput
+  signs?: Prisma.HeatSignUpdateManyWithoutHeatCycleNestedInput
+}
+
+export type HeatCycleUncheckedUpdateWithoutMatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  dogId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  progesteroneTests?: Prisma.ProgesteroneTestUncheckedUpdateManyWithoutHeatCycleNestedInput
+  signs?: Prisma.HeatSignUncheckedUpdateManyWithoutHeatCycleNestedInput
+}
+
+export type HeatCycleCreateWithoutSignsInput = {
+  id?: string
+  startDate: Date | string
+  endDate?: Date | string | null
+  notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  dog: Prisma.DogCreateNestedOneWithoutHeatCyclesInput
+  progesteroneTests?: Prisma.ProgesteroneTestCreateNestedManyWithoutHeatCycleInput
+  matings?: Prisma.MatingCreateNestedManyWithoutHeatCycleInput
+}
+
+export type HeatCycleUncheckedCreateWithoutSignsInput = {
+  id?: string
+  dogId: string
+  startDate: Date | string
+  endDate?: Date | string | null
+  notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  progesteroneTests?: Prisma.ProgesteroneTestUncheckedCreateNestedManyWithoutHeatCycleInput
+  matings?: Prisma.MatingUncheckedCreateNestedManyWithoutHeatCycleInput
+}
+
+export type HeatCycleCreateOrConnectWithoutSignsInput = {
+  where: Prisma.HeatCycleWhereUniqueInput
+  create: Prisma.XOR<Prisma.HeatCycleCreateWithoutSignsInput, Prisma.HeatCycleUncheckedCreateWithoutSignsInput>
+}
+
+export type HeatCycleUpsertWithoutSignsInput = {
+  update: Prisma.XOR<Prisma.HeatCycleUpdateWithoutSignsInput, Prisma.HeatCycleUncheckedUpdateWithoutSignsInput>
+  create: Prisma.XOR<Prisma.HeatCycleCreateWithoutSignsInput, Prisma.HeatCycleUncheckedCreateWithoutSignsInput>
+  where?: Prisma.HeatCycleWhereInput
+}
+
+export type HeatCycleUpdateToOneWithWhereWithoutSignsInput = {
+  where?: Prisma.HeatCycleWhereInput
+  data: Prisma.XOR<Prisma.HeatCycleUpdateWithoutSignsInput, Prisma.HeatCycleUncheckedUpdateWithoutSignsInput>
+}
+
+export type HeatCycleUpdateWithoutSignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  dog?: Prisma.DogUpdateOneRequiredWithoutHeatCyclesNestedInput
+  progesteroneTests?: Prisma.ProgesteroneTestUpdateManyWithoutHeatCycleNestedInput
+  matings?: Prisma.MatingUpdateManyWithoutHeatCycleNestedInput
+}
+
+export type HeatCycleUncheckedUpdateWithoutSignsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  dogId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  progesteroneTests?: Prisma.ProgesteroneTestUncheckedUpdateManyWithoutHeatCycleNestedInput
+  matings?: Prisma.MatingUncheckedUpdateManyWithoutHeatCycleNestedInput
 }
 
 export type HeatCycleCreateWithoutProgesteroneTestsInput = {
@@ -518,10 +821,14 @@ export type HeatCycleCreateWithoutProgesteroneTestsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   dog: Prisma.DogCreateNestedOneWithoutHeatCyclesInput
+  signs?: Prisma.HeatSignCreateNestedManyWithoutHeatCycleInput
+  matings?: Prisma.MatingCreateNestedManyWithoutHeatCycleInput
 }
 
 export type HeatCycleUncheckedCreateWithoutProgesteroneTestsInput = {
@@ -530,9 +837,13 @@ export type HeatCycleUncheckedCreateWithoutProgesteroneTestsInput = {
   startDate: Date | string
   endDate?: Date | string | null
   notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  signs?: Prisma.HeatSignUncheckedCreateNestedManyWithoutHeatCycleInput
+  matings?: Prisma.MatingUncheckedCreateNestedManyWithoutHeatCycleInput
 }
 
 export type HeatCycleCreateOrConnectWithoutProgesteroneTestsInput = {
@@ -556,10 +867,14 @@ export type HeatCycleUpdateWithoutProgesteroneTestsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   dog?: Prisma.DogUpdateOneRequiredWithoutHeatCyclesNestedInput
+  signs?: Prisma.HeatSignUpdateManyWithoutHeatCycleNestedInput
+  matings?: Prisma.MatingUpdateManyWithoutHeatCycleNestedInput
 }
 
 export type HeatCycleUncheckedUpdateWithoutProgesteroneTestsInput = {
@@ -568,9 +883,13 @@ export type HeatCycleUncheckedUpdateWithoutProgesteroneTestsInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  signs?: Prisma.HeatSignUncheckedUpdateManyWithoutHeatCycleNestedInput
+  matings?: Prisma.MatingUncheckedUpdateManyWithoutHeatCycleNestedInput
 }
 
 export type HeatCycleCreateManyDogInput = {
@@ -578,6 +897,8 @@ export type HeatCycleCreateManyDogInput = {
   startDate: Date | string
   endDate?: Date | string | null
   notes?: string | null
+  outcome?: $Enums.HeatOutcome
+  scanLitterCount?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
@@ -588,10 +909,14 @@ export type HeatCycleUpdateWithoutDogInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   progesteroneTests?: Prisma.ProgesteroneTestUpdateManyWithoutHeatCycleNestedInput
+  signs?: Prisma.HeatSignUpdateManyWithoutHeatCycleNestedInput
+  matings?: Prisma.MatingUpdateManyWithoutHeatCycleNestedInput
 }
 
 export type HeatCycleUncheckedUpdateWithoutDogInput = {
@@ -599,10 +924,14 @@ export type HeatCycleUncheckedUpdateWithoutDogInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   progesteroneTests?: Prisma.ProgesteroneTestUncheckedUpdateManyWithoutHeatCycleNestedInput
+  signs?: Prisma.HeatSignUncheckedUpdateManyWithoutHeatCycleNestedInput
+  matings?: Prisma.MatingUncheckedUpdateManyWithoutHeatCycleNestedInput
 }
 
 export type HeatCycleUncheckedUpdateManyWithoutDogInput = {
@@ -610,6 +939,8 @@ export type HeatCycleUncheckedUpdateManyWithoutDogInput = {
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  outcome?: Prisma.EnumHeatOutcomeFieldUpdateOperationsInput | $Enums.HeatOutcome
+  scanLitterCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -622,10 +953,14 @@ export type HeatCycleUncheckedUpdateManyWithoutDogInput = {
 
 export type HeatCycleCountOutputType = {
   progesteroneTests: number
+  signs: number
+  matings: number
 }
 
 export type HeatCycleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   progesteroneTests?: boolean | HeatCycleCountOutputTypeCountProgesteroneTestsArgs
+  signs?: boolean | HeatCycleCountOutputTypeCountSignsArgs
+  matings?: boolean | HeatCycleCountOutputTypeCountMatingsArgs
 }
 
 /**
@@ -645,6 +980,20 @@ export type HeatCycleCountOutputTypeCountProgesteroneTestsArgs<ExtArgs extends r
   where?: Prisma.ProgesteroneTestWhereInput
 }
 
+/**
+ * HeatCycleCountOutputType without action
+ */
+export type HeatCycleCountOutputTypeCountSignsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HeatSignWhereInput
+}
+
+/**
+ * HeatCycleCountOutputType without action
+ */
+export type HeatCycleCountOutputTypeCountMatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MatingWhereInput
+}
+
 
 export type HeatCycleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -652,11 +1001,15 @@ export type HeatCycleSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   startDate?: boolean
   endDate?: boolean
   notes?: boolean
+  outcome?: boolean
+  scanLitterCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
   dog?: boolean | Prisma.DogDefaultArgs<ExtArgs>
   progesteroneTests?: boolean | Prisma.HeatCycle$progesteroneTestsArgs<ExtArgs>
+  signs?: boolean | Prisma.HeatCycle$signsArgs<ExtArgs>
+  matings?: boolean | Prisma.HeatCycle$matingsArgs<ExtArgs>
   _count?: boolean | Prisma.HeatCycleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["heatCycle"]>
 
@@ -666,6 +1019,8 @@ export type HeatCycleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   startDate?: boolean
   endDate?: boolean
   notes?: boolean
+  outcome?: boolean
+  scanLitterCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -678,6 +1033,8 @@ export type HeatCycleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   startDate?: boolean
   endDate?: boolean
   notes?: boolean
+  outcome?: boolean
+  scanLitterCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
@@ -690,15 +1047,19 @@ export type HeatCycleSelectScalar = {
   startDate?: boolean
   endDate?: boolean
   notes?: boolean
+  outcome?: boolean
+  scanLitterCount?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   deletedAt?: boolean
 }
 
-export type HeatCycleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dogId" | "startDate" | "endDate" | "notes" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["heatCycle"]>
+export type HeatCycleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "dogId" | "startDate" | "endDate" | "notes" | "outcome" | "scanLitterCount" | "createdAt" | "updatedAt" | "deletedAt", ExtArgs["result"]["heatCycle"]>
 export type HeatCycleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   dog?: boolean | Prisma.DogDefaultArgs<ExtArgs>
   progesteroneTests?: boolean | Prisma.HeatCycle$progesteroneTestsArgs<ExtArgs>
+  signs?: boolean | Prisma.HeatCycle$signsArgs<ExtArgs>
+  matings?: boolean | Prisma.HeatCycle$matingsArgs<ExtArgs>
   _count?: boolean | Prisma.HeatCycleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type HeatCycleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -713,6 +1074,8 @@ export type $HeatCyclePayload<ExtArgs extends runtime.Types.Extensions.InternalA
   objects: {
     dog: Prisma.$DogPayload<ExtArgs>
     progesteroneTests: Prisma.$ProgesteroneTestPayload<ExtArgs>[]
+    signs: Prisma.$HeatSignPayload<ExtArgs>[]
+    matings: Prisma.$MatingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -720,6 +1083,8 @@ export type $HeatCyclePayload<ExtArgs extends runtime.Types.Extensions.InternalA
     startDate: Date
     endDate: Date | null
     notes: string | null
+    outcome: $Enums.HeatOutcome
+    scanLitterCount: number | null
     createdAt: Date
     updatedAt: Date
     deletedAt: Date | null
@@ -1119,6 +1484,8 @@ export interface Prisma__HeatCycleClient<T, Null = never, ExtArgs extends runtim
   readonly [Symbol.toStringTag]: "PrismaPromise"
   dog<T extends Prisma.DogDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DogDefaultArgs<ExtArgs>>): Prisma.Prisma__DogClient<runtime.Types.Result.GetResult<Prisma.$DogPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   progesteroneTests<T extends Prisma.HeatCycle$progesteroneTestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HeatCycle$progesteroneTestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProgesteroneTestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  signs<T extends Prisma.HeatCycle$signsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HeatCycle$signsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HeatSignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  matings<T extends Prisma.HeatCycle$matingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.HeatCycle$matingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1153,6 +1520,8 @@ export interface HeatCycleFieldRefs {
   readonly startDate: Prisma.FieldRef<"HeatCycle", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"HeatCycle", 'DateTime'>
   readonly notes: Prisma.FieldRef<"HeatCycle", 'String'>
+  readonly outcome: Prisma.FieldRef<"HeatCycle", 'HeatOutcome'>
+  readonly scanLitterCount: Prisma.FieldRef<"HeatCycle", 'Int'>
   readonly createdAt: Prisma.FieldRef<"HeatCycle", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"HeatCycle", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"HeatCycle", 'DateTime'>
@@ -1578,6 +1947,54 @@ export type HeatCycle$progesteroneTestsArgs<ExtArgs extends runtime.Types.Extens
   take?: number
   skip?: number
   distinct?: Prisma.ProgesteroneTestScalarFieldEnum | Prisma.ProgesteroneTestScalarFieldEnum[]
+}
+
+/**
+ * HeatCycle.signs
+ */
+export type HeatCycle$signsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HeatSign
+   */
+  select?: Prisma.HeatSignSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HeatSign
+   */
+  omit?: Prisma.HeatSignOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HeatSignInclude<ExtArgs> | null
+  where?: Prisma.HeatSignWhereInput
+  orderBy?: Prisma.HeatSignOrderByWithRelationInput | Prisma.HeatSignOrderByWithRelationInput[]
+  cursor?: Prisma.HeatSignWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HeatSignScalarFieldEnum | Prisma.HeatSignScalarFieldEnum[]
+}
+
+/**
+ * HeatCycle.matings
+ */
+export type HeatCycle$matingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Mating
+   */
+  select?: Prisma.MatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Mating
+   */
+  omit?: Prisma.MatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MatingInclude<ExtArgs> | null
+  where?: Prisma.MatingWhereInput
+  orderBy?: Prisma.MatingOrderByWithRelationInput | Prisma.MatingOrderByWithRelationInput[]
+  cursor?: Prisma.MatingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MatingScalarFieldEnum | Prisma.MatingScalarFieldEnum[]
 }
 
 /**
