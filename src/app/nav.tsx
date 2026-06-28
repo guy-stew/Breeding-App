@@ -121,22 +121,22 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Kennel",
     items: [
       { href: "/dogs", label: "Dogs", match: "/dogs", icon: DogIcon },
-      { href: "/seasons", label: "Seasons", icon: SeasonIcon, stub: true },
-      { href: "/matings", label: "Matings", icon: MatingIcon, stub: true },
+      { href: "/seasons", label: "Seasons", icon: SeasonIcon },
+      { href: "/matings", label: "Matings", icon: MatingIcon },
     ],
   },
   {
     label: "Whelping",
     items: [
       { href: "/litters/new", label: "Litters", match: "/litters", icon: LitterIcon },
-      { href: "/growth", label: "Growth", icon: GrowthIcon, stub: true },
+      { href: "/growth", label: "Growth", icon: GrowthIcon },
     ],
   },
   {
     label: "Marketing",
     items: [
       { href: "/buyers", label: "Buyers", icon: BuyerIcon },
-      { href: "/contracts", label: "Contracts", icon: ContractIcon, stub: true },
+      { href: "/contracts", label: "Contracts", icon: ContractIcon },
       { href: "/listings", label: "Listings", icon: ListingIcon },
     ],
   },
