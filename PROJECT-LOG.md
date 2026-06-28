@@ -11,8 +11,10 @@ anyone helping) can get oriented in seconds.
 **WhelpWise** (logo + favicons + app name), a full responsive UI overhaul
 (desktop sidebar shell + redesigned dashboard, dogs list, litter detail, puppy
 record, and detailed add-dog screens), built out the Seasons / Matings /
-Growth / Contracts pages, and renamed the GitHub repo, Vercel project, and
-Supabase project to `whelpwise`. The app covers the full breeding cycle, buyer
+Growth / Contracts pages, added **breed-aware health testing** (KC breed data
++ autocomplete + in-app refresh) and a **phase-aware season/cycle planner**,
+and renamed the GitHub repo, Vercel project, and Supabase project to
+`whelpwise`. See the "28 June 2026 — WhelpWise relaunch day" section below. The app covers the full breeding cycle, buyer
 management, health records, heat cycle tracking, public marketplace, photo
 uploads, welfare checks, and a polished app shell with dark mode. Login
 required for breeder pages; marketplace is public.*
@@ -197,12 +199,45 @@ once, and re-arrange/print it differently** for each feature.
       grey (no breed average set). Helps breeders make responsible pairing
       decisions at a glance.
 
-**All planned milestones complete.** The app now supports the full workflow:
+**All original milestones complete.** The app now supports the full workflow:
 add dogs → record matings and litters → add puppies → track daily weights →
 view growth charts → log health records → track heat cycles with progesterone
 → manage buyers → assign buyers to puppies → generate pre-filled contracts
 and info packs → upload photos → publish puppies to the public marketplace.
 All wrapped in a polished app shell with dark mode support.
+
+---
+
+## 28 June 2026 — WhelpWise relaunch day
+
+A big day, on top of the original feature set above:
+
+- [x] **Responsive redesign + WhelpWise rebrand** — desktop sidebar app shell
+      (Kennel / Whelping / Marketing groups), navy header with logo + settings /
+      theme / user menus, mobile bottom tabs; blue + warm-cream palette.
+      Redesigned dashboard, new `/dogs` list, litter detail, puppy record (shown
+      at `/dogs/[id]` for puppies), and detailed add-dog. Brand kit wired in
+      (inline SVG logo, favicons, web manifest). See "Brand & identity".
+- [x] **Renamed everything to `whelpwise`** (GitHub repo, Vercel project,
+      Supabase project) and went **live on the custom domain www.whelpwise.dog**
+      (123-reg DNS, `.co.uk` redirects in). See "Live domain & hosting".
+- [x] **Seasons / Matings / Growth / Contracts pages** — the four grouped-nav
+      destinations, built out with real data (no longer stubs).
+- [x] **Breed-aware health testing** — `Breed` table seeded from the KC sheet
+      (222 breeds, 178 with tests). Add Dog has a breed typeahead; picking a
+      breed surfaces that breed's recommended hip / elbow / eye flags and
+      pre-fills its Good / Best Practice DNA tests (saved as HealthRecord).
+      In-app CSV refresh at **`/settings/breeds`** for the ~twice-yearly KC
+      updates, with provenance tracking. Parser + logic in `src/lib/breeds/`.
+- [x] **Season / cycle planner** (`/seasons/[id]`) — one phase-aware page that
+      re-skins itself early → fertile → pregnant → ended: timeline with a
+      fertile-window prediction (estimate, then refines on progesterone),
+      behavioural sign logging, a days-standing counter, mating + scan logging,
+      a gestation countdown with milestones + breeding record, and a next-season
+      interval estimate. Pure logic in `src/lib/cycle.ts` (unit-tested via
+      `scripts/cycle-test.ts`); new `HeatSign` model, `HeatCycle.outcome` /
+      `scanLitterCount`, and `Mating.heatCycleId`. The old
+      `/dogs/[id]/heat-cycles/[cycleId]` URL now redirects here.
 
 ---
 
@@ -492,8 +527,19 @@ data model. Worked examples exist for every pattern:
 - **MULTI-CREATE:** `src/app/litters/new/` — creates two linked records (Mating + Litter) in one action.
 - **CRM / ASSIGN:** `src/app/buyers/` + `AssignBuyer.tsx` — CRUD pages, dropdown assigns buyer to puppy, contract pre-fills.
 - **HEALTH:** `src/app/dogs/[id]/health/new/` — typed record form, info pack auto-fills from real data.
-- **HEAT CYCLE:** `src/app/dogs/[id]/heat-cycles/` — cycle + progesterone tests, Recharts chart, predicted whelp date.
+- **SEASON PLANNER:** `src/app/seasons/[id]/` — phase-aware detail page; pure logic in `src/lib/cycle.ts` (tested via `scripts/cycle-test.ts`). The old `dogs/[id]/heat-cycles/[cycleId]` route now redirects here.
+- **BREED DATA:** `src/lib/breeds/` (parse + import), `src/app/breed-actions.ts`, seeded via `scripts/seed-breeds.ts` from `prisma/breed-data.md`; refreshed in-app at `/settings/breeds`.
 - **MARKETPLACE:** `src/app/marketplace/` — public pages (no auth), `src/app/listings/` — breeder management.
+
+### Where we left off (28 June 2026)
+
+Everything above is built, committed, and live on **www.whelpwise.dog**. Nothing
+is half-finished. Possible next sessions: stored document generation (contracts /
+info packs as records), notifications/reminders (vaccinations, progesterone,
+whelp dates), an in-app settings page for kennel/licence details (the Settings
+menu still has placeholder items), and wiring the season planner's predicted
+whelp date into litter creation. One known tidy-up: 2 pre-existing `as any`
+casts in `src/app/actions.ts` (lines ~741/932) — harmless, build-safe.
 - **PHOTO UPLOAD:** `src/app/dogs/[id]/PhotoUpload.tsx` — client-side Supabase Storage upload → server action saves URL.
 - **WELFARE CHECK:** `src/app/litters/[id]/welfare/new/` — timestamped litter welfare visits with concerns tracking.
 - **COI:** `coiPercent` + `breedAvgCoi` on Mating model — entered in litter create/edit forms, colour-coded display on litter detail.
