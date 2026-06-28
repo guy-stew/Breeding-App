@@ -119,6 +119,14 @@ type AddDogInput = {
   colour?: string;
   dateOfBirth?: string;   // a date string like "2023-04-15", or empty
   microchip?: string;
+  // Detailed add-dog fields (optional).
+  kcRegNumber?: string;
+  external?: boolean;     // a colleague's stud, kept for reference
+  hipScore?: string;      // e.g. "4:3"
+  elbowScore?: string;    // e.g. "0"
+  eyeTest?: string;       // result, e.g. "Clear" / "Affected" ("" or "Not tested" = skip)
+  testDate?: string;      // date for hip/elbow/eye screening records
+  dnaTests?: { gene: string; result: string }[];
 };
 
 // ============================================================
@@ -634,8 +642,12 @@ export async function addDog(input: AddDogInput): Promise<AddDogResult> {
     dob = parsed;
   }
 
+  // Screening date for hip/elbow/eye records (falls back to today).
+  const screeningDate = input.testDate ? new Date(input.testDate) : new Date();
+
+  let newDogId: string;
   try {
-    await prisma.dog.create({
+    const dog = await prisma.dog.create({
       data: {
         breederId: breeder.id,
         breed,
@@ -644,19 +656,50 @@ export async function addDog(input: AddDogInput): Promise<AddDogResult> {
         callName: input.callName?.trim() || null,
         colour: input.colour?.trim() || null,
         microchip: input.microchip?.trim() || null,
+        kcRegNumber: input.kcRegNumber?.trim() || null,
+        ...(input.external ? { ownership: "external" } : {}),
         ...(dob ? { dateOfBirth: dob } : {}),
       },
     });
+    newDogId = dog.id;
+
+    // Health screening + DNA → HealthRecord rows (each optional).
+    const records: {
+      dogId: string;
+      type: "hip_score" | "elbow_score" | "eye_test" | "dna_test";
+      date: Date;
+      result: string | null;
+      description: string | null;
+    }[] = [];
+
+    if (input.hipScore?.trim()) {
+      records.push({ dogId: dog.id, type: "hip_score", date: screeningDate, result: input.hipScore.trim(), description: null });
+    }
+    if (input.elbowScore?.trim()) {
+      records.push({ dogId: dog.id, type: "elbow_score", date: screeningDate, result: input.elbowScore.trim(), description: null });
+    }
+    if (input.eyeTest?.trim() && input.eyeTest.trim().toLowerCase() !== "not tested") {
+      records.push({ dogId: dog.id, type: "eye_test", date: screeningDate, result: input.eyeTest.trim(), description: null });
+    }
+    for (const dna of input.dnaTests ?? []) {
+      if (dna.gene?.trim()) {
+        records.push({ dogId: dog.id, type: "dna_test", date: screeningDate, result: dna.result?.trim() || null, description: dna.gene.trim() });
+      }
+    }
+
+    if (records.length > 0) {
+      await prisma.healthRecord.createMany({ data: records });
+    }
   } catch {
     return { ok: false, error: "Could not save the dog — please try again." };
   }
 
-  // Refresh the home screen so the new dog shows in "My dogs".
+  // Refresh the dashboard + dogs list so the new dog shows up.
   revalidatePath("/");
+  revalidatePath("/dogs");
 
-  // Then send the breeder back home to see it. redirect() ends the
-  // action here — nothing after this line runs.
-  redirect("/");
+  // Send the breeder to the new dog's profile to see it.
+  redirect(`/dogs/${newDogId}`);
 }
 
 // ============================================================
