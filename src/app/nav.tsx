@@ -128,7 +128,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Whelping",
     items: [
-      { href: "/litters/new", label: "Litters", match: "/litters", icon: LitterIcon },
+      { href: "/litters", label: "Litters", match: "/litters", icon: LitterIcon },
       { href: "/growth", label: "Growth", icon: GrowthIcon },
     ],
   },
@@ -146,7 +146,7 @@ export const NAV_GROUPS: NavGroup[] = [
 export const BOTTOM_NAV: NavItem[] = [
   HOME_ITEM,
   { href: "/dogs", label: "Dogs", match: "/dogs", icon: DogIcon },
-  { href: "/litters/new", label: "Litters", match: "/litters", icon: LitterIcon },
+  { href: "/litters", label: "Litters", match: "/litters", icon: LitterIcon },
   { href: "/buyers", label: "Buyers", icon: BuyerIcon },
   { href: "/listings", label: "Listings", icon: ListingIcon },
 ];

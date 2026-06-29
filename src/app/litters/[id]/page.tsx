@@ -154,11 +154,11 @@ export default async function LitterDetailPage({
   return (
     <div className="mx-auto max-w-3xl p-4 sm:p-6">
       {/* Header */}
-      <Link href="/" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200">
+      <Link href="/litters" className="inline-flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200">
         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
-        Dashboard
+        Litters
       </Link>
 
       <div className="mt-2 mb-5 flex flex-wrap items-start justify-between gap-3">
