@@ -25,11 +25,6 @@ function ageFromDob(dob: Date | null | undefined): string | null {
   return `${totalDays}d`;
 }
 
-function formatWeight(grams: number): string {
-  if (grams >= 1000) return `${(grams / 1000).toFixed(2)} kg`;
-  return `${grams} g`;
-}
-
 export default async function DogProfilePage({
   params,
 }: {
@@ -276,11 +271,10 @@ export default async function DogProfilePage({
   //  ADULT DOG PROFILE (existing layout).
   // ============================================================
   const age = ageFromDob(dog.dateOfBirth);
-  const latestWeight = dog.weightLogs.at(-1);
-  const recentWeights = [...dog.weightLogs].slice(-10).reverse();
 
   const details: [string, string][] = [
-    ["Registered name", dog.registeredName ?? "—"],
+    ["Given Name", dog.callName ?? "—"],
+    ["KC Registered Name", dog.registeredName ?? "—"],
     ["Breed", dog.breed],
     ["Sex", dog.sex === "bitch" ? "Bitch" : "Dog"],
     ["Colour", dog.colour ?? "—"],
@@ -362,19 +356,6 @@ export default async function DogProfilePage({
         </section>
       )}
 
-      {/* Paperwork */}
-      <section className="mb-5">
-        <p className="mb-2 text-xs text-neutral-400">Paperwork</p>
-        <div className="flex gap-2">
-          <Link href={`/dogs/${dog.id}/contract`} className="flex-1 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-center text-sm font-medium hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-            Puppy contract
-          </Link>
-          <Link href={`/dogs/${dog.id}/info-pack`} className="flex-1 rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-center text-sm font-medium hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:bg-neutral-800">
-            Info pack
-          </Link>
-        </div>
-      </section>
-
       {/* Health records */}
       <section className="mb-5">
         <div className="mb-2 flex items-center justify-between">
@@ -431,36 +412,6 @@ export default async function DogProfilePage({
           )}
         </section>
       )}
-
-      {/* Recent weights */}
-      <section>
-        <p className="mb-2 text-xs text-neutral-400">
-          Recent weights
-          {latestWeight && <span className="ml-2 font-medium text-neutral-600 dark:text-neutral-300">(latest: {formatWeight(latestWeight.weightG)})</span>}
-        </p>
-        {recentWeights.length === 0 ? (
-          <p className="rounded-xl border border-neutral-200 bg-white p-4 text-center text-sm text-neutral-400 dark:border-neutral-800 dark:bg-neutral-900">No weights recorded yet.</p>
-        ) : (
-          <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-neutral-200 text-left text-xs text-neutral-400 dark:border-neutral-800">
-                  <th className="px-4 py-2 font-normal">Date</th>
-                  <th className="px-4 py-2 text-right font-normal">Weight</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                {recentWeights.map((log) => (
-                  <tr key={log.id}>
-                    <td className="px-4 py-2">{formatDate(log.date)}</td>
-                    <td className="px-4 py-2 text-right font-medium">{formatWeight(log.weightG)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </section>
     </div>
   );
 }
