@@ -6,8 +6,12 @@ A running notebook for the project: what's built, where each file lives, and
 what's next. Keep this committed to GitHub so it's always in sync and you (or
 anyone helping) can get oriented in seconds.
 
-*Last updated: 28 June 2026 — **launched on the custom domain
-[www.whelpwise.dog](https://www.whelpwise.dog)**. Today's work: rebranded to
+*Last updated: 29 June 2026 — added a **Litters list page** (`/litters`),
+slimmed the **adult dog profile** (removed Paperwork buttons + Recent weights,
+renamed name fields to "Given Name" / "KC Registered Name"), and **fixed photo
+upload** by creating the missing Supabase `photos` storage bucket. See the
+"29 June 2026" section below. Previously (28 June 2026): **launched on the custom domain
+[www.whelpwise.dog](https://www.whelpwise.dog)**. That day's work: rebranded to
 **WhelpWise** (logo + favicons + app name), a full responsive UI overhaul
 (desktop sidebar shell + redesigned dashboard, dogs list, litter detail, puppy
 record, and detailed add-dog screens), built out the Seasons / Matings /
@@ -205,6 +209,30 @@ view growth charts → log health records → track heat cycles with progesteron
 → manage buyers → assign buyers to puppies → generate pre-filled contracts
 and info packs → upload photos → publish puppies to the public marketplace.
 All wrapped in a polished app shell with dark mode support.
+
+---
+
+## 29 June 2026 — Litters list, dog-profile tidy, photo upload fix
+
+A short session of fixes and polish:
+
+- [x] **Litters list page** — the Litters nav button used to drop straight onto
+      the "Record a new litter" form. Added `/litters` (`src/app/litters/page.tsx`,
+      modelled on `/matings`): a list of every litter with status, breed, age and
+      puppy counts, each card linking to its detail view. Repointed the sidebar +
+      mobile bottom-nav links to `/litters`, and changed the litter detail
+      back-link to return to `/litters`.
+- [x] **Dog profile slimmed down** (`src/app/dogs/[id]/page.tsx`) — removed the
+      Paperwork buttons (Puppy contract, Info pack) and the Recent weights table
+      from the adult dog view (that info belongs in Litters). Reworked the details
+      list to lead with **Given Name** (call name) and **KC Registered Name**
+      (registered name) directly beneath it.
+- [x] **Fixed "Bucket not found" on photo upload** — the Supabase `photos`
+      storage bucket had never been created (verified: zero buckets/policies in
+      the project). Created a public `photos` bucket (5 MB limit, JPG/PNG/WebP)
+      with RLS policies (public read; authenticated insert/update/delete) and
+      saved a re-runnable `supabase/storage-photos-bucket.sql` for reproducibility.
+      Upload confirmed working.
 
 ---
 
@@ -531,15 +559,16 @@ data model. Worked examples exist for every pattern:
 - **BREED DATA:** `src/lib/breeds/` (parse + import), `src/app/breed-actions.ts`, seeded via `scripts/seed-breeds.ts` from `prisma/breed-data.md`; refreshed in-app at `/settings/breeds`.
 - **MARKETPLACE:** `src/app/marketplace/` — public pages (no auth), `src/app/listings/` — breeder management.
 
-### Where we left off (28 June 2026)
+### Where we left off (29 June 2026)
 
 Everything above is built, committed, and live on **www.whelpwise.dog**. Nothing
-is half-finished. Possible next sessions: stored document generation (contracts /
-info packs as records), notifications/reminders (vaccinations, progesterone,
-whelp dates), an in-app settings page for kennel/licence details (the Settings
-menu still has placeholder items), and wiring the season planner's predicted
-whelp date into litter creation. One known tidy-up: 2 pre-existing `as any`
-casts in `src/app/actions.ts` (lines ~741/932) — harmless, build-safe.
+is half-finished. Photo upload now works end-to-end (the `photos` bucket is
+created in Supabase). Possible next sessions: stored document generation
+(contracts / info packs as records), notifications/reminders (vaccinations,
+progesterone, whelp dates), an in-app settings page for kennel/licence details
+(the Settings menu still has placeholder items), and wiring the season planner's
+predicted whelp date into litter creation. One known tidy-up: 2 pre-existing
+`as any` casts in `src/app/actions.ts` (lines ~741/932) — harmless, build-safe.
 - **PHOTO UPLOAD:** `src/app/dogs/[id]/PhotoUpload.tsx` — client-side Supabase Storage upload → server action saves URL.
 - **WELFARE CHECK:** `src/app/litters/[id]/welfare/new/` — timestamped litter welfare visits with concerns tracking.
 - **COI:** `coiPercent` + `breedAvgCoi` on Mating model — entered in litter create/edit forms, colour-coded display on litter detail.
